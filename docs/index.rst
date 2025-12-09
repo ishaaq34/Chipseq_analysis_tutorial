@@ -1,17 +1,24 @@
-.. Chipseq analysis tutorial documentation master file, created by
-   sphinx-quickstart on Tue Dec  9 18:08:20 2025.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
+ChIP-seq Analysis Tutorial
+=========================
 
-Chipseq analysis tutorial documentation
-=======================================
+This documentation describes a complete ChIP-seq analysis pipeline, from raw FASTQ files
+to peak calling, annotation, and visualization.
 
-Add your content using ``reStructuredText`` syntax. See the
-`reStructuredText <https://www.sphinx-doc.org/en/master/usage/restructuredtext/index.html>`_
-documentation for details.
+The pipeline is intended for reproducible analysis of ChIP-seq data using standard tools
+such as Bowtie2, SAMtools, MACS2, and R/Bioconductor packages.
 
+Contents
+--------
 
 .. toctree::
    :maxdepth: 2
-   :caption: Contents:
+   :caption: Tutorial
+
+   introduction
+   requirements
+   workflow
+   alignment
+   peak_calling
+   downstream_analysis
+
 
