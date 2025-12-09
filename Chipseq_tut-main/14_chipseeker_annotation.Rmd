@@ -1,0 +1,223 @@
+---
+title: "ChIP-seq annotation & visualization with ChIPseeker"
+author: "Raja Khan"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    theme: flatly
+    toc: true
+    toc_float: true
+    number_sections: true
+    code_folding: show
+    highlight: tango
+    df_print: paged
+    fig_caption: true
+    self_contained: true
+---
+
+```{r setup, include=TRUE}
+library(ChIPseeker)
+library(GenomicRanges)
+library(GenomicFeatures)
+library(AnnotationDbi)
+library(clusterProfiler)
+library(ggplot2)
+
+setwd("/Volumes/CrucialX6/human/")
+
+knitr::opts_chunk$set(echo = TRUE, message = TRUE, warning = TRUE,
+                      fig.width = 8, fig.height = 5, dpi = 600)
+```
+
+# Parameters
+
+```{r params}
+peakdir  <- "19.peaks_chr11_12/"
+gtf      <- "gencode.v49.annotation.gtf"
+
+plot_theme <-  theme(text = element_text(size = 12, colour = "black", family = "Helvetica"),
+        axis.text.y = element_text(size = 12, colour = "black", family = "Helvetica"),
+        axis.text.x = element_text(size = 12, colour = "black", family = "Helvetica"),
+        axis.title = element_text(size = 12, colour = "black", family = "Helvetica"),
+        axis.line = element_line(linewidth = 0.3528), axis.ticks = element_line(linewidth = 0.3528),
+        legend.text  = element_text(size = 12, family = "Helvetica", colour = "black"))
+```
+
+# Build TxDb from GTF
+
+```{r txdb}
+txdb <- makeTxDbFromGFF(gtf, format = "gtf")
+tx <- transcripts(txdb)
+length(tx)
+```
+
+# Get peak files and sample names
+
+```{r peaks}
+samplefiles <- list.files(peakdir, full.names = TRUE)
+sample_names = basename(samplefiles)
+
+sample_names <- sub("\\.(narrowPeak|broadPeak|bed|bedgraph|bam)(\\.gz)?$", "", 
+                    sample_names, ignore.case = TRUE)
+sample_names <- sub("\\.chr11_12_peaks$", "", sample_names, ignore.case = TRUE)
+
+files_for_peakprof <- setNames(as.list(samplefiles), sample_names)
+
+head(sample_names)
+```
+
+# Single Peak analysis
+
+```{r}
+ceb      <- files_for_peakprof[["ceb_ENCFF327JFG"]]
+H3K27me3 <- files_for_peakprof[["H3K27me3_ENCFF164ALR"]]
+H3K9ac   <- files_for_peakprof[["H3K9ac_ENCFF193NPE"]]
+```
+
+### Figure: TSS heatmap for CEB peaks  
+This heatmap shows CEB read density ±3 kb around transcription start sites, highlighting promoter-centered binding patterns.
+
+```{r}
+peak_Profile_Heatmap(
+  peak = ceb,
+  upstream = 3000,
+  downstream = 3000,
+  by = "gene",
+  type = "start_site",
+  TxDb = txdb,
+  nbin = 800
+) 
+```
+
+### TSS heatmap for H3K27me3 peaks  
+This heatmap visualizes how the repressive H3K27me3 mark distributes relative to TSS positions.
+
+```{r}
+peak_Profile_Heatmap(
+  peak = H3K27me3,
+  upstream = 3000,
+  downstream = 3000,
+  by = "gene",
+  type = "start_site",
+  TxDb = txdb,
+  nbin = 800
+)
+```
+
+### TSS heatmap for H3K9ac peaks  
+This plot shows enrichment of the active histone mark H3K9ac near TSS regions.
+
+```{r}
+peak_Profile_Heatmap(
+  peak = H3K9ac,
+  upstream = 3000,
+  downstream = 3000,
+  by = "gene",
+  type = "start_site",
+  TxDb = txdb,
+  nbin = 800
+) 
+```
+
+# Promoter-centric tag matrix and average profile
+
+### Average promoter profiles across samples  
+This line plot shows averaged tag density across promoter windows for each dataset.
+
+```{r tagmatrix}
+promoter <- getPromoters(TxDb = txdb, upstream = 3000, downstream = 3000)
+
+tagMatrixList <- setNames(
+  lapply(samplefiles, getTagMatrix, windows = promoter),
+  sample_names
+)
+
+p1 <- plotAvgProf(tagMatrixList, xlim = c(-3000, 3000)) + plot_theme
+
+p1
+```
+
+# Peak body profiles (plotPeakProf2)
+
+###  Normalized gene-body binding profiles  
+This figure shows how signals distribute across scaled gene bodies with 20% upstream/downstream extension.
+
+```{r peakprof}
+plotPeakProf2(files_for_peakprof,
+              upstream = rel(0.2), downstream = rel(0.2), by = "gene", type = "body",
+              TxDb = txdb, nbin = 800) + plot_theme
+```
+
+# Annotate peaks and genomic distribution plots
+
+### Genomic feature distribution for CEB peaks  
+This barplot summarizes the fraction of CEB peaks in promoters, introns, exons, and intergenic space.
+
+```{r}
+peakAnno.ceb <- annotatePeak(
+  ceb,
+  tssRegion = c(-3000, 3000),
+  TxDb = txdb
+)
+
+peakAnno.ceb
+plotAnnoBar(peakAnno.ceb) + plot_theme
+```
+
+###  Genomic feature distribution for H3K27me3 peaks  
+This annotation plot shows how H3K27me3 peaks distribute across genomic elements.
+
+```{r}
+peakAnno.H3K27me3 <- annotatePeak(
+  H3K27me3,
+  tssRegion = c(-3000, 3000),
+  TxDb = txdb
+)
+
+peakAnno.H3K27me3
+plotAnnoBar(peakAnno.H3K27me3) + plot_theme
+```
+
+### Genomic feature distribution for H3K9ac peaks  
+This plot displays the annotation categories for H3K9ac peaks, a mark associated with active chromatin states.
+
+```{r}
+peakAnno.H3K9ac <- annotatePeak(
+  H3K9ac,
+  tssRegion = c(-3000, 3000),
+  TxDb = txdb
+)
+
+peakAnno.H3K9ac
+plotAnnoBar(peakAnno.H3K9ac) + plot_theme
+```
+
+### Combined annotation across all samples  
+This multi-sample barplot compares how each dataset distributes across promoters, introns, exons, and intergenic regions.
+
+```{r}
+peakAnnoList <- lapply(samplefiles, annotatePeak, TxDb = txdb,
+                       tssRegion = c(-3000, 3000), verbose = FALSE)
+names(peakAnnoList) <- sample_names
+
+plotAnnoBar(peakAnnoList) + plot_theme
+```
+
+### Distance-to-TSS distributions across samples  
+This figure visualizes how the peaks of each dataset are distributed relative to TSS positions.
+
+```{r}
+plotDistToTSS(peakAnnoList) + plot_theme
+```
+
+# Notes and troubleshooting
+
+- Ensure peak files are valid BED-like formats.
+- Check sample naming if plots appear mislabeled.
+- Use named lists for functions requiring sample identities.
+
+# Session info
+
+```{r session}
+sessionInfo()
+```
