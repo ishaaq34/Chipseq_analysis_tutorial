@@ -1,6 +1,6 @@
 # Tutorial 00: Setting Up Your Digital Lab Bench (Conda Environment)
 
-## Level 1: Basic Concept (The "Why")
+##  Basic Concept 
 
 Imagine you are about to start a complex experiment in a wet lab. You wouldn't just dump all your chemicals and tools onto a cluttered desk, right? You would set up a specific **Lab Bench** with exactly the pipettes, reagents, and machines you need for *that specific experiment*.
 
@@ -12,7 +12,7 @@ In this tutorial, we will build a simplified environment named `chip` that conta
 
 ---
 
-## Level 2: Execution (The "How")
+##  Execution 
 
 ### Step 1: Get the Environment Manager (Anaconda)
 First, you need the software that builds these environments. We recommend **Anaconda** (or the lighter version, **Miniconda**).
@@ -101,7 +101,6 @@ If these commands print paths (like `/Users/.../envs/chip/bin/fastqc`) and versi
 
 ---
 
-## Level 3: Advanced Analysis (The "Deep Dive")
 
 ### Understanding the YAML "Recipe"
 Let's break down the `chip_env.yml` file we just used:
