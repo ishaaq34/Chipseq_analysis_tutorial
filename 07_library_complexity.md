@@ -44,7 +44,6 @@ cat QC_results/Sample1.pbc.txt
 
 ---
 
-## Level 3: Advanced Analysis (The Standards)
 
 ### Understanding the Metrics
 *   **NRF (Non-Redundant Fraction):**  
