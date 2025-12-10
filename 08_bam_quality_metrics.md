@@ -1,6 +1,6 @@
 # Tutorial 06: Experiment Design & BAM Quality Control
 
-## Level 1: Basic Concept (The Experiment & The File)
+##  Basic Concept (The Experiment & The File)
 
 ### 1.1 The Experiment Story
 This tutorial uses real data from **BLaER1 cells** (human immune cells).
@@ -18,7 +18,7 @@ This tutorial uses real data from **BLaER1 cells** (human immune cells).
 
 ---
 
-## Level 2: Execution (The Checklist)
+## Execution (The Checklist)
 
 ### 2.1 Sample Table
 Here are the files we are analyzing. In real life, you should make a table like this to track your work.
