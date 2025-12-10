@@ -49,7 +49,6 @@ By listing only the `_R1` files, we get exactly one entry per sample. We then st
 
 ---
 
-## Level 3: Advanced Analysis (The Logic)
 
 ### Creating the List Manually?
 You *could* just type the names into a text file yourself. However, that is prone to typos. Using `ls` ensures you only list files that actually exist.
