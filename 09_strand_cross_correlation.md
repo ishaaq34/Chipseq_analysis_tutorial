@@ -16,6 +16,7 @@ Imagine you shout **"HELLO"** (Forward Reads). A split second later, you hear th
 *   We slide the Forward reads towards the Reverse reads. When they overlap perfectly, the "volume" is loudest (Max Correlation).
 *   The distance we slid them telling us the **True Fragment Length**.
 
+---
 <img width="650" height="444" alt="Screenshot 2025-11-26 at 2 20 02 PM" src="https://github.com/user-attachments/assets/c75c7945-ae0e-42f0-b4ac-fcc7538a8ef6" />
 *(Source: Nature Methods)*
 
@@ -58,11 +59,11 @@ The output plot usually shows TWO peaks. This is where quality control happens.
     *   **Why?** It's caused by mapping artifacts and "sticky" sequences. It happens in *every* experiment, even bad ones.
     *   **Meaning:** Represents **Background Noise**.
 
-
+---
 
 <img width="817" height="522" alt="Screenshot 2025-12-10 at 11 30 18 AM" src="https://github.com/user-attachments/assets/e60c165f-22c6-4900-8d35-b97e6340982c" />
 
-
+---
 
 ### 3.2 The Metrics (NSC & RSC)
 We compare the Height of the Real Peak (Signal) to the Phantom Peak (Noise).
@@ -76,10 +77,11 @@ We compare the Height of the Real Peak (Signal) to the Phantom Peak (Noise).
 
 ### 3.3 Interpreting Your Data (Example Analysis)
 
+---
 
 <img width="955" height="467" alt="Screenshot 2025-12-10 at 11 31 35 AM" src="https://github.com/user-attachments/assets/576b1aa0-f6c1-4ff6-8dba-9900712b7f0c" />
 
- 
+ ---
 *   **Inputs (Control):**
     *   NSC values sit almost exactly at background **(1.003 and 1.005)**. RSC values are only **0.62 and 0.64** (Low).
     *   **Interpretation:** Just noise. This is normal for inputs! The numerically high correlation values (0.5509 and 0.5474) are driven by the dominant phantom peak, not real enrichment.
