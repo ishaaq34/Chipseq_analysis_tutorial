@@ -66,11 +66,11 @@ The output plot (`Sample1_spp.qc.pdf`) usually shows TWO peaks. This is where qu
 
   `Sample1_spp.qc.txt` provides numeric QC metrics 
   
-    *  **COL5** : provides Phantom peak 
-    *  **COL3** : provides Fragment length peak
-    *  **COL4** : These numbers show how well the forward and reverse reads match at the fragment length.
-    *  **COL6** : corr_phantomPeak. This is the match at the phantom peak. If this is much lower than the real fragment peak (COL4), that means the ChIP is good.
-    * **COL8**:  min_corr.This is the lowest cross-correlation value. It represents the background noise level. Lower values here mean a clearer signal-to-noise contrast.
+       **COL5** : provides Phantom peak 
+       **COL3** : provides Fragment length peak
+       **COL4** : These numbers show how well the forward and reverse reads match at the fragment length.
+       **COL6** : corr_phantomPeak. This is the match at the phantom peak. If this is much lower than the real fragment peak (COL4), that means the ChIP is good.
+       **COL8**:  min_corr.This is the lowest cross-correlation value. It represents the background noise level. Lower values here mean a clearer signal-to-noise contrast.
 
   
 ---
