@@ -60,7 +60,7 @@ The output plot usually shows TWO peaks. This is where quality control happens.
 
 
 
-![Cross-Correlation Plot](images/Chipse_tut-1.pdf)
+![Cross-Correlation Plot](images/Chipse_tut-1.tiff)
 
 ### 3.2 The Metrics (NSC & RSC)
 We compare the Height of the Real Peak (Signal) to the Phantom Peak (Noise).
@@ -76,7 +76,7 @@ We compare the Height of the Real Peak (Signal) to the Phantom Peak (Noise).
 
 
 
-![Example Analysis](images/Chipse_tut-2.pdf)    
+![Example Analysis](images/Chipse_tut-2.tiff)    
 
 *   **Inputs (Control):**
     *   NSC values sit almost exactly at background **(1.003 and 1.005)**. RSC values are only **0.62 and 0.64** (Low).
