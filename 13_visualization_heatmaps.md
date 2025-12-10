@@ -170,6 +170,8 @@ H3K9ac displays a sharp, TSS-centered peak with strong promoter-specific enrichm
 
 
 
+#### More 
+Consider trying different parameters of the compute matrix and plotprofile/plotheatmap, and see how much they influence the plotting and representation. Consider having the bedfile of the lines/sines/pEl
 
 
 
