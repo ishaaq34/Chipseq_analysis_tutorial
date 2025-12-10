@@ -17,14 +17,18 @@ Imagine you shout **"HELLO"** (Forward Reads). A split second later, you hear th
 *   The distance we slid them telling us the **True Fragment Length**.
 
 ---
-<img width="650" height="444" alt="Screenshot 2025-11-26 at 2 20 02 PM" src="https://github.com/user-attachments/assets/c75c7945-ae0e-42f0-b4ac-fcc7538a8ef6" />
-*(Source: Nature Methods)*
+<img width="639" height="403" alt="Screenshot 2025-12-10 at 11 39 06 AM" src="https://github.com/user-attachments/assets/cfc18aa5-2c0d-4772-ad2a-f4ae8c0f578d" />
+
+
+*(Source:[Genome-wide analysis of transcription factor binding sites based on ChIP-Seq data](https://www.nature.com/articles/nmeth.1246)*
 
 ---
 
 ## Level 2: Execution (PhantomPeakQualTools)
 
-We use a tool called `run_spp.R` (part of PhantomPeakQualTools) to calculate this. It finds the "Best Match" distance.
+
+
+We use a tool called `run_spp.R` (part of [PhantomPeakQualTools]( https://github.com/kundajelab/phantompeakqualtools) to calculate this. It finds the "Best Match" distance.
 
 ### The Command
 ```bash
@@ -44,9 +48,9 @@ Rscript /opt/anaconda3/envs/chip/bin/run_spp.R \
 
 ---
 
-## Level 3: Advanced Analysis (Signal vs Noise)
+## Level 3: Analysis (Signal vs Noise)
 
-The output plot usually shows TWO peaks. This is where quality control happens.
+The output plot (`Sample1_spp.qc.pdf`) usually shows TWO peaks. This is where quality control happens.
 
 ### 3.1 The Peaks
 1.  **The Real Peak (Red Line):**
@@ -59,9 +63,19 @@ The output plot usually shows TWO peaks. This is where quality control happens.
     *   **Why?** It's caused by mapping artifacts and "sticky" sequences. It happens in *every* experiment, even bad ones.
     *   **Meaning:** Represents **Background Noise**.
 
+
+  `Sample1_spp.qc.txt` provides numeric QC metrics 
+  
+    *  **COL5** : provides Phantom peak 
+    *  **COL3** : provides Fragment length peak
+    *  **COL4** : These numbers show how well the forward and reverse reads match at the fragment length.
+    *  **COL6** : corr_phantomPeak. This is the match at the phantom peak. If this is much lower than the real fragment peak (COL4), that means the ChIP is good.
+    * **COL8**:  min_corr.This is the lowest cross-correlation value. It represents the background noise level. Lower values here mean a clearer signal-to-noise contrast.
+
+  
 ---
 
-<img width="817" height="522" alt="Screenshot 2025-12-10 at 11 30 18 AM" src="https://github.com/user-attachments/assets/e60c165f-22c6-4900-8d35-b97e6340982c" />
+<img width="681" height="498" alt="image2" src="https://github.com/user-attachments/assets/f58d1127-7733-47f1-81e7-5bee8abfefb8" />
 
 ---
 
@@ -79,7 +93,9 @@ We compare the Height of the Real Peak (Signal) to the Phantom Peak (Noise).
 
 ---
 
-<img width="955" height="467" alt="Screenshot 2025-12-10 at 11 31 35 AM" src="https://github.com/user-attachments/assets/576b1aa0-f6c1-4ff6-8dba-9900712b7f0c" />
+<img width="943" height="470" alt="image3" src="https://github.com/user-attachments/assets/5b03189d-8fb7-4f4c-8145-5b5930921e05" />
+
+
 
  ---
 *   **Inputs (Control):**
