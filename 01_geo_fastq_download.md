@@ -3,7 +3,7 @@
 > [!NOTE]
 > **Project Context:** While this tutorial teaches you how to download data from SRA, our specific project utilizes **ENCODE** data (CEBPA, H3K27me3, H3K9ac). See the `README.md` for the specific file list. The `fastq-dl` tool is excellent for public SRA data, but ENCODE data is often downloaded directly from the ENCODE portal.
 
-## Level 1: Basic Concept (The "Data Journey")
+## Level 1: Basic Concept 
 
 ### The "Library" Analogy
 Before we download anything, it helps to understand where the data lives. Think of the public databases like a University Library.
@@ -20,7 +20,7 @@ As we process data, we change formats. Think of it like this:
 
 ---
 
-## Level 2: Execution (The "Fetch")
+## Level 2: Fetching the data
 
 To download data, we use a tool called `fastq-dl`. It acts like a smart librarian—you just give it the ID number, and it deals with the complicated databases for you.
 
@@ -73,7 +73,6 @@ fastq-dl --accession SRP115709
 
 ---
 
-## Level 3: Advanced Analysis (The Details)
 
 ### Connecting GEO to SRA
 How do we find the **SRR** numbers?
