@@ -69,7 +69,7 @@ done
 
 ---
 
-## Level 3: Advanced Analysis (Optimization & QC)
+## Level 3: Optimization & QC
 
 ### Optimization: Threads vs. Jobs
 You have a limited number of CPU cores (computers brains). You can use them in two ways:
