@@ -1,6 +1,6 @@
 # Tutorial 08: Peak Calling with MACS2 (The Summit Search)
 
-## Level 1: Basic Concept (The "Heap" Hunt)
+## Basic Concept (The "Heap" Hunt)
 
 ### What is a Peak?
 Imagine you are looking for hidden treasure on a long beach (the Genome).
@@ -17,7 +17,7 @@ This heap means thousands of protein molecules were bound to that exact spot of 
 
 ---
 
-## Level 2: Execution (Step-by-Step)
+## Execution (Step-by-Step)
 
 We will not use complex loops. We will run the command for each sample type specifically.
 
@@ -87,7 +87,7 @@ macs2 callpeak \
 
 ---
 
-## Level 3: Advanced Analysis (The Outputs)
+## The Outputs
 
 After running the commands, look in the `macs2_results` folder. You will see these files:
 
