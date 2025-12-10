@@ -54,7 +54,7 @@ samtools stats sample.bam > sample.stats.txt
 
 ---
 
-## Level 3: Advanced Analysis (Quality Control)
+## Quality Control
 
 ### 3.1 Interpreting `flagstat`
 What do the numbers mean?
@@ -81,7 +81,6 @@ samtools view sample.bam | awk '{print $5}' | sort -n | uniq -c
 ```
 
 **Understanding the Output:**
-<img width="931" height="211" alt="Screenshot 2025-11-28 at 2 54 40 PM" src="https://github.com/user-attachments/assets/19b9cdd2-de95-4f52-97bb-a110e048434e" />
 
 *   **If you see lots of 0s:** Your file includes "Lost GPS" reads (Multimappers).
 *   **If your scores start at 30+:** Your file has **Already Filtered** the bad reads.
