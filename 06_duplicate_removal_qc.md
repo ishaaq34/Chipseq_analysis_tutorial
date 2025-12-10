@@ -62,7 +62,7 @@ echo "Duplicates removed. Clean file is ready."
 
 ---
 
-## 3. Advanced Analysis: Understanding the Details
+## 3. Understanding the Details
 
 For those who want to understand the "under the hood" mechanics, here is how Picard distinguishes different types of duplicates and why Read Groups matter.
 
