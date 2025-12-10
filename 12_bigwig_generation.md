@@ -1,6 +1,6 @@
 # Tutorial 08: Bam to BigWig (Visualizing the Signal)
 
-## Level 1: Basic Concept (The Traffic Map)
+## Basic Concept (The Traffic Map)
 
 ### Why BigWig?
 A **BAM** file gives you the location of every single "car" (read) on the road. It's massive and slow to load.
@@ -10,7 +10,7 @@ A **BigWig** file is like the **Google Maps Traffic View**. It doesn't show you 
 
 ---
 
-## Level 2: Execution (The Converter)
+## Execution (The Converter)
 
 The `bamCoverage` tool converts a BAM file into a bigWig file. A bigWig file stores the read coverage across the genome in a compact format that is easy to load in genome browsers like IGV or UCSC. Each option in the command controls how the coverage is calculated.
 
@@ -136,7 +136,7 @@ bamCoverage \
 
 ---
 
-## Level 3: Advanced Analysis (Fine Tuning)
+## Fine Tuning 
 
 ### 3.1 Bin Size (Resolution)
 *   **Concept:** Think of this as the "Resolution" of your image.
