@@ -114,24 +114,34 @@ Now we turn the `matrix_TSS.gz` and `matrix_Body.gz` into plots.
 
 ---
 
-Across all genes, the meta-profiles show clear and reproducible mark-specific patterns that are obvious from both the shape of the curves and their amplitude on the Y axis. The input tracks sit around ~1.22–1.30 along the entire region, with only a very small rise near the TSS, which confirms that the background structure is low and there are no major mapping or copy-number artifacts. In contrast, the ceb ChIP reaches ~1.45–1.50 at the TSS before dropping back to ~1.30 across the gene body, a pattern and magnitude that match promoter-restricted occupancy of a transcription factor. H3K27me3 shows a broader profile with TSS values rising to ~2.0–2.2 and gradually decaying toward ~1.5 at the TES, consistent with the expected spread of a repressive chromatin domain rather than a sharply localized promoter mark. H3K9ac displays the highest dynamic range: the TSS peak reaches ~8–10 in one replicate and ~5 in the other, dropping to ~2–3 across the gene body, which is exactly the kind of focused acetylation seen at active promoters. The fact that replicates for each mark reach similar Y-axis heights and have nearly identical curve shapes indicates that the enrichment is real, reproducible, and well above the input background.
+Each panel shows the expected hierarchy of promoter-proximal enrichment, and the contrast between marks is pretty stark.
+
+The **input tracks** sit between roughly 1.2 and 1.55 on the y-axis. That flat, low-amplitude range is exactly what you expect from a background signal with no real TSS enrichment.
+
+The **two CEB profiles** stay in the same neighborhood, about 1.25 to 1.5, with only small oscillations and a shallow dip at the TSS. They never rise above the background, which tells you the factor is either weakly bound or the data quality is modest. 
+
+**H3K27me3** is clearly different. Its signal climbs from about 1.7–2.0 in the flanks to peaks around 2.7–3.0 at the TSS in one replicate and about 2.5–2.75 in the other. That broad, mid-range elevation matches what you expect from a repressive domain mark. 
+
+**H3K9ac** is the outlier. Instead of hovering around 1–3, it shoots to 12 in one replicate and 25 in the other. Those tall, narrow spikes reflect strong, promoter-proximal acetylation and clean separation from background noise. 
 
 ---
 <img width="1022" height="323" alt="Screenshot 2025-12-10 at 12 14 14 PM" src="https://github.com/user-attachments/assets/0c10ed9f-6ff9-43a1-82d6-0c029973c56f" />
 
 ---
 
-Each panel shows the expected hierarchy of promoter-proximal enrichment, and the contrast between marks is pretty stark.
+Across all genes, the meta-profiles show clear and reproducible mark-specific patterns that are obvious from both the shape of the curves and their amplitude on the Y axis. 
 
-The input tracks sit between roughly 1.2 and 1.55 on the y-axis. That flat, low-amplitude range is exactly what you expect from a background signal with no real TSS enrichment.
+The **input tracks** sit around **~1.22–1.30** along the entire region, with only a very small rise near the TSS, which confirms that the background structure is low and there are no major mapping or copy-number artifacts. 
 
-The two CEB profiles stay in the same neighborhood, about 1.25 to 1.5, with only small oscillations and a shallow dip at the TSS. They never rise above the background, which tells you the factor is either weakly bound or the data quality is modest. 
+In contrast, the **ceb ChIP** reaches **~1.45–1.50** at the TSS before dropping back to ~1.30 across the gene body, a pattern and magnitude that match promoter-restricted occupancy of a transcription factor. 
 
-H3K27me3 is clearly different. Its signal climbs from about 1.7–2.0 in the flanks to peaks around 2.7–3.0 at the TSS in one replicate and about 2.5–2.75 in the other. That broad, mid-range elevation matches what you expect from a repressive domain mark. 
+**H3K27me3** shows a broader profile with TSS values rising to **~2.0–2.2** and gradually decaying toward ~1.5 at the TES, consistent with the expected spread of a repressive chromatin domain rather than a sharply localized promoter mark. 
 
-H3K9ac is the outlier. Instead of hovering around 1–3, it shoots to 12 in one replicate and 25 in the other. Those tall, narrow spikes reflect strong, promoter-proximal acetylation and clean separation from background noise. 
+**H3K9ac** displays the highest dynamic range: the TSS peak reaches ~8–10 in one replicate and ~5 in the other, dropping to ~2–3 across the gene body, which is exactly the kind of focused acetylation seen at active promoters. 
 
+The fact that replicates for each mark reach similar Y-axis heights and have nearly identical curve shapes indicates that the enrichment is real, reproducible, and well above the input background.
 
+---
 
 
 ### 3.2 Comparison: Portrait vs Panorama
