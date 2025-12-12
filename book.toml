@@ -2,3 +2,7 @@
 title = "Chipseq_analyis"
 authors = ["Raja Khan"]
 language = "en"
+
+[output.html]
+additional-css = ["custom.css"]
+additional-js = ["custom.js"]
