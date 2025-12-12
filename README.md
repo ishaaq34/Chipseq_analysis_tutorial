@@ -1,8 +1,8 @@
-# Practical ChIP-seq Analysis Tutorial
+# Practical ChIP-seq Analysis Tutorial (v1.0)
 
 A simplified, "Zero-to-Hero" guide to ChIP-seq analysis using **mdbook**. This repository contains the source code for the interactive book.
 
-**[Read the Tutorial Book](./book/index.html)** *(If viewing locally after build)*
+**[📚 Read the Tutorial Book Online](https://ishaaq34.github.io/Chipseq_analysis_tutorial/)**
 
 ## About This Project
 This tutorial walks through a complete ChIP-seq analysis pipeline using real **ENCODE** data (CEBPA, H3K27me3, H3K9ac). It is structured using the "Tiered Learning" method:
