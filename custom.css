@@ -2,119 +2,155 @@
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700&display=swap");
 
 :root {
-  /* Typography Overrides */
+  /* Typography */
   --font-sans: "Inter", system-ui, -apple-system, sans-serif;
   --font-heading: "Outfit", sans-serif;
 
-  /* Base Spacing & Radius */
+  /* Brand Colors */
+  --brand-primary: #6366f1; /* Indigo */
+  --brand-secondary: #8b5cf6; /* Violet */
+  --brand-gradient: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+
+  /* Spacing */
   --radius-md: 8px;
   --radius-lg: 12px;
 }
 
 /* Headings */
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
+h1, h2, h3, h4 {
   font-family: var(--font-heading);
-  font-weight: 600;
+  font-weight: 700;
   letter-spacing: -0.02em;
+  color: var(--brand-primary); /* Default brand color for headings */
 }
 
-/* Body Font - Remove override to respect Switcher, but set variable */
-/* body, .markdown-section { font-family: var(--font-sans); } */
+h1 {
+  background: var(--brand-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: inline-block; /* Required for gradient text */
+}
 
-/* --- GLASSPORPHISM & MODERN UI --- */
+/* Body Font Setup */
+/* Note: mdbook overrides body font on theme switch, so we target specific containers if needed, 
+   but generally mdbook handles this. We let it be to avoid breaking the font switcher. */
 
-/* Sidebar Glassmorphism */
+/* --- SIDEBAR & NAVIGATION --- */
+
 .sidebar {
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border-right: 1px solid var(--sidebar-non-existant-border); /* Fallback */
-  background-color: var(--sidebar-bg); /* Use variable for translucency */
+  border-right: 1px solid rgba(255, 255, 255, 0.1);
+  background: var(--sidebar-bg); 
 }
 
-/* Enhancements for specifics themes */
+/* Active Chapter Highlight */
+.chapter li.active > a {
+  color: var(--brand-primary) !important;
+  background: rgba(99, 102, 241, 0.1);
+  border-radius: var(--radius-md);
+  font-weight: 600;
+}
 
-/* LIGHT THEME MODERNIZATION */
+/* --- THEME SPECIFIC VIBRANCY --- */
+
+/* LIGHT THEME */
 .light {
-  --bg: #FAFAFA; /* Softer white */
-  --fg: #1A1A1A; /* Softer black */
-  --sidebar-bg: rgba(245, 245, 245, 0.75); /* More translucent */
-  --sidebar-fg: #404040;
-  --table-header-bg: #f2f2f2;
-  --quote-bg: #f4f6f8;
-  --quote-border: #dfe2e5;
+  --bg: #FAFAFA;
+  --fg: #1e293b;
+  --sidebar-bg: linear-gradient(180deg, rgba(245, 247, 250, 0.9) 0%, rgba(255, 255, 255, 0.8) 100%);
+  --sidebar-fg: #475569;
+  --table-header-bg: #f1f5f9;
+  --quote-bg: #f8fafc;
+  --quote-border: #e2e8f0;
 }
 
-/* RUST THEME MODERNIZATION */
+.light h2, .light h3, .light h4 { color: #4f46e5; }
+.light .chapter li.active > a { color: #4f46e5 !important; background: rgba(79, 70, 229, 0.08); }
+
+
+/* RUST THEME (Warm) */
 .rust {
-  --sidebar-bg: rgba(60, 48, 41, 0.75);
+  --sidebar-bg: linear-gradient(180deg, rgba(60, 48, 41, 0.95) 0%, rgba(45, 35, 30, 0.9) 100%);
+  --brand-primary: #ffad66; 
 }
+.rust h1 { 
+    background: linear-gradient(135deg, #ffcba4 0%, #ffad66 100%); 
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+.rust h2, .rust h3 { color: #ffcba4; }
 
-/* NAVY THEME MODERNIZATION */
+
+/* NAVY THEME (Dark/Cool) */
 .navy {
-  --sidebar-bg: rgba(30, 36, 49, 0.75);
+  --bg: #0f172a;
+  --fg: #e2e8f0;
+  --sidebar-bg: linear-gradient(180deg, rgba(15, 23, 42, 0.9) 0%, rgba(30, 41, 59, 0.8) 100%);
+  --quote-bg: #1e293b;
+  --quote-border: #334155;
+}
+.navy h1 { 
+    background: linear-gradient(135deg, #818cf8 0%, #c084fc 100%); 
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
 
-/* --- GITHUB-STYLE ALERTS (Using JS classes) --- */
 
-/* Base Blockquote */
+/* --- GITHUB ALERTS --- */
+
 blockquote {
   border-radius: var(--radius-md);
   padding: 1rem 1.25rem;
   margin: 1.5rem 0;
   border-left: 4px solid var(--quote-border);
   background: var(--quote-bg);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); /* Subtle lift */
   font-style: normal;
 }
 
-/* Note Alert */
+/* Alert Colors - More Vibrant */
 blockquote.alert-note {
-  border-left-color: #0969da;
-  background-color: rgba(9, 105, 218, 0.1);
+  border-left-color: #3b82f6; /* Bright Blue */
+  background: linear-gradient(to right, rgba(59, 130, 246, 0.1), transparent);
 }
-blockquote.alert-note strong:first-child {
-  color: #0969da;
-}
+blockquote.alert-note strong:first-child { color: #2563eb; }
 
-/* Warning Alert */
 blockquote.alert-warning {
-  border-left-color: #9a6700;
-  background-color: rgba(154, 103, 0, 0.1);
-  color: #4d3800;
+  border-left-color: #f59e0b; /* Amber */
+  background: linear-gradient(to right, rgba(245, 158, 11, 0.1), transparent);
+  color: #92400e;
 }
-.light blockquote.alert-warning {
-  background-color: #fff8c5;
-} /* GitHub style highlight */
+.navy blockquote.alert-warning { color: #fcd34d; }
 
-/* Important Alert */
 blockquote.alert-important {
-  border-left-color: #8250df;
-  background-color: rgba(130, 80, 223, 0.1);
+  border-left-color: #8b5cf6; /* Violet */
+  background: linear-gradient(to right, rgba(139, 92, 246, 0.1), transparent);
 }
 
-/* Tip Alert */
 blockquote.alert-tip {
-  border-left-color: #1f883d;
-  background-color: rgba(31, 136, 61, 0.1);
+  border-left-color: #10b981; /* Emerald */
+  background: linear-gradient(to right, rgba(16, 185, 129, 0.1), transparent);
 }
 
-/* --- BUTTONS & INTERACTION --- */
 
-/* Nav buttons */
+/* --- BUTTONS & INTERACTIVE --- */
+
 .nav-chapters {
-  transition: transform 0.2s ease, background 0.2s;
-}
-.nav-chapters:hover {
-  transform: translateX(4px); /* More pronounced */
-  background: rgba(0, 0, 0, 0.05);
+  border-radius: 50%; /* Circle buttons */
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Code blocks */
+.nav-chapters:hover {
+  transform: scale(1.1);
+  background-color: var(--brand-primary);
+  color: white;
+  box-shadow: 0 10px 15px -3px rgba(99, 102, 241, 0.4);
+}
+
+/* Code Blocks */
 pre {
-  border-radius: var(--radius-md);
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  border-radius: var(--radius-lg);
+  border: 1px solid rgba(128, 128, 128, 0.1);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
 }
