@@ -32,8 +32,14 @@ h1 {
 }
 
 /* Body Font Setup */
-/* Note: mdbook overrides body font on theme switch, so we target specific containers if needed, 
-   but generally mdbook handles this. We let it be to avoid breaking the font switcher. */
+/* We target the default class (.opensans) to replace it with Inter.
+   This allows the user to switch to "Serif" (.slab) or "Mono" (.source-code-pro) if they want. */
+.opensans, .opensans body {
+  font-family: var(--font-sans);
+}
+
+/* Ensure font size scaling works by using relative units (rem/em) for everything */
+/* mdbook handles the root font-size on html, so we just flow with it. */
 
 /* --- SIDEBAR & NAVIGATION --- */
 
