@@ -1,8 +1,13 @@
 [book]
-title = "Chipseq_analyis"
+title = "ChIP-seq Analysis Tutorial"
 authors = ["Raja Khan"]
 language = "en"
 
 [output.html]
 additional-css = ["custom.css"]
 additional-js = ["custom.js"]
+
+
+
+
+
