@@ -1,0 +1,1937 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Chipseq_analyis</title>
+        <meta name="robots" content="noindex">
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon-de23e50b.svg">
+        <link rel="shortcut icon" href="favicon-8114d1fc.png">
+        <link rel="stylesheet" href="css/variables-8adf115d.css">
+        <link rel="stylesheet" href="css/general-2459343d.css">
+        <link rel="stylesheet" href="css/chrome-ae938929.css">
+        <link rel="stylesheet" href="css/print-9e4910d8.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="fonts/fonts-9644e21d.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="mdbook-highlight-css" href="highlight-493f70e1.css">
+        <link rel="stylesheet" id="mdbook-tomorrow-night-css" href="tomorrow-night-4c0ae647.css">
+        <link rel="stylesheet" id="mdbook-ayu-highlight-css" href="ayu-highlight-3fdfc3ac.css">
+
+        <!-- Custom theme stylesheets -->
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+            window.path_to_searchindex_js = "searchindex-ef778fde.js";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc-df4cee15.js"></script>
+    </head>
+    <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>S</kbd> or <kbd>/</kbd> to search in the book</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
+    <div id="mdbook-body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="mdbook-sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("mdbook-sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+                sidebar_toggle.checked = false;
+            }
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
+        </script>
+
+        <nav id="mdbook-sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="mdbook-sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="mdbook-page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="mdbook-menu-bar-hover-placeholder"></div>
+                <div id="mdbook-menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="mdbook-sidebar-toggle" class="icon-button" for="mdbook-sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="mdbook-sidebar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M0 96C0 78.3 14.3 64 32 64H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H416c17.7 0 32 14.3 32 32z"/></svg></span>
+                        </label>
+                        <button id="mdbook-theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="mdbook-theme-list">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M371.3 367.1c27.3-3.9 51.9-19.4 67.2-42.9L600.2 74.1c12.6-19.5 9.4-45.3-7.6-61.2S549.7-4.4 531.1 9.6L294.4 187.2c-24 18-38.2 46.1-38.4 76.1L371.3 367.1zm-19.6 25.4l-116-104.4C175.9 290.3 128 339.6 128 400c0 3.9 .2 7.8 .6 11.6c1.8 17.5-10.2 36.4-27.8 36.4H96c-17.7 0-32 14.3-32 32s14.3 32 32 32H240c61.9 0 112-50.1 112-112c0-2.5-.1-5-.2-7.5z"/></svg></span>
+                        </button>
+                        <ul id="mdbook-theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-ayu">Ayu</button></li>
+                        </ul>
+                        <button id="mdbook-search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="mdbook-searchbar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352c79.5 0 144-64.5 144-144s-64.5-144-144-144S64 128.5 64 208s64.5 144 144 144z"/></svg></span>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Chipseq_analyis</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <span class=fa-svg id="print-button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M128 0C92.7 0 64 28.7 64 64v96h64V64H354.7L384 93.3V160h64V93.3c0-17-6.7-33.3-18.7-45.3L400 18.7C388 6.7 371.7 0 354.7 0H128zM384 352v32 64H128V384 368 352H384zm64 32h32c17.7 0 32-14.3 32-32V256c0-35.3-28.7-64-64-64H64c-35.3 0-64 28.7-64 64v96c0 17.7 14.3 32 32 32H64v64c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V384zm-16-88c-13.3 0-24-10.7-24-24s10.7-24 24-24s24 10.7 24 24s-10.7 24-24 24z"/></svg></span>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="mdbook-search-wrapper" class="hidden">
+                    <form id="mdbook-searchbar-outer" class="searchbar-outer">
+                        <div class="search-wrapper">
+                            <input type="search" id="mdbook-searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="mdbook-searchresults-outer" aria-describedby="searchresults-header">
+                            <div class="spinner-wrapper">
+                                <span class=fa-svg id="fa-spin"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M304 48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zm0 416c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM48 304c26.5 0 48-21.5 48-48s-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48zm464-48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM142.9 437c18.7-18.7 18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zm0-294.2c18.7-18.7 18.7-49.1 0-67.9S93.7 56.2 75 75s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zM369.1 437c18.7 18.7 49.1 18.7 67.9 0s18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9z"/></svg></span>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="mdbook-searchresults-outer" class="searchresults-outer hidden">
+                        <div id="mdbook-searchresults-header" class="searchresults-header"></div>
+                        <ul id="mdbook-searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('mdbook-sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('mdbook-sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#mdbook-sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="mdbook-content" class="content">
+                    <main>
+                        <h1 id="welcome-to-the-practical-chip-seq-tutorial"><a class="header" href="#welcome-to-the-practical-chip-seq-tutorial">Welcome to the Practical ChIP-seq Tutorial</a></h1>
+<p><strong>From Raw Reads to Biological Insight: A “Zero-to-Hero” Guide.</strong></p>
+<p>This book is a comprehensive, hands-on course designed to teach you <strong>Chromatin Immunoprecipitation sequencing (ChIP-seq)</strong> analysis. We replicate a full-scale <strong>ENCODE</strong> analysis, processing real biological data to uncover gene regulation mechanisms.</p>
+<hr>
+<h2 id="why-this-tutorial"><a class="header" href="#why-this-tutorial">Why This Tutorial?</a></h2>
+<p>We built this course to solve the common frustrations of bioinformatics learning. Here is what makes it different:</p>
+<h3 id="1-the-tiered-learning-method"><a class="header" href="#1-the-tiered-learning-method">1. The “Tiered” Learning Method</a></h3>
+<p>We believe you shouldn’t just run code—you should understand it. Every chapter is broken into three distinct levels:</p>
+<ul>
+<li><strong>Level 1: Basic Concept (The “Why”):</strong> We use simple English and real-world analogies (like “Jigsaw Puzzles” for Alignment) to explain the biology.</li>
+<li><strong>Level 2: Execution (The “How”):</strong> We provide the exact code, line-by-line, to run on your machine.</li>
+<li><strong>Level 3: Interpretation (The “So What?”):</strong> We teach you how to read the output. A plot is useless if you don’t know what a “good” result looks like.</li>
+</ul>
+<h3 id="2-the-trinity-of-peaks"><a class="header" href="#2-the-trinity-of-peaks">2. The “Trinity” of Peaks</a></h3>
+<p>Most tutorials show you one easy transcription factor. We challenge you with the three distinct types of ChIP-seq data, so you are ready for anything:</p>
+<ul>
+<li><strong>The Sharp Peak:</strong> <em>CEBPA</em> (Transcription Factor).</li>
+<li><strong>The Narrow Peak:</strong> <em>H3K9ac</em> (Active Promoter Mark).</li>
+<li><strong>The Broad Domain:</strong> <em>H3K27me3</em> (Repressive Polycomb Mark).</li>
+</ul>
+<h3 id="3-a-complete-pipeline"><a class="header" href="#3-a-complete-pipeline">3. A Complete Pipeline</a></h3>
+<p>We don’t skip steps. You will go from:</p>
+<ol>
+<li><strong>Downloading</strong> raw FASTQ files from GEO.</li>
+<li><strong>Aligning</strong> reads with Bowtie2.</li>
+<li><strong>Calling Peaks</strong> with MACS2.</li>
+<li><strong>Visualizing</strong> data with deepTools.</li>
+<li><strong>Annotating</strong> genomic features with ChIPseeker.</li>
+</ol>
+<hr>
+<h2 id="the-scientific-goal"><a class="header" href="#the-scientific-goal">The Scientific Goal</a></h2>
+<p>In this project, we are investigating how the transcription factor <strong>CEBPA</strong> cooperates with histone modifications to regulate the genome.</p>
+<h3 id="experimental-context"><a class="header" href="#experimental-context">Experimental Context</a></h3>
+<p>These experiments were performed using the human <strong>BLaER1</strong> cell line. The cells were treated for 18 hours with three molecules:</p>
+<ul>
+<li><strong>100 nM 17β-estradiol</strong></li>
+<li><strong>10 ng/mL Interleukin-3</strong></li>
+<li><strong>10 ng/mL CSF1</strong></li>
+</ul>
+<p>These treatments activate specific signaling pathways in the cells and create a controlled biological state for studying transcription factors and histone modifications. The biosamples are described as <strong>isogenic</strong>, which means all replicates come from genetically identical cells and differ only in the experimental treatment or assay. The work was carried out in the laboratory of <strong>Roderic Guigó</strong> at CRG.</p>
+<p><strong>Data Availability:</strong></p>
+<ul>
+<li><a href="https://www.encodeproject.org/carts/ca521f95-7835-4369-88a9-b89f98fb39ad/">ENCODE Cart</a></li>
+<li><a href="https://doi.org/doi:10.17989%2FENCSR255SDP">DOI</a></li>
+</ul>
+<h3 id="study-design-targets--controls"><a class="header" href="#study-design-targets--controls">Study Design: Targets &amp; Controls</a></h3>
+<p>To study gene regulation under these conditions, several ChIP-seq experiments were carried out. These include:</p>
+<ul>
+<li><strong>Transcription Factor ChIP-seq:</strong> Targeted <strong>CEBPA</strong> to indicate specific transcription factor activity.</li>
+<li><strong>Histone Modification ChIP-seq:</strong> Targeted <strong>H3K27me3</strong> (repressed chromatin) and <strong>H3K9ac</strong> (active regulatory regions).</li>
+</ul>
+<p>Each of these marks highlights a different aspect of gene regulation. Alongside these, <strong>matching input (control) samples</strong> were generated to measure background DNA fragmentation and sequencing noise. These input libraries are essential because they allow a clear comparison between true enrichment (ChIP signal) and nonspecific background.</p>
+<h3 id="tutorial-learning-goals"><a class="header" href="#tutorial-learning-goals">Tutorial Learning Goals</a></h3>
+<p>While the biological context is interesting, our primary goal is to <strong>master the tools</strong>. Instead of just looking for biological answers, we will focus on the technical questions that every analyst must answer:</p>
+<ul>
+<li><strong>Quality Control:</strong> How do we know if our sequencing data is good enough to use? Why are duplicates bad?</li>
+<li><strong>Signal vs. Noise:</strong> How precisely does the “Input” control help us filter out background artifacts?</li>
+<li><strong>Peak Characteristics:</strong> How do the calling algorithms differ when looking for a <strong>sharp</strong> peak (CEBPA) versus a <strong>broad</strong> mark (H3K27me3)?</li>
+</ul>
+<p>By answering these technical questions, you will build a robust pipeline that can be applied to <em>any</em> organism or biological question.</p>
+<p>By the end of this book, you will have the skills—and the code—to answer these questions for your own research.</p>
+<p><strong>Let’s get started</strong></p>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="tutorial-00-setting-up-your-digital-lab-bench-conda-environment"><a class="header" href="#tutorial-00-setting-up-your-digital-lab-bench-conda-environment">Tutorial 00: Setting Up Your Digital Lab Bench (Conda Environment)</a></h1>
+<h2 id="basic-concept"><a class="header" href="#basic-concept">Basic Concept</a></h2>
+<p>Imagine you are about to start a complex experiment in a wet lab. You wouldn’t just dump all your chemicals and tools onto a cluttered desk, right? You would set up a specific <strong>Lab Bench</strong> with exactly the pipettes, reagents, and machines you need for <em>that specific experiment</em>.</p>
+<p>In bioinformatics, <strong>Conda</strong> allows us to do the exact same thing on a computer.</p>
+<ul>
+<li><strong>The Problem:</strong> Different software tools often conflict with each other (like needing different versions of Python). Installing them all on your main system is like mixing all your chemicals in one bucket—messy and dangerous.</li>
+<li><strong>The Solution:</strong> We create a “Virtual Environment” (our digital lab bench). Inside this environment, we install only the tools we need for ChIP-seq. When we are done, we can “close” the environment and go back to a clean computer.</li>
+</ul>
+<p>In this tutorial, we will build a simplified environment named <code>chip</code> that contains all the tools for our analysis.</p>
+<hr>
+<h2 id="execution"><a class="header" href="#execution">Execution</a></h2>
+<h3 id="step-1-get-the-environment-manager-anaconda"><a class="header" href="#step-1-get-the-environment-manager-anaconda">Step 1: Get the Environment Manager (Anaconda)</a></h3>
+<p>First, you need the software that builds these environments. We recommend <strong>Anaconda</strong> (or the lighter version, <strong>Miniconda</strong>).</p>
+<ul>
+<li>
+<p><strong>Check if you already have it:</strong>
+Open your terminal and type:</p>
+<pre><code class="language-bash">conda --version
+</code></pre>
+<p><em>(If you see a version number like <code>conda 24.7.1</code>, skip to Step 2.)</em></p>
+</li>
+<li>
+<p><strong>If not, download and install it:</strong></p>
+<ul>
+<li><strong>Anaconda (Recommended):</strong> <a href="https://www.anaconda.com/download">https://www.anaconda.com/download</a></li>
+<li><strong>Miniconda (Lightweight):</strong> <a href="https://docs.conda.io/en/latest/miniconda.html">https://docs.conda.io/en/latest/miniconda.html</a></li>
+</ul>
+</li>
+</ul>
+<h3 id="step-2-creates-the-recipe-file"><a class="header" href="#step-2-creates-the-recipe-file">Step 2: Creates the “Recipe” File</a></h3>
+<p>To build our lab bench, we give Conda a “recipe” list called a YAML file. This tells Conda exactly which tools to fetch.</p>
+<ol>
+<li>Create a new file named <code>chip_env.yml</code>.</li>
+<li>Copy and paste the exact code below into that file:</li>
+</ol>
+<pre><code class="language-yaml">name: chip   # Name of our environment
+channels:    # The "App Stores" where we find tools
+  - bioconda
+  - conda-forge
+  - defaults
+dependencies: # The tools we want to install
+  - multiqc=1.31
+  - fastqc=0.12.1
+  - numpy
+  - bowtie2=2.5.4
+  - pandas
+  - cutadapt=5.2
+  - trim-galore=0.6.10
+  - samtools=1.22.1
+  - macs2=2.2.9.1
+  - matplotlib
+  - pip
+  - openjdk
+  - python=3.10
+  - picard=3.4.0
+  - seaborn
+  - phantompeakqualtools
+  - bedtools
+  - ucsc-bedgraphtobigwig
+  - ucsc-facount
+  - ucsc-bigwiginfo
+  - ucsc-bigwigsummary
+prefix: /opt/anaconda3/envs/chip 
+</code></pre>
+<blockquote>
+<p><strong>Note:</strong> If you downloaded the repository, this file might be named <code>00_chip_updated.yml</code>. You can use that too!</p>
+</blockquote>
+<h3 id="step-3-build-the-environment"><a class="header" href="#step-3-build-the-environment">Step 3: Build the Environment</a></h3>
+<p>Now, let’s look at the instructions to build the bench.</p>
+<ol>
+<li>
+<p><strong>Create the environment:</strong>
+Run this command in the same folder where you saved your file:</p>
+<pre><code class="language-bash">conda env create -f chip_env.yml
+</code></pre>
+<p><em>(This takes a few minutes as it downloads all the tools.)</em></p>
+</li>
+<li>
+<p><strong>Enter the environment:</strong>
+To start working, you must “step into” your new lab bench:</p>
+<pre><code class="language-bash">conda activate chip
+</code></pre>
+<p><em>(You should see <code>(chip)</code> appear next to your cursor in the terminal.)</em></p>
+</li>
+</ol>
+<h3 id="step-4-verify-your-tools"><a class="header" href="#step-4-verify-your-tools">Step 4: Verify Your Tools</a></h3>
+<p>Let’s make sure our tools are actually there. Run these commands:</p>
+<pre><code class="language-bash"># Check if key tools are reachable
+which fastqc
+which bowtie2
+which macs2
+
+# Check versions to ensure successful installation
+fastqc --version
+bowtie2 --version
+</code></pre>
+<p>If these commands print paths (like <code>/Users/.../envs/chip/bin/fastqc</code>) and version numbers, <strong>congratulations!</strong> Your digital lab bench is ready.</p>
+<hr>
+<h3 id="understanding-the-yaml-recipe"><a class="header" href="#understanding-the-yaml-recipe">Understanding the YAML “Recipe”</a></h3>
+<p>Let’s break down the <code>chip_env.yml</code> file we just used:</p>
+<ul>
+<li><strong><code>channels</code></strong>: These are repositories (like App Stores).
+<ul>
+<li><strong><code>bioconda</code></strong>: The community hub for bioinformatics software.</li>
+<li><strong><code>conda-forge</code></strong>: A massive collection of general-purpose tools.</li>
+<li><em>The order matters!</em> Conda looks in the first channel on the list, then the second.</li>
+</ul>
+</li>
+<li><strong><code>dependencies</code></strong>: This is your shopping list.
+<ul>
+<li><strong>Version Pinned (e.g., <code>bowtie2=2.5.4</code>)</strong>: We specify the <em>exact</em> version. Why? So that if you run this analysis 2 years from now, you get the exact same results. This is key for <strong>Reproducibility</strong>.</li>
+</ul>
+</li>
+</ul>
+<h3 id="managing-your-environment"><a class="header" href="#managing-your-environment">Managing Your Environment</a></h3>
+<p>Here are some useful “Housekeeping” commands:</p>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th style="text-align: left">Command</th><th style="text-align: left">Explanation</th></tr>
+</thead>
+<tbody>
+<tr><td style="text-align: left"><code>conda deactivate</code></td><td style="text-align: left">“Step out” of the environment. Returns you to your base system.</td></tr>
+<tr><td style="text-align: left"><code>conda env list</code></td><td style="text-align: left">Lists all environments you have created on your computer.</td></tr>
+<tr><td style="text-align: left"><code>conda env remove -n chip</code></td><td style="text-align: left">Deletes the <code>chip</code> environment mostly used if you made a mistake and want to start over.</td></tr>
+<tr><td style="text-align: left"><code>conda env update -f chip_env.yml --prune</code></td><td style="text-align: left">Updates the environment if you change the YAML file. The <code>--prune</code> flag removes old tools you don’t need anymore.</td></tr>
+</tbody>
+</table>
+</div>
+<hr>
+<h2 id="summary"><a class="header" href="#summary"><strong>Summary</strong></a></h2>
+<ol>
+<li><strong>Analogy:</strong> We built a dedicated “Lab Bench” (Environment) to keep our work clean.</li>
+<li><strong>Action:</strong> We used <code>conda env create</code> with a YAML recipe to install tools like Bowtie2 and MACS2.</li>
+<li><strong>Result:</strong> We now have a <code>(chip)</code> environment ready for the actual ChIP-seq analysis.</li>
+</ol>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="tutorial-01-getting-the-raw-data-fastq"><a class="header" href="#tutorial-01-getting-the-raw-data-fastq">Tutorial 01: Getting the Raw Data (FASTQ)</a></h1>
+<blockquote class="blockquote-tag blockquote-tag-note">
+<p class="blockquote-tag-title"><svg viewbox="0 0 16 16" width="18" height="18"><path d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8Zm8-6.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13ZM6.5 7.75A.75.75 0 0 1 7.25 7h1a.75.75 0 0 1 .75.75v2.75h.25a.75.75 0 0 1 0 1.5h-2a.75.75 0 0 1 0-1.5h.25v-2h-.25a.75.75 0 0 1-.75-.75ZM8 6a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z"></path></svg>Note</p>
+<p><strong>Project Context:</strong> While this tutorial teaches you how to download data from SRA, our specific project utilizes <strong>ENCODE</strong> data (CEBPA, H3K27me3, H3K9ac). See the <code>README.md</code> for the specific file list. The <code>fastq-dl</code> tool is excellent for public SRA data, but ENCODE data is often downloaded directly from the ENCODE portal.</p>
+</blockquote>
+<h2 id="level-1-basic-concept"><a class="header" href="#level-1-basic-concept">Level 1: Basic Concept</a></h2>
+<h3 id="the-library-analogy"><a class="header" href="#the-library-analogy">The “Library” Analogy</a></h3>
+<p>Before we download anything, it helps to understand where the data lives. Think of the public databases like a University Library.</p>
+<ul>
+<li><strong>GEO (Gene Expression Omnibus):</strong> This is the <strong>Card Catalog</strong>. It has the descriptions (Metadata) of the experiments—like “H3K27ac in Breast Cancer”—but it usually doesn’t hold the actual heavy books (data files).</li>
+<li><strong>SRA (Sequence Read Archive) &amp; ENA (European Nucleotide Archive):</strong> These are the <strong>Stacks</strong>. This is where the actual raw data files are stored.</li>
+</ul>
+<p><strong>Your Goal:</strong> You find an interesting study in the Catalog (GEO), get its ID, and then send a runner (our software tool) to the Stacks (SRA/ENA) to fetch the files.</p>
+<h3 id="the-files-you-will-encounter"><a class="header" href="#the-files-you-will-encounter">The Files You Will Encounter</a></h3>
+<p>As we process data, we change formats. Think of it like this:</p>
+<ol>
+<li><strong>FASTQ (Raw Reads):</strong> The jumbled words. This is what comes off the sequencer. It’s just millions of short strings of letters (A, C, G, T) with no context.</li>
+<li><strong>BAM (Aligned Reads):</strong> The assembled sentences. We map the words to a reference genome so we know where they belong.</li>
+<li><strong>BED/BigWig (Signals):</strong> The highlighted passages. These are simplified files that show us where the interesting “peaks” (protein binding sites) are.</li>
+</ol>
+<hr>
+<h2 id="level-2-fetching-the-data"><a class="header" href="#level-2-fetching-the-data">Level 2: Fetching the data</a></h2>
+<p>To download data, we use a tool called <code>fastq-dl</code>. It acts like a smart librarian—you just give it the ID number, and it deals with the complicated databases for you.</p>
+<h3 id="21-download-a-single-sample"><a class="header" href="#21-download-a-single-sample">2.1 Download a Single Sample</a></h3>
+<p>If you have a Run ID (starts with <strong>SRR</strong> or <strong>ERR</strong>), use this command:</p>
+<pre><code class="language-bash"># Download one sample from SRA
+fastq-dl --accession SRR7297994 --provider SRA --cpus 4
+
+# Or from ENA (often faster/more reliable)
+fastq-dl --accession SRR7297994 --provider ena
+</code></pre>
+<h3 id="22-download-multiple-samples-the-loop"><a class="header" href="#22-download-multiple-samples-the-loop">2.2 Download Multiple Samples (The Loop)</a></h3>
+<p>Usually, you need to download many samples. Instead of typing the command 10 times, we put the IDs in a list.</p>
+<ol>
+<li>
+<p>Create a file named <code>srr_list.txt</code> with one ID per line:</p>
+<pre><code class="language-text">SRR7297994
+SRR7297995
+SRR7297998
+SRR7298003
+</code></pre>
+</li>
+<li>
+<p>Run this “Loop” to download them one by one:</p>
+<pre><code class="language-bash">while read acc; do                       # Reads each line as variable $acc
+  fastq-dl --accession $acc \            # Tells fastq-dl to download that ID
+           --provider SRA \
+           --cpus 4
+done &lt; srr_list.txt                      # The file to read from
+</code></pre>
+</li>
+</ol>
+<h3 id="23-parallel-download-the-fast-way"><a class="header" href="#23-parallel-download-the-fast-way">2.3 Parallel Download (The Fast Way)</a></h3>
+<p>If you have a powerful computer, you can download multiple files at the same time using <code>parallel</code>.</p>
+<pre><code class="language-bash"># Download 4 files at once
+cat srr_list.txt | parallel -j 4 'fastq-dl --accession {} --provider ena'
+</code></pre>
+<h3 id="24-download-an-entire-study"><a class="header" href="#24-download-an-entire-study">2.4 Download an Entire Study</a></h3>
+<p>You can also download everything associated with a study ID (starts with <strong>SRP</strong> or <strong>PRJNA</strong>):</p>
+<pre><code class="language-bash">fastq-dl --accession SRP115709
+</code></pre>
+<p><em>Note: Be careful! A whole study might have hundreds of files.</em></p>
+<hr>
+<h3 id="connecting-geo-to-sra"><a class="header" href="#connecting-geo-to-sra">Connecting GEO to SRA</a></h3>
+<p>How do we find the <strong>SRR</strong> numbers?
+In GEO, you will see a hierarchy. It’s important not to mix these up:</p>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th style="text-align: left">Level</th><th style="text-align: left">Prefix (SRA / ENA)</th><th style="text-align: left">What It Is</th></tr>
+</thead>
+<tbody>
+<tr><td style="text-align: left"><strong>Project</strong></td><td style="text-align: left">PRJNA / PRJEB</td><td style="text-align: left">The umbrella project (e.g., “Breast Cancer Epigenomics 2024”).</td></tr>
+<tr><td style="text-align: left"><strong>Study</strong></td><td style="text-align: left">SRP / ERP</td><td style="text-align: left">A specific paper or dataset.</td></tr>
+<tr><td style="text-align: left"><strong>Sample</strong></td><td style="text-align: left">SRS / ERS</td><td style="text-align: left">The biological sample (e.g., “Patient 5 Tumor”).</td></tr>
+<tr><td style="text-align: left"><strong>Experiment</strong></td><td style="text-align: left">SRX / ERX</td><td style="text-align: left">The library prep info.</td></tr>
+<tr><td style="text-align: left"><strong>Run</strong></td><td style="text-align: left"><strong>SRR / ERR</strong></td><td style="text-align: left"><strong>The actual data.</strong> This is what you download.</td></tr>
+</tbody>
+</table>
+</div>
+<h3 id="technical-replicates-multi-lane"><a class="header" href="#technical-replicates-multi-lane">Technical Replicates (Multi-lane)</a></h3>
+<p>Sometimes, one biological sample is sequenced across multiple “lanes” of a machine to get more reads.</p>
+<ul>
+<li><strong>Result:</strong> You might see <code>SRR900100</code> and <code>SRR900101</code> for the <em>same</em> sample.</li>
+<li><strong>Action:</strong> <code>fastq-dl</code> will download them. Later, we will merge these FASTQ files together so we have one big file for that sample.</li>
+</ul>
+<hr>
+<h2 id="summary-1"><a class="header" href="#summary-1">Summary</a></h2>
+<ol>
+<li><strong>Understand:</strong> GEO is for metadata; SRA/ENA is for data.</li>
+<li><strong>Identify:</strong> Find the <strong>SRR</strong> (Run) IDs for your samples.</li>
+<li><strong>Download:</strong> Use <code>fastq-dl</code> with a loop or parallel command to fetch the FASTQ files.</li>
+</ol>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="tutorial-02-creating-a-sample-list-the-attendance-sheet"><a class="header" href="#tutorial-02-creating-a-sample-list-the-attendance-sheet">Tutorial 02: Creating a Sample List (The “Attendance Sheet”)</a></h1>
+<blockquote class="blockquote-tag blockquote-tag-note">
+<p class="blockquote-tag-title"><svg viewbox="0 0 16 16" width="18" height="18"><path d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8Zm8-6.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13ZM6.5 7.75A.75.75 0 0 1 7.25 7h1a.75.75 0 0 1 .75.75v2.75h.25a.75.75 0 0 1 0 1.5h-2a.75.75 0 0 1 0-1.5h.25v-2h-.25a.75.75 0 0 1-.75-.75ZM8 6a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z"></path></svg>Note</p>
+<p><strong>Project Context:</strong> In our specific analysis (see <code>README.md</code>), our files are named with ENCODE IDs (e.g., <code>ENCFF327JFG</code>). When you run the commands below on our dataset, your <code>sample_id.txt</code> will contain these IDs instead of “Sample1” or “Experiment1”.</p>
+</blockquote>
+<h2 id="level-1-basic-concept-the-roll-call"><a class="header" href="#level-1-basic-concept-the-roll-call">Level 1: Basic Concept (The “Roll Call”)</a></h2>
+<p>Imagine you have a classroom with 100 students. If you want to give everyone a grade, you don’t want to type out “Student_John_Doe_Homework_Final_v2.docx” every single time. You just want a simple list of names like “John”, “Sarah”, “Mike”.</p>
+<p>In bioinformatics, we feel the same way about our files.</p>
+<ul>
+<li><strong>The Problem:</strong> Our files have long, messy names like <code>Sample1_Rep1_R1.fastq.gz</code>.</li>
+<li><strong>The Goal:</strong> We want a clean list of “Sample IDs” (e.g., <code>Sample1_Rep1</code>) saved in a text file.</li>
+<li><strong>The Why:</strong> We will feed this list to our computer later so it can automatically loop through every sample and process them one by one.</li>
+</ul>
+<hr>
+<h2 id="level-2-execution-cleaning-the-names"><a class="header" href="#level-2-execution-cleaning-the-names">Level 2: Execution (Cleaning the Names)</a></h2>
+<p>We will use a command-line tool called <code>sed</code> (Stream Editor) to “search and replace” the messy file extensions with nothing, leaving only the clean name.</p>
+<h3 id="scenario-a-single-end-reads"><a class="header" href="#scenario-a-single-end-reads">Scenario A: Single-End Reads</a></h3>
+<p>If your files look like <code>SampleA.fastq.gz</code>, we just want to remove <code>.fastq.gz</code>.</p>
+<p>Run this command:</p>
+<pre><code class="language-bash">ls *.fastq.gz | sed 's/.fastq.gz//' &gt; sample_id.txt
+</code></pre>
+<p><strong>What did this do?</strong></p>
+<ol>
+<li><code>ls *.fastq.gz</code>: Listed all the files.</li>
+<li><code>|</code>: Passed that list to the next tool.</li>
+<li><code>sed 's/.fastq.gz//'</code>: Replaced the text “.fastq.gz” with nothing (effectively deleting it).</li>
+<li><code>&gt; sample_id.txt</code>: Saved the result to a new file.</li>
+</ol>
+<h3 id="scenario-b-paired-end-reads-most-common"><a class="header" href="#scenario-b-paired-end-reads-most-common">Scenario B: Paired-End Reads (Most Common)</a></h3>
+<p>Paired-end data usually comes in pairs of files for <em>one</em> sample:</p>
+<ul>
+<li><code>Experiment1_R1.fastq.gz</code> (Read 1)</li>
+<li><code>Experiment1_R2.fastq.gz</code> (Read 2)</li>
+</ul>
+<p>We don’t want “Experiment1” to appear twice in our list. We only want to grab the name <em>once</em>.</p>
+<p>Run this command:</p>
+<pre><code class="language-bash">ls *_R1.fastq.gz | sed 's/_R1.fastq.gz//' &gt; sample_id.txt
+</code></pre>
+<p><strong>Why look for R1?</strong>
+By listing only the <code>_R1</code> files, we get exactly one entry per sample. We then strip off the <code>_R1.fastq.gz</code> part to get the clean sample name.</p>
+<hr>
+<h3 id="creating-the-list-manually"><a class="header" href="#creating-the-list-manually">Creating the List Manually?</a></h3>
+<p>You <em>could</em> just type the names into a text file yourself. However, that is prone to typos. Using <code>ls</code> ensures you only list files that actually exist.</p>
+<h3 id="verifying-your-list"><a class="header" href="#verifying-your-list">Verifying Your List</a></h3>
+<p>Always check your list before running a pipeline!</p>
+<pre><code class="language-bash">cat sample_id.txt
+</code></pre>
+<p><strong>Good Output:</strong></p>
+<pre><code class="language-text">Control_Rep1
+Control_Rep2
+Treated_Rep1
+Treated_Rep2
+</code></pre>
+<p><strong>Bad Output (Common Mistake):</strong></p>
+<pre><code class="language-text">Control_Rep1.fastq.gz  &lt;-- Extension wasn't removed!
+Control_Rep2.fastq.gz
+</code></pre>
+<p><em>If you see the “Bad Output”, check your <code>sed</code> command again.</em></p>
+<hr>
+<h2 id="summary-2"><a class="header" href="#summary-2">Summary</a></h2>
+<ol>
+<li><strong>Goal:</strong> Create a clean list of sample names (<code>sample_id.txt</code>).</li>
+<li><strong>Tool:</strong> Use <code>ls</code> to find files and <code>sed</code> to remove extensions.</li>
+<li><strong>Result:</strong> A simple text file that acts as an “Attendance Sheet” for your future automation loops.</li>
+</ol>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="tutorial-03-understanding-and-cleaning-your-data-fastq--fastp"><a class="header" href="#tutorial-03-understanding-and-cleaning-your-data-fastq--fastp">Tutorial 03: Understanding and Cleaning Your Data (FASTQ &amp; fastp)</a></h1>
+<h2 id="level-1-basic-concept-the-anatomy-of-a-read"><a class="header" href="#level-1-basic-concept-the-anatomy-of-a-read">Level 1: Basic Concept (The Anatomy of a Read)</a></h2>
+<p>A FASTQ file is just a text file full of DNA sequences. But unlike a simple list of letters, every single read carries extra baggage (its quality score).</p>
+<p>Think of every read like a <strong>Luggage Tag</strong> with 4 lines of information:</p>
+<ol>
+<li><strong>Line 1 (The Header):</strong> Starts with <code>@</code>. This is the <strong>ID Card</strong>. It tells you the machine name, flowcell lane, and coordinates.</li>
+<li><strong>Line 2 (The Sequence):</strong> The DNA letters (<code>ACTG...</code>). This is the <strong>Content</strong> inside the bag.</li>
+<li><strong>Line 3 (The Spacer):</strong> Starts with <code>+</code>. Just a divider.</li>
+<li><strong>Line 4 (The Quality):</strong> A string of weird characters (<code>F:F#,,...</code>). This is the <strong>Trust Score</strong>. Each character represents the probability that the corresponding base in Line 2 is wrong.</li>
+</ol>
+<p><strong>Example Read:</strong></p>
+<pre><code class="language-text">@SRR7298010.1 1/1                 &lt;-- ID: Read #1
+NGATTTCTATTCTTGGAACCATTAAAA...    &lt;-- DNA: "N" means the machine failed to call that base
++SRR7298010.1 1/1                 &lt;-- Spacer
+FFFFF:F#,,...                     &lt;-- Quality: Matches the length of the DNA
+</code></pre>
+<hr>
+<h2 id="level-2-execution-the-car-wash"><a class="header" href="#level-2-execution-the-car-wash">Level 2: Execution (The Car Wash)</a></h2>
+<p>Before we start analyzing, we need to clean our data.</p>
+<ul>
+<li><strong>The Problem:</strong> Sequencers sometimes make mistakes, especially at the ends of reads. They also leave “adapters” (artificial tags) attached to the DNA.</li>
+<li><strong>The Solution:</strong> We use a tool called <strong>fastp</strong>. It acts like an automatic car wash: dirty reads go in, clean reads come out.</li>
+</ul>
+<h3 id="21-basic-cleaning-single-end"><a class="header" href="#21-basic-cleaning-single-end">2.1 Basic Cleaning (Single-End)</a></h3>
+<pre><code class="language-bash"># -i: Input (dirty)
+# -o: Output (clean)
+fastp -i raw_sample.fastq.gz -o clean_sample.fastq.gz
+</code></pre>
+<h3 id="22-basic-cleaning-paired-end"><a class="header" href="#22-basic-cleaning-paired-end">2.2 Basic Cleaning (Paired-End)</a></h3>
+<p>For paired-end data, we must process R1 and R2 together so they stay synchronized.</p>
+<pre><code class="language-bash">fastp -i in.R1.fq.gz -I in.R2.fq.gz \
+      -o out.R1.fq.gz -O out.R2.fq.gz \
+      -f 3 -t 2
+</code></pre>
+<ul>
+<li><code>-f 3</code>: Trim 3 bases from the front (optional, if you know the start is bad).</li>
+<li><code>-t 2</code>: Trim 2 bases from the tail.</li>
+</ul>
+<p><strong>What does fastp do automatically?</strong></p>
+<ul>
+<li><strong>Quality Filtering:</strong> Drops reads if too many bases have low scores (default: Phred &lt; 15).</li>
+<li><strong>Length Filtering:</strong> Drops reads that become too short after trimming (default: &lt; 15bp).</li>
+<li><strong>Adapter Removal:</strong> Finds and cuts off adapter sequences automatically.</li>
+</ul>
+<hr>
+<h2 id="level-3-advanced-analysis-the-math"><a class="header" href="#level-3-advanced-analysis-the-math">Level 3: Advanced Analysis (The Math)</a></h2>
+<h3 id="31-quick-stats-with-awk"><a class="header" href="#31-quick-stats-with-awk">3.1 Quick Stats with AWK</a></h3>
+<p>Sometimes you don’t want to run a full report; you just want to know “How many reads do I have?”
+You can use <code>awk</code> (a math tool for text) to count directly from the compressed file.</p>
+<p><strong>Count Total Reads:</strong></p>
+<pre><code class="language-bash"># A FASTQ record is 4 lines. We count total lines and divide by 4.
+gzcat sample.fastq.gz | wc -l | awk '{print $1/4 " reads"}'
+</code></pre>
+<p><strong>Count Total Bases (Coverage):</strong></p>
+<pre><code class="language-bash"># Sums the length of line 2 (sequence) for every record
+gzcat sample.fastq.gz | awk 'NR%4==2 {b+=length($0)} END{print b " bases"}'
+</code></pre>
+<ul>
+<li><em>Approximation:</em> If you have 100 Million bases and your genome is 3 Billion bases (Human), your coverage is roughly 0.03x.</li>
+</ul>
+<h3 id="32-batch-processing"><a class="header" href="#32-batch-processing">3.2 Batch Processing</a></h3>
+<p>If you have 50 files, you can use a script to run <code>fastp</code> on all of them in parallel.
+The <code>fastp</code> developers provide a handy script called <code>parallel.py</code>:</p>
+<pre><code class="language-bash"># Process 3 files at a time (-f 3), using 2 threads per file (-t 2)
+python parallel.py -i /raw_data_folder -o /clean_data_folder -r /report_folder -f 3 -t 2
+</code></pre>
+<p>This automatically finds pairs and generates HTML reports for every sample.</p>
+<hr>
+<h2 id="summary-3"><a class="header" href="#summary-3">Summary</a></h2>
+<ol>
+<li><strong>Understand:</strong> FASTQ files have 4 lines per read; line 4 is the quality score.</li>
+<li><strong>Action:</strong> Always run <code>fastp</code> to trim adapters, low-quality bases, and too-short reads.</li>
+<li><strong>Check:</strong> Use <code>wc -l</code> or <code>awk</code> for instant feedback on your data size.</li>
+</ol>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="tutorial-04-alignment-solving-the-jigsaw-puzzle"><a class="header" href="#tutorial-04-alignment-solving-the-jigsaw-puzzle">Tutorial 04: Alignment (Solving the Jigsaw Puzzle)</a></h1>
+<h2 id="level-1-basic-concept-the-puzzle"><a class="header" href="#level-1-basic-concept-the-puzzle">Level 1: Basic Concept (The “Puzzle”)</a></h2>
+<p>Imagine your Reference Genome is the <strong>Picture on the Puzzle Box</strong> (a complete image of the DNA).
+Your Reads (FASTAS) are the millions of tiny <strong>Puzzle Pieces</strong> scattered on the floor.</p>
+<p><strong>Alignment</strong> is simply picking up every piece and finding exactly where it fits on the picture.</p>
+<ul>
+<li><strong>The Input:</strong> Millions of jumbled reads.</li>
+<li><strong>The Tool:</strong> <strong>Bowtie2</strong> (The Puzzle Solver).</li>
+<li><strong>The Output:</strong> A <strong>BAM File</strong>. This is the digital record of where every piece belongs.</li>
+</ul>
+<hr>
+<h2 id="level-2-execution-solving-it"><a class="header" href="#level-2-execution-solving-it">Level 2: Execution (Solving It)</a></h2>
+<h3 id="step-1-the-index-building-the-map"><a class="header" href="#step-1-the-index-building-the-map">Step 1: The Index (Building the Map)</a></h3>
+<p>Before Bowtie2 can work, it needs to process the reference genome into a format it can search quickly. This is called an <strong>Index</strong>.</p>
+<pre><code class="language-bash"># Example syntax: bowtie2-build [genome.fa] [prefix_name]
+bowtie2-build hg38.fa hg38_index
+</code></pre>
+<p><em>You only do this once!</em></p>
+<h3 id="step-2-single-sample-alignment"><a class="header" href="#step-2-single-sample-alignment">Step 2: Single Sample Alignment</a></h3>
+<p>We use a “Pipe” (<code>|</code>) to connect two tools: <code>bowtie2</code> aligns the data, and <code>samtools</code> sorts it immediately.</p>
+<p><strong>Why Sort?</strong> A puzzle is useless if the pieces are in random order. We sort them by chromosome location (Left to Right) so we can look at them later.</p>
+<p><strong>Run this command:</strong></p>
+<pre><code class="language-bash">mkdir -p bowalign
+
+bowtie2 -x hg38_index \                  # 1. The Reference Map
+  -1 trim/Sample1_R1.clean.fq.gz \       # 2. Input Read 1
+  -2 trim/Sample1_R2.clean.fq.gz \       # 3. Input Read 2
+  -p 6 --no-unal \                       # 4. Use 6 threads, ignore unmapped trash
+  2&gt; bowalign/Sample1.log |              # 5. Save the log file...
+  samtools sort -@ 6 -o bowalign/Sample1.sorted.bam  # 6. ...and sort the result!
+</code></pre>
+<p><strong>Final Touch:</strong>
+We always “index” the BAM file. Think of this as creating a <strong>Table of Contents</strong> so the computer can jump to any chromosome instantly.</p>
+<pre><code class="language-bash">samtools index bowalign/Sample1.sorted.bam
+</code></pre>
+<h3 id="step-3-automation-loop"><a class="header" href="#step-3-automation-loop">Step 3: Automation Loop</a></h3>
+<p>Here is the script to run this for all your samples:</p>
+<pre><code class="language-bash">#!/bin/bash
+mkdir -p bowalign
+
+# Loop through every ID in our "Attendance Sheet"
+for sample in $(cat sample_id.txt); do
+  echo "Aligning $sample..."
+  
+  bowtie2 -x hg38_index \
+    -1 trim/${sample}_R1.clean.fq.gz \
+    -2 trim/${sample}_R2.clean.fq.gz \
+    -p 6 --no-unal \
+    2&gt; bowalign/${sample}.log | samtools sort -@ 6 -o bowalign/${sample}.sorted.bam
+
+  samtools index bowalign/${sample}.sorted.bam
+done
+</code></pre>
+<hr>
+<h2 id="level-3-optimization--qc"><a class="header" href="#level-3-optimization--qc">Level 3: Optimization &amp; QC</a></h2>
+<h3 id="optimization-threads-vs-jobs"><a class="header" href="#optimization-threads-vs-jobs">Optimization: Threads vs. Jobs</a></h3>
+<p>You have a limited number of CPU cores (computers brains). You can use them in two ways:</p>
+<ol>
+<li><strong>Multi-Threading (<code>-p 6</code>):</strong> One sample uses 6 cores. It finishes very fast, but you only do <strong>one sample at a time</strong>.
+<ul>
+<li><em>Best for:</em> Large genomes, low memory.</li>
+</ul>
+</li>
+<li><strong>Parallel Jobs:</strong> You run <strong>3 samples</strong> at once, and each sample uses <strong>2 cores</strong>.
+<ul>
+<li><em>Best for:</em> Many small samples (RNA-seq, small genomes).</li>
+</ul>
+</li>
+</ol>
+<p><strong>Rule of Thumb:</strong> <code>bowtie2</code> stops getting faster after about <strong>8 threads</strong>. Don’t give it 50 threads; it’s a waste!</p>
+<h3 id="quality-check-samtools-flagstat"><a class="header" href="#quality-check-samtools-flagstat">Quality Check: <code>samtools flagstat</code></a></h3>
+<p>Did the alignment work? Let’s check the score.</p>
+<pre><code class="language-bash">samtools flagstat bowalign/Sample1.sorted.bam
+</code></pre>
+<p><strong>What to look for:</strong></p>
+<ul>
+<li><strong>Mapping Rate:</strong> Ideally <strong>&gt;80-90%</strong>. If it’s &lt;50%, your DNA might be contaminated (e.g., bacteria in a human sample).</li>
+<li><strong>Properly Paired:</strong> Ideally <strong>high</strong>. This means R1 and R2 pointed towards each other at the correct distance.</li>
+</ul>
+<hr>
+<h2 id="summary-4"><a class="header" href="#summary-4">Summary</a></h2>
+<ol>
+<li><strong>Analogy:</strong> Alignment is placing puzzle pieces onto the reference picture.</li>
+<li><strong>Action:</strong> Use <code>bowtie2</code> to align and <code>samtools sort</code> to organize.</li>
+<li><strong>Result:</strong> A <strong>Sorted BAM</strong> file (the solved puzzle), ready for peak calling.</li>
+</ol>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="05-handling-duplicates--quality-control"><a class="header" href="#05-handling-duplicates--quality-control">05. Handling Duplicates &amp; Quality Control</a></h1>
+<h2 id="1-basic-concept-the-photocopier-analogy"><a class="header" href="#1-basic-concept-the-photocopier-analogy">1. Basic Concept: The “Photocopier” Analogy</a></h2>
+<p>Imagine you are trying to read a rare, handwritten manuscript (your DNA sample). You want to digitize it, so you take photos (sequencing reads) of different pages.</p>
+<ul>
+<li><strong>Real Signal (Enriched Regions):</strong> If many people are taking photos of the <em>same important page</em> because it’s interesting, that’s good! In ChIP-seq, this happens when a protein binds strongly to a specific DNA spot. We see many reads there because the biological signal is strong.</li>
+<li><strong>Duplicates (Artifacts):</strong> Now, imagine the photocopier gets stuck and prints 100 copies of a <em>random, unimportant page</em> just because of a machine error. These copies don’t mean that page is 100 times more important; they are just <strong>junk</strong>. In sequencing, this is called <strong>PCR duplication</strong>—where the chemistry accidentally over-copies a single DNA fragment.</li>
+</ul>
+<p><strong>Goal:</strong> We want to keep the “popular pages” (real biological signal) but throw away the “accidental machine copies” (PCR duplicates) so they don’t trick us into thinking a random spot is important.</p>
+<hr>
+<h2 id="2-execution-marking--removing-duplicates"><a class="header" href="#2-execution-marking--removing-duplicates">2. Execution: Marking &amp; Removing Duplicates</a></h2>
+<p>We use a tool called <strong>Picard</strong> to find these “accidental copies.” It looks for reads that start and end at the exact same position. If it finds 10 identical reads, it keeps the best one and marks the other 9 as duplicates.</p>
+<h3 id="step-33-mark-duplicates-be-careful"><a class="header" href="#step-33-mark-duplicates-be-careful">Step 3.3: Mark Duplicates (Be Careful!)</a></h3>
+<p>First, we will just <strong>mark</strong> the duplicates but <strong>keep them</strong> in the file. This is like highlighting the duplicate pages in yellow but not throwing them in the trash yet. This is important for Quality Control (QC) to see how bad the duplication problem is.</p>
+<pre><code class="language-bash"># ----- 3.3 Mark duplicates (keep all reads, just mark) -----
+# Create a folder for results
+mkdir -p marked_reads
+
+# Run Picard MarkDuplicates
+picard MarkDuplicates \
+  I=sample01.bam \
+  O=marked_reads/sample01.marked.bam \
+  M=marked_reads/metrics.txt \
+  REMOVE_DUPLICATES=false
+</code></pre>
+<ul>
+<li><code>I="$bam"</code>: Input BAM file.</li>
+<li><code>O=...</code>: Output BAM file (with duplicates marked).</li>
+<li><code>M=...</code>: Metrics file (report card showing how many duplicates were found).</li>
+<li><code>REMOVE_DUPLICATES=false</code>: Crucial! identifying them, not deleting them.</li>
+</ul>
+<h3 id="step-34-remove-duplicates-clean-up"><a class="header" href="#step-34-remove-duplicates-clean-up">Step 3.4: Remove Duplicates (Clean Up)</a></h3>
+<p>Now that we’ve checked the quality, we create a “clean” version of our data for analysis. We remove the marked duplicates so they don’t interfere with peak calling.</p>
+<pre><code class="language-bash"># ----- 3.4 Create a duplicate-removed BAM by filtering marked BAM -----
+# Create a folder for final results
+mkdir -p final_clean_bam
+
+# Run Picard to REMOVE duplicates
+picard MarkDuplicates \
+  I=sample01.bam \
+  O=final_clean_bam/sample01.dedup.bam \
+  M=final_clean_bam/dedup_metrics.txt \
+  REMOVE_DUPLICATES=true
+
+# Index the new file
+samtools index final_clean_bam/sample01.dedup.bam
+echo "Duplicates removed. Clean file is ready."
+</code></pre>
+<ul>
+<li><code>REMOVE_DUPLICATES=true</code>: This time, we actually delete the highlighted duplicates.</li>
+</ul>
+<hr>
+<h2 id="3-understanding-the-details"><a class="header" href="#3-understanding-the-details">3. Understanding the Details</a></h2>
+<p>For those who want to understand the “under the hood” mechanics, here is how Picard distinguishes different types of duplicates and why Read Groups matter.</p>
+<h3 id="pcr-vs-optical-duplicates"><a class="header" href="#pcr-vs-optical-duplicates">PCR vs. Optical Duplicates</a></h3>
+<p>Picard is smart enough to tell <em>why</em> a duplicate happened:</p>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>Type</th><th>Origin</th><th>Typical Cause</th><th>Implication</th></tr>
+</thead>
+<tbody>
+<tr><td><strong>PCR Duplicates</strong></td><td>Library Prep</td><td>Over-cycling (amplifying DNA too much)</td><td>Shows low library complexity (not enough unique DNA to start with).</td></tr>
+<tr><td><strong>Optical Duplicates</strong></td><td>Sequencer</td><td>Camera errors reads the same cluster as two</td><td>Technical glitch on the flow cell.</td></tr>
+</tbody>
+</table>
+</div>
+<h3 id="pcr-duplicates-vs-biological-signal"><a class="header" href="#pcr-duplicates-vs-biological-signal">PCR Duplicates vs. Biological Signal</a></h3>
+<p>How do we know it’s a duplicate and not a strong signal?</p>
+<ul>
+<li><strong>Duplicates:</strong> Reads start and end at the <em>exact</em> same base pair.</li>
+<li><strong>Real Signal:</strong> Reads pile up in the same <em>region</em> (peak), but they have slightly different start/end points (staggered).</li>
+</ul>
+<h3 id="the-role-of-read-groups-rg"><a class="header" href="#the-role-of-read-groups-rg">The Role of Read Groups (RG)</a></h3>
+<p>A <strong>Read Group</strong> is a tag that tells the software “this read came from Sample A, Run 1.”</p>
+<ul>
+<li><strong>Why is it vital?</strong> If you merge two different samples (e.g., Replicate 1 and Replicate 2), you might have two different reads that coincidentally map to the same spot.</li>
+<li>Without Read Groups, Picard acts blindly: “These look identical! Delete one!” -&gt; <strong>Data Loss.</strong></li>
+<li>With Read Groups, Picard sees: “Oh, one is from Replicate 1 and one is from Replicate 2. They are different samples. Keep both!”</li>
+</ul>
+<p><strong>Picard’s Superpower:</strong> It checks for duplicates <em>within</em> a Read Group, never <em>across</em> them.</p>
+<h3 id="references"><a class="header" href="#references">References</a></h3>
+<ul>
+<li><a href="https://www.biostars.org/p/318974/">Biostars: Duplicate marking</a></li>
+<li><a href="https://gatk.broadinstitute.org/hc/en-us/articles/360035890671-Read-groups">GATK: Read Groups</a></li>
+<li><a href="https://broadinstitute.github.io/picard/command-line-overview.html#AddOrReplaceReadGroups">Picard Documentation</a></li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="tutorial-05-library-complexity-the-street-photographer"><a class="header" href="#tutorial-05-library-complexity-the-street-photographer">Tutorial 05: Library Complexity (The “Street Photographer”)</a></h1>
+<h2 id="level-1-basic-concept-the-photographer"><a class="header" href="#level-1-basic-concept-the-photographer">Level 1: Basic Concept (The Photographer)</a></h2>
+<p>Imagine you are a <strong>Street Photographer</strong> in a busy city. Your goal is to capture the diversity of the population.</p>
+<ul>
+<li><strong>High Complexity Library (Good):</strong> You take 100 photos, and every photo shows a different person. You have captured the true variety of the city.</li>
+<li><strong>Low Complexity Library (Bad):</strong> You take 100 photos, but it’s just the same person 100 times. You wasted your film (sequencing reads) on duplicates.</li>
+</ul>
+<p>In ChIP-seq, if we keep sequencing the exact same DNA fragment over and over (PCR duplicates), we aren’t learning anything new. We want a “Complex” library with many unique fragments.</p>
+<hr>
+<h2 id="level-2-execution-the-calculator"><a class="header" href="#level-2-execution-the-calculator">Level 2: Execution (The Calculator)</a></h2>
+<p>We calculate complexity using metrics called <strong>NRF</strong> and <strong>PBC</strong>.
+This calculation is a bit complex, so we use a script that combines <code>bedtools</code>, <code>sort</code>, and <code>awk</code>.</p>
+<p><strong>Run this command block for one sample:</strong></p>
+<pre><code class="language-bash"># 1. Create a "5-prime" BED file
+# (Convert BAM to simple coordinates, keeping only the start position of each read)
+bedtools bamtobed -i bowalign_with_RG/Sample1.sorted.bam \
+  | awk 'BEGIN{OFS="\t"} ($6=="+"){print $1,$2,$2+1} ($6=="-"){print $1,$3-1,$3}' \
+  | sort -k1,1 -k2,2n \
+  &gt; QC_results/Sample1.read5.bed
+
+# 2. Compute NRF, PBC1, PBC2
+# (Count how many times each position appears)
+uniq -c QC_results/Sample1.read5.bed \
+  | awk '{c=$1; total+=c; uniq++; if(c==1) single++; if(c==2) double++;} \
+    END{ if(total==0){print "NRF=NA\tPBC1=NA\tPBC2=NA"; exit} \
+    NRF=uniq/total; \
+    PBC1=single/uniq; \
+    PBC2=(double? single/double:"Inf"); \
+    printf("NRF=%.3f\tPBC1=%.3f\tPBC2=%s\n", NRF, PBC1, PBC2); }' \
+  &gt; QC_results/Sample1.pbc.txt
+</code></pre>
+<p><strong>Check the result:</strong></p>
+<pre><code class="language-bash">cat QC_results/Sample1.pbc.txt
+</code></pre>
+<hr>
+<h3 id="understanding-the-metrics"><a class="header" href="#understanding-the-metrics">Understanding the Metrics</a></h3>
+<ul>
+<li><strong>NRF (Non-Redundant Fraction):</strong><br><code>Unique Reads / Total Reads</code>. (Ideal: &gt; 0.8)</li>
+<li><strong>PBC1 (PCR Bottleneck Coefficient 1):</strong><br><code>Genomic positions with 1 read / Genomic positions with ≥1 read</code>. (Ideal: &gt; 0.8)</li>
+<li><strong>PBC2 (PCR Bottleneck Coefficient 2):</strong><br><code>Positions with 1 read / Positions with 2 reads</code>. (Ideal: &gt; 3.0)</li>
+</ul>
+<h3 id="encode-guidelines"><a class="header" href="#encode-guidelines">ENCODE Guidelines</a></h3>
+<p>How good is your library? Use this chart from ENCODE to grade your data.</p>
+<img width="1126" height="275" alt="Screenshot 2025-11-26 at 11 20 56 AM" src="https://github.com/user-attachments/assets/730d3662-6973-4a4e-a9f9-fe565583ed32" />
+<p><a href="https://www.encodeproject.org/data-standards/terms/#library"><em>Source: ENCODE Data Standards</em></a></p>
+<h3 id="before-vs-after-deduplication"><a class="header" href="#before-vs-after-deduplication">Before vs. After Deduplication</a></h3>
+<p><strong>Crucial Concept:</strong><br>Raw data often looks “Low Complexity” just because of PCR duplicates. This is misleading. Once you remove the duplicates, the remaining data reveals the <em>true</em> quality of your library.</p>
+<p><strong>Example Comparison:</strong></p>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th style="text-align: left">Stage</th><th style="text-align: left">NRF</th><th style="text-align: left">PBC1</th><th style="text-align: left">PBC2</th><th style="text-align: left">Interpretation</th></tr>
+</thead>
+<tbody>
+<tr><td style="text-align: left"><strong>Before</strong> Removal</td><td style="text-align: left">0.668</td><td style="text-align: left">0.695</td><td style="text-align: left">3.3</td><td style="text-align: left">Appears “Moderate/Low” quality due to duplicates.</td></tr>
+<tr><td style="text-align: left"><strong>After</strong> Removal</td><td style="text-align: left"><strong>0.952</strong></td><td style="text-align: left"><strong>0.949</strong></td><td style="text-align: left"><strong>18.6</strong></td><td style="text-align: left">Use these values! True library is <strong>High Quality</strong>.</td></tr>
+</tbody>
+</table>
+</div>
+<p><strong>Lesson:</strong> Don’t panic if your raw NRF is low. Remove duplicates first, then check again.</p>
+<hr>
+<h2 id="summary-5"><a class="header" href="#summary-5">Summary</a></h2>
+<ol>
+<li><strong>Goal:</strong> Ensure we have many unique DNA fragments (High Complexity).</li>
+<li><strong>Action:</strong> Run the NRF/PBC calculation script.</li>
+<li><strong>Result:</strong> Compare your numbers against the ENCODE chart to validate your experiment.</li>
+</ol>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="tutorial-06-experiment-design--bam-quality-control"><a class="header" href="#tutorial-06-experiment-design--bam-quality-control">Tutorial 06: Experiment Design &amp; BAM Quality Control</a></h1>
+<h2 id="basic-concept-the-experiment--the-file"><a class="header" href="#basic-concept-the-experiment--the-file">Basic Concept (The Experiment &amp; The File)</a></h2>
+<h3 id="11-the-experiment-story"><a class="header" href="#11-the-experiment-story">1.1 The Experiment Story</a></h3>
+<p>This tutorial uses real data from <strong>BLaER1 cells</strong> (human immune cells).</p>
+<ul>
+<li><strong>Treatment:</strong> Cells were treated for 18 hours with Estradiol, Interleukin-3, and CSF1 to activate specific genes.</li>
+<li><strong>The Targets:</strong>
+<ol>
+<li><strong>CEBPA:</strong> A Transcription Factor (The “Driver” that turns on genes).</li>
+<li><strong>H3K27me3:</strong> A Histone Mark for <strong>Closed/Repressed</strong> DNA (The “Stop Sign”).</li>
+<li><strong>H3K9ac:</strong> A Histone Mark for <strong>Open/Active</strong> DNA (The “Go Sign”).</li>
+<li><strong>Input:</strong> Random background DNA (The “Noise” control).</li>
+</ol>
+</li>
+</ul>
+<h3 id="12-the-zip-file-analogy-bam-vs-sam"><a class="header" href="#12-the-zip-file-analogy-bam-vs-sam">1.2 The “Zip File” Analogy (BAM vs SAM)</a></h3>
+<ul>
+<li><strong>SAM File (Sequence Alignment Map):</strong> This is a huge, readable text file. It’s like a 1000-page printed manuscript.</li>
+<li><strong>BAM File (Binary Alignment Map):</strong> This is the <strong>Compressed Zip File</strong> version. It contains the exact same info but is smaller and faster for the computer to read.
+<ul>
+<li><em>Rule:</em> We always work with BAM files to save space and time.</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2 id="execution-the-checklist"><a class="header" href="#execution-the-checklist">Execution (The Checklist)</a></h2>
+<h3 id="21-sample-table"><a class="header" href="#21-sample-table">2.1 Sample Table</a></h3>
+<p>Here are the files we are analyzing. In real life, you should make a table like this to track your work.</p>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>Biosample Accession</th><th>ChIP Type</th><th>Target</th><th>Custom BAM Filename</th></tr>
+</thead>
+<tbody>
+<tr><td>ENCFF327JFG</td><td>TF ChIP-seq</td><td>CEBPA</td><td>ceb_ENCFF327JFG.bam</td></tr>
+<tr><td>ENCFF744SVA</td><td>TF ChIP-seq</td><td>CEBPA</td><td>ceb_ENCFF744SVA.bam</td></tr>
+<tr><td>ENCFF164ALR</td><td>Histone ChIP-seq</td><td>H3K27me3</td><td>H3K27me3_ENCFF164ALR.bam</td></tr>
+<tr><td>ENCFF532DQH</td><td>Histone ChIP-seq</td><td>H3K27me3</td><td>H3K27me3_ENCFF532DQH.bam</td></tr>
+<tr><td>ENCFF193NPE</td><td>Histone ChIP-seq</td><td>H3K9ac</td><td>H3K9ac_ENCFF193NPE.bam</td></tr>
+<tr><td>ENCFF534IPX</td><td>Histone ChIP-seq</td><td>H3K9ac</td><td>H3K9ac_ENCFF534IPX.bam</td></tr>
+<tr><td>ENCFF110SOB</td><td>Control ChIP-seq</td><td>Input</td><td>Input_ENCFF110SOB.bam</td></tr>
+<tr><td>ENCFF919XCV</td><td>Control ChIP-seq</td><td>Input</td><td>Input_ENCFF919XCV.bam</td></tr>
+</tbody>
+</table>
+</div>
+<h3 id="22-basic-checks"><a class="header" href="#22-basic-checks">2.2 Basic Checks</a></h3>
+<p>Before processing, we verify the BAM files are healthy.</p>
+<p><strong>1. Create a smaller test file (Optional)</strong>
+Working with full genomes takes time. For testing, we can extract just chromosome 11 and 12:</p>
+<pre><code class="language-bash">samtools view -b -h sample.bam chr11 chr12 | samtools sort -o sample.chr11_12.bam
+</code></pre>
+<p><strong>2. Get Alignment Stats</strong></p>
+<pre><code class="language-bash"># Quick summary
+samtools flagstat sample.bam &gt; sample.flagstat.txt
+
+# Detailed stats
+samtools stats sample.bam &gt; sample.stats.txt
+</code></pre>
+<hr>
+<h2 id="quality-control"><a class="header" href="#quality-control">Quality Control</a></h2>
+<h3 id="31-interpreting-flagstat"><a class="header" href="#31-interpreting-flagstat">3.1 Interpreting <code>flagstat</code></a></h3>
+<p>What do the numbers mean?</p>
+<pre><code class="language-text">2565563 + 0 in total          # Total raw reads.
+2565563 + 0 mapped (100%)     # Success! 100% of reads found a home on the genome.
+0 + 0 duplicates              # 0 duplicates found (if un-marked).
+0 + 0 paired in sequencing    # These are Single-End reads (0 paired).
+</code></pre>
+<ul>
+<li><strong>Goal:</strong> High mapping % (&gt;80%).</li>
+<li><strong>Warning:</strong> If mapping is low (&lt;50%), you may have the wrong organism or bad sequencing.</li>
+</ul>
+<h3 id="32-multimapping--the-lost-gps"><a class="header" href="#32-multimapping--the-lost-gps">3.2 Multimapping &amp; The “Lost GPS”</a></h3>
+<p>Sometimes a read is repetitive (e.g., “ATATATAT”). It fits in 50 different places on the genome.
+The aligner doesn’t know which spot is correct, so it gives it a <strong>Low MAPQ Score</strong> (Mapping Quality).</p>
+<ul>
+<li><strong>MAPQ = 0:</strong> “I have NO clue where this goes. It fits in many places.” (Multimapped)</li>
+<li><strong>MAPQ &gt; 30:</strong> “I am highly confident this read belongs EXACTLY here.” (Unique)</li>
+</ul>
+<p><strong>How to check MAPQ distribution:</strong></p>
+<pre><code class="language-bash">samtools view sample.bam | awk '{print $5}' | sort -n | uniq -c
+</code></pre>
+<p><strong>Understanding the Output:</strong></p>
+<ul>
+<li><strong>If you see lots of 0s:</strong> Your file includes “Lost GPS” reads (Multimappers).</li>
+<li><strong>If your scores start at 30+:</strong> Your file has <strong>Already Filtered</strong> the bad reads.</li>
+</ul>
+<p><strong>Example of a Clean File (Filtered):</strong></p>
+<pre><code class="language-text">123964  30  &lt;-- Lowest score is 30 (Good confidence)
+1928 31
+20741 32
+1477 33
+4040 34
+34434 35
+14294 36
+53329 37
+30665 38
+88528 39
+77123 40
+2960636 42  &lt;-- Highest score is 42 (Perfect confidence)
+</code></pre>
+<p><em>Verdict: This BAM file contains only uniquely mapped, high-quality reads.</em></p>
+<hr>
+<h2 id="summary-6"><a class="header" href="#summary-6">Summary</a></h2>
+<ol>
+<li><strong>Context:</strong> We are analyzing active/repressed marks in BLaER1 cells.</li>
+<li><strong>Files:</strong> BAMs are compressed alignment maps.</li>
+<li><strong>QC:</strong> We use <code>samtools flagstat</code> and check <strong>MAPQ scores</strong> to ensure we aren’t analyzing “lost” multimapping reads.</li>
+</ol>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="tutorial-07-strand-cross-correlation-the-echo"><a class="header" href="#tutorial-07-strand-cross-correlation-the-echo">Tutorial 07: Strand Cross-Correlation (The Echo)</a></h1>
+<h2 id="level-1-basic-concept-the-echo"><a class="header" href="#level-1-basic-concept-the-echo">Level 1: Basic Concept (The Echo)</a></h2>
+<h3 id="why-do-we-see-two-peaks"><a class="header" href="#why-do-we-see-two-peaks">Why do we see two peaks?</a></h3>
+<p>When you do ChIP-seq, the DNA fragments are 3D objects, about 200bp long, with the protein in the middle.
+However, the sequencer only reads the <strong>Ends</strong> of these fragments (5’ ends).</p>
+<ul>
+<li><strong>Forward Strand Reads:</strong> Read from the left end (Start of fragment).</li>
+<li><strong>Reverse Strand Reads:</strong> Read from the right end (End of fragment).</li>
+</ul>
+<p>This creates two piles of reads separated by the fragment length, like two mountains with a valley in between.</p>
+<h3 id="the-echo-analogy"><a class="header" href="#the-echo-analogy">The Echo Analogy</a></h3>
+<p>Imagine you shout <strong>“HELLO”</strong> (Forward Reads). A split second later, you hear the echo <strong>“HELLO”</strong> (Reverse Reads).</p>
+<ul>
+<li><strong>Cross-Correlation</strong> is measuring exactly how long that delay is.</li>
+<li>We slide the Forward reads towards the Reverse reads. When they overlap perfectly, the “volume” is loudest (Max Correlation).</li>
+<li>The distance we slid them telling us the <strong>True Fragment Length</strong>.</li>
+</ul>
+<hr><img width="639" height="403" alt="Screenshot 2025-12-10 at 11 39 06 AM" src="https://github.com/user-attachments/assets/cfc18aa5-2c0d-4772-ad2a-f4ae8c0f578d" />
+<p><em>(Source:<a href="https://www.nature.com/articles/nmeth.1246">Genome-wide analysis of transcription factor binding sites based on ChIP-Seq data</a></em></p>
+<hr>
+<h2 id="level-2-execution-phantompeakqualtools"><a class="header" href="#level-2-execution-phantompeakqualtools">Level 2: Execution (PhantomPeakQualTools)</a></h2>
+<p>We use a tool called <code>run_spp.R</code> (part of <a href="https://github.com/kundajelab/phantompeakqualtools">PhantomPeakQualTools</a> to calculate this. It finds the “Best Match” distance.</p>
+<h3 id="the-command"><a class="header" href="#the-command">The Command</a></h3>
+<pre><code class="language-bash"># Run PhantomPeakQualTools
+Rscript /opt/anaconda3/envs/chip/bin/run_spp.R \
+      -c=sample.bam \
+      -savp=Sample1_spp.qc.pdf \
+      -s=0:5:400 \
+      -out=Sample1_spp.qc.txt
+</code></pre>
+<p><strong>Explanation:</strong></p>
+<ul>
+<li><code>-c</code>: Input BAM file.</li>
+<li><code>-savp</code>: Saves the diagnostic PDF plot (The “Echo” graph).</li>
+<li><code>-out</code>: Output file containing the score numbers (NSC and RSC).</li>
+<li><code>-s=0:5:400</code>: Scan shift distances from 0 to 400 bp in steps of 5.</li>
+</ul>
+<hr>
+<h2 id="level-3-analysis-signal-vs-noise"><a class="header" href="#level-3-analysis-signal-vs-noise">Level 3: Analysis (Signal vs Noise)</a></h2>
+<p>The output plot (<code>Sample1_spp.qc.pdf</code>) usually shows TWO peaks. This is where quality control happens.</p>
+<h3 id="31-the-peaks"><a class="header" href="#31-the-peaks">3.1 The Peaks</a></h3>
+<ol>
+<li>
+<p><strong>The Real Peak (Red Line):</strong></p>
+<ul>
+<li><strong>What is it?</strong> The “Echo”. The point where Forward and Reverse reads overlap because they bind the same protein.</li>
+<li><strong>Location:</strong> Usually around 150-250 bp (your fragment size).</li>
+<li><strong>Meaning:</strong> Represents <strong>Biological Signal</strong>.</li>
+</ul>
+</li>
+<li>
+<p><strong>The Phantom Peak (Blue Line):</strong></p>
+<ul>
+<li><strong>What is it?</strong> “Microphone Feedback”. It occurs at the <strong>Read Length</strong> (e.g., 50bp or 100bp).</li>
+<li><strong>Why?</strong> It’s caused by mapping artifacts and “sticky” sequences. It happens in <em>every</em> experiment, even bad ones.</li>
+<li><strong>Meaning:</strong> Represents <strong>Background Noise</strong>.</li>
+</ul>
+</li>
+</ol>
+<p><code>Sample1_spp.qc.txt</code> provides numeric QC metrics</p>
+<pre><code>   **COL5** : provides Phantom peak 
+   **COL3** : provides Fragment length peak
+   **COL4** : These numbers show how well the forward and reverse reads match at the fragment length.
+   **COL6** : corr_phantomPeak. This is the match at the phantom peak. If this is much lower than the real fragment peak (COL4), that means the ChIP is good.
+   **COL8**:  min_corr.This is the lowest cross-correlation value. It represents the background noise level. Lower values here mean a clearer signal-to-noise contrast.
+</code></pre>
+<hr><img width="681" height="498" alt="image2" src="https://github.com/user-attachments/assets/f58d1127-7733-47f1-81e7-5bee8abfefb8" />
+<hr>
+<h3 id="32-the-metrics-nsc--rsc"><a class="header" href="#32-the-metrics-nsc--rsc">3.2 The Metrics (NSC &amp; RSC)</a></h3>
+<p>We compare the Height of the Real Peak (Signal) to the Phantom Peak (Noise).</p>
+<p><strong>Key Metrics Table:</strong></p>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th style="text-align: left">Metric</th><th style="text-align: left">Full Name</th><th style="text-align: left">Meaning</th><th style="text-align: left">Good Threshold</th></tr>
+</thead>
+<tbody>
+<tr><td style="text-align: left"><strong>NSC</strong></td><td style="text-align: left">Normalized Strand Cross-correlation</td><td style="text-align: left"><strong>Signal-to-Noise Ratio.</strong> How much higher is the Real Peak (COL4) than the flat background (COL8)? (COL4 / COL8)</td><td style="text-align: left"><strong>&gt; 1.05</strong></td></tr>
+<tr><td style="text-align: left"><strong>RSC</strong></td><td style="text-align: left">Relative Strand Cross-correlation</td><td style="text-align: left"><strong>Signal vs Phantom.</strong> Is the Real Peak (COL4) clearly stronger than the Phantom Peak (COL6)? ((COL4 – COL8) / (COL6 – COL8))</td><td style="text-align: left"><strong>&gt; 0.8</strong></td></tr>
+</tbody>
+</table>
+</div>
+<h3 id="33-interpreting-your-data-example-analysis"><a class="header" href="#33-interpreting-your-data-example-analysis">3.3 Interpreting Your Data (Example Analysis)</a></h3>
+<hr><img width="943" height="470" alt="image3" src="https://github.com/user-attachments/assets/5b03189d-8fb7-4f4c-8145-5b5930921e05" />
+<hr>
+<ul>
+<li><strong>Inputs (Control):</strong>
+<ul>
+<li>NSC values sit almost exactly at background <strong>(1.003 and 1.005)</strong>. RSC values are only <strong>0.62 and 0.64</strong> (Low).</li>
+<li><strong>Interpretation:</strong> Just noise. This is normal for inputs! The numerically high correlation values (0.5509 and 0.5474) are driven by the dominant phantom peak, not real enrichment.</li>
+</ul>
+</li>
+<li><strong>H3K9ac (Active Mark):</strong>
+<ul>
+<li>Correlation is <strong>High (0.5454 and 0.4112)</strong>.</li>
+<li><strong>Interpretation:</strong> Strong signal. Acetylation marks usually give huge peaks, reflecting the broad and high-coverage nature of these marks.</li>
+</ul>
+</li>
+<li><strong>H3K27me3 (Repressive Mark):</strong>
+<ul>
+<li>Correlation is <strong>Medium (0.3708 and 0.3572)</strong>.</li>
+<li><strong>Interpretation:</strong> Expected. Repressive marks are broad and diffuse, so the “Echo” is quieter, fitting a repressive mark that produces wide but moderate enrichment.</li>
+</ul>
+</li>
+<li><strong>CEBPA (Transcription Factor):</strong>
+<ul>
+<li>Correlation is <strong>Lower (0.2876 and 0.1979)</strong>.</li>
+<li><strong>Interpretation:</strong> TF peaks are sharp but rare (small % of genome). Total signal is lower, but the peaks are distinct. This is expected because TF peaks are sharp and occupy a small fraction of the genome, so their genome-wide cross-correlation values are naturally smaller.</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2 id="summary-7"><a class="header" href="#summary-7">Summary</a></h2>
+<ol>
+<li><strong>Cross-Correlation</strong> shifts reads to find the fragment length (The Echo).</li>
+<li><strong>Phantom Peak</strong> is a background artifact at read length (Microphone Feedback).</li>
+<li><strong>RSC &gt; 0.8</strong> means your Signal (Real Peak) is louder than your Noise (Phantom Peak).</li>
+</ol>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="tutorial-07-advanced-qc-with-deeptools-the-health-checkup"><a class="header" href="#tutorial-07-advanced-qc-with-deeptools-the-health-checkup">Tutorial 07: Advanced QC with deepTools (The “Health Checkup”)</a></h1>
+<h2 id="basic-concept-the-health-check"><a class="header" href="#basic-concept-the-health-check">Basic Concept (The Health Check)</a></h2>
+<p>Before we call peaks, we must perform a <strong>Health Checkup</strong> on our data.</p>
+<ul>
+<li><strong>The Census (Fingerprint):</strong> Are the reads spread out evenly (Socialist/Input) or concentrated in specific spots (Capitalist/ChIP)?</li>
+<li><strong>The Coverage Check:</strong> Do we have enough reads? Are they duplicates?</li>
+<li><strong>The Family Tree (Correlation &amp; PCA):</strong> Do biological replicates (siblings) look similar? Are they distinct from the control?</li>
+</ul>
+<p>We use a suite of tools called <strong>deepTools</strong> to generate these reports.</p>
+<hr>
+<h2 id="execution-running-the-tests"><a class="header" href="#execution-running-the-tests">Execution (Running the Tests)</a></h2>
+<h3 id="21-fingerprint-plot"><a class="header" href="#21-fingerprint-plot">2.1 Fingerprint Plot</a></h3>
+<p>Checks if the IP worked (Enrichment).</p>
+<pre><code class="language-bash">plotFingerprint \
+  -b sample1.bam sample2.bam sample3.bam \              # BAM files (ChIP + input) to evaluate
+  --skipZeros \                       # Ignore bins with zero coverage (speeds up, reduces noise)
+  --numberOfSamples 50000 \           # Number of random genomic positions for sampling
+  -T "Fingerprints of all BAM samples" \  # Plot title
+  --plotFile fingerprints.pdf \  # Output PDF
+  --plotFileFormat pdf \
+  2&gt;&amp;1 | tee plotFingerprint.log  # Log stderr+stdout to a log file
+</code></pre>
+<h3 id="22-coverage-plot"><a class="header" href="#22-coverage-plot">2.2 Coverage Plot</a></h3>
+<p>Checks sequencing depth and duplication levels.</p>
+<pre><code class="language-bash">plotCoverage \
+  -b  sample1.bam sample2.bam sample3.bam \                           # BAM files to summarize
+  -o  coverage_histogram.pdf \                             # Output PDF with coverage histogram(s)
+  --plotFileFormat pdf \
+  --smartLabels \                             # Auto-generate labels from filenames (if labels not passed)
+  --numberOfSamples 1000000 \                 # Number of genomic positions to sample
+  --ignoreDuplicates \                        # Exclude duplicate reads (avoid PCR bias)
+  --minMappingQuality 30 \                    # Only count high-quality alignments (MAPQ ≥ 30)
+  --outRawCounts coverage_counts.txt          # Raw coverage counts for downstream inspection
+</code></pre>
+<h3 id="23-summary-matrix"><a class="header" href="#23-summary-matrix">2.3 Summary Matrix</a></h3>
+<p>We need a “Count Matrix” to compare samples. This counts reads in bins across the whole genome.</p>
+<pre><code class="language-bash">multiBamSummary bins \
+  -b  sample1.bam sample2.bam sample3.bam \                          
+  --numberOfProcessors 4 \        # Parallel processing
+  -o matrix.npz \                              # Output compressed matrix (used by other deepTools commands)
+  --outRawCounts matrix.tab                   # Tab-delimited matrix of counts per bin per sample
+</code></pre>
+<h3 id="24-correlation--pca"><a class="header" href="#24-correlation--pca">2.4 Correlation &amp; PCA</a></h3>
+<p>Using the matrix from Step 2.3, we compare the samples.</p>
+<p><strong>Correlation Heatmap:</strong></p>
+<pre><code class="language-bash">plotCorrelation \
+  -in matrix.npz \                                   # Input matrix from multiBamSummary
+  --corMethod spearman \                           # Spearman correlation (rank-based, robust to outliers)
+  --skipZeros \                                    # Ignore bins with zero signal in all samples
+  --whatToPlot heatmap \                           # Produce a heatmap
+  --plotNumbers \                                  # Print correlation coefficients on the heatmap
+  -o  spearman_corr_plot.pdf \                            # Output PDF
+  --outFileCorMatrix spearman_corr_plot.tab                 # Save the correlation matrix to a text file
+</code></pre>
+<p><strong>PCA (Principal Component Analysis):</strong></p>
+<pre><code class="language-bash">plotPCA \
+  -in matrix.npz \                                   # Same matrix as for plotCorrelation
+  -o pca.pdf \                                # Output PCA plot
+  --transpose \                                    # Treat samples as variables (standard deepTools setting here)
+  --plotWidth 10 \                                 # Width of figure (in inches)
+  --plotHeight 8 \                                 # Height of figure (in inches)
+  --plotFileFormat pdf \                           # Output format
+  --outFileNameData pca.tab                 # Save underlying PCA coordinates
+</code></pre>
+<hr>
+<h2 id="level-3-advanced-analysis-reading-the-charts"><a class="header" href="#level-3-advanced-analysis-reading-the-charts">Level 3: Advanced Analysis (Reading the Charts)</a></h2>
+<h3 id="31-interpreting-the-fingerprint-the-census"><a class="header" href="#31-interpreting-the-fingerprint-the-census">3.1 Interpreting the Fingerprint (The Census)</a></h3>
+<p>This plot shows the cumulative read distribution across the genome. Good ChIP libraries show a clear separation between ChIP and input samples, with ChIP curves rising earlier due to enriched regions. Flat, overlapping curves usually indicate poor enrichment or over-background signal.</p>
+<hr><img width="755" height="574" alt="Screenshot 2025-12-10 at 12 02 40 PM" src="https://github.com/user-attachments/assets/db1e7f33-6775-4705-b6b3-62a4c0bf7405" />
+<hr>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th style="text-align: left">Sample Type</th><th style="text-align: left">Interpretation</th></tr>
+</thead>
+<tbody>
+<tr><td style="text-align: left"><strong>Input</strong></td><td style="text-align: left">Close to the diagonal. Reads are uniformly distributed, behaving like ideal background.</td></tr>
+<tr><td style="text-align: left"><strong>H3K9ac (Active)</strong></td><td style="text-align: left">Strong “Elbow”. Reads concentrated in a small fraction of bins (focal peaks), showing a strong bend away from the diagonal.</td></tr>
+<tr><td style="text-align: left"><strong>H3K27me3 (Broad)</strong></td><td style="text-align: left">In between. Enrichment is present but more diffuse, so the curve is less sharp than H3K9ac.</td></tr>
+<tr><td style="text-align: left"><strong>ceb ChIP</strong></td><td style="text-align: left">Slightly lower than Input. Modest enrichment, close to background.</td></tr>
+</tbody>
+</table>
+</div>
+<h3 id="32-interpreting-coverage"><a class="header" href="#32-interpreting-coverage">3.2 Interpreting Coverage</a></h3>
+<p>Next, we look at the overall coverage distribution in each BAM using plotCoverage. This reveals whether some samples are globally under-sequenced, dominated by a few high-coverage regions, or heavily affected by duplicated reads. We restrict to high-quality, non-duplicate reads to make the distributions comparable.</p>
+<p><strong>Plot A: The Drop-off</strong></p>
+<ul>
+<li>
+<p><strong>Inputs :</strong> The Input tracks sit higher at low coverage because they spread their reads across the genome without enrichment. That’s why both Input samples show a large fraction of bases at coverage 0 and 1, then taper off more slowly as coverage increases.</p>
+</li>
+<li>
+<p><strong>ChIPs :</strong> In contrast, every IP sample collapses more sharply; the curves drop faster after coverage 1 because most genomic positions in a ChIP experiment receive almost no reads. Only a small portion of the genome — the actual binding or modification sites — reaches deeper coverage, and that fraction is tiny enough that the tail beyond coverage 2 nearly vanishes.</p>
+</li>
+</ul>
+<hr><img width="861" height="578" alt="Screenshot 2025-12-10 at 12 03 51 PM" src="https://github.com/user-attachments/assets/26404eb5-7041-4674-bf94-d44d0d9edc8b" />
+<hr>
+<p><strong>Plot B: The Tail</strong>
+Zooming in reveals the difference. Input covers more of the genome at 1x depth, while ChIP focuses on peaks. The Input curves decline more slowly because a larger fraction of their genome maintains at least some measurable coverage. The IP curves fall off earlier and more steeply, which reflects the enrichment pattern: most positions have essentially no reads, and only a very small subset of bases in true peak regions sustain higher coverage.</p>
+<hr><img width="731" height="501" alt="Screenshot 2025-12-10 at 12 04 14 PM" src="https://github.com/user-attachments/assets/b8e24d14-d41b-4c55-a268-9982b49026c5" />
+<hr>
+<h3 id="33-interpreting-correlation-the-family-tree"><a class="header" href="#33-interpreting-correlation-the-family-tree">3.3 Interpreting Correlation (The Family Tree)</a></h3>
+<p>Using the binned count matrix, we compute pairwise correlations between samples. A Spearman correlation heatmap shows whether biological replicates cluster together and whether inputs are distinct from ChIP samples. Poor clustering or scattered correlations usually indicate sample swaps, failed IPs, or inconsistent library prep.</p>
+<p><strong>The Heatmap:</strong></p>
+<ul>
+<li><strong>Clustering:</strong> H3K27me3 samples cluster together and show moderately high mutual correlations (around 0.6), which is exactly what you expect for a broad repressive mark. The H3K9ac samples also correlate strongly with each other (0.76–1.0), forming a clean sub-cluster that is distinct from H3K27me3.</li>
+<li><strong>Separation:</strong> Active marks (H3K9ac) should look different from Repressive marks (H3K27me3).</li>
+</ul>
+<hr><img width="667" height="575" alt="Screenshot 2025-12-10 at 12 05 28 PM" src="https://github.com/user-attachments/assets/652741bb-8b63-4fc2-88d8-eca5508e5938" />
+<hr>
+<h3 id="34-interpreting-pca"><a class="header" href="#34-interpreting-pca">3.4 Interpreting PCA</a></h3>
+<p>Finally, we perform PCA on the same binned count matrix. PCA reduces the data to a few dimensions that capture most of the variance. In a good ChIP-seq dataset, biological replicates cluster together in PCA space, and distinct conditions or marks separate along major components. PCA is a convenient visual check for batch effects, sample swaps, and outlier libraries.</p>
+<p><strong>The Map:</strong></p>
+<ul>
+<li><strong>PC1 (X-axis):</strong> The PCA shows clear separation of samples by assay type. PC1 captures most of the variance and cleanly splits the H3K27me3 group from the H3K9ac group, which is expected because these marks have very different genomic distributions.</li>
+<li><strong>Clustering:</strong> The two “ceb” samples cluster tightly together, indicating consistent coverage patterns within that group. The H3K27me3 replicates are also tightly paired, which matches their broad and uniform enrichment profile. The H3K9ac replicates sit on the opposite side of PC1, with one replicate shifted slightly on PC2, hinting at a mild difference in coverage distribution but nothing severe. If one replicate is far away, it might be an outlier/bad sample.</li>
+</ul>
+<hr><img width="983" height="488" alt="Screenshot 2025-12-10 at 12 05 56 PM" src="https://github.com/user-attachments/assets/d2d785d1-4da3-4cc4-a3e0-1ee612ad3d38" />
+<hr>
+<h2 id="summary-8"><a class="header" href="#summary-8">Summary</a></h2>
+<ol>
+<li><strong>Fingerprint:</strong> Confirms your IP worked (Sharp elbow).</li>
+<li><strong>Coverage:</strong> Confirms sequencing depth (Inputs = broad, ChIP = peaky).</li>
+<li><strong>PCA/Correlation:</strong> Confirms your replicates match (Siblings cluster together).</li>
+</ol>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="tutorial-08-peak-calling-with-macs2-the-summit-search"><a class="header" href="#tutorial-08-peak-calling-with-macs2-the-summit-search">Tutorial 08: Peak Calling with MACS2 (The Summit Search)</a></h1>
+<h2 id="basic-concept-the-heap-hunt"><a class="header" href="#basic-concept-the-heap-hunt">Basic Concept (The “Heap” Hunt)</a></h2>
+<h3 id="what-is-a-peak"><a class="header" href="#what-is-a-peak">What is a Peak?</a></h3>
+<p>Imagine you are looking for hidden treasure on a long beach (the Genome).</p>
+<ul>
+<li><strong>Random Reads:</strong> Sand scattered everywhere evenly (Background noise).</li>
+<li><strong>A “Peak”:</strong> A huge heap of sand in one specific spot.</li>
+</ul>
+<p>This heap means thousands of protein molecules were bound to that exact spot of DNA.</p>
+<h3 id="signal-vs-noise"><a class="header" href="#signal-vs-noise">Signal vs. Noise</a></h3>
+<ul>
+<li><strong>Signal:</strong> The Heap (Peak).</li>
+<li><strong>Noise:</strong> The random thin layer of sand everywhere else (Input/Control).</li>
+</ul>
+<p><strong>MACS2</strong> is the software that scans the beach, measures the height of the sand pile, and calculates if it is “significantly” higher than the background.</p>
+<hr>
+<h2 id="execution-step-by-step"><a class="header" href="#execution-step-by-step">Execution (Step-by-Step)</a></h2>
+<p>We will not use complex loops. We will run the command for each sample type specifically.</p>
+<h3 id="step-1-create-output-directory"><a class="header" href="#step-1-create-output-directory">Step 1: Create Output Directory</a></h3>
+<p>Keep your workspace clean.</p>
+<pre><code class="language-bash">mkdir -p macs2_results
+</code></pre>
+<h3 id="step-2-h3k9ac-narrow-peak"><a class="header" href="#step-2-h3k9ac-narrow-peak">Step 2: H3K9ac (Narrow Peak)</a></h3>
+<p>H3K9ac (Acetylation) creates sharp, tall spikes. This is the default mode for MACS2.</p>
+<p><strong>The Command:</strong></p>
+<pre><code class="language-bash">macs2 callpeak \
+  -t H3K9ac.bam \
+  -c Input.bam \
+  -f BAM \
+  -g hs \
+  -n H3K9ac \
+  -q 0.01 \
+  --outdir macs2_results
+</code></pre>
+<p><strong>Explanation:</strong></p>
+<ul>
+<li><code>-t</code>: Treatment file (Signal).</li>
+<li><code>-c</code>: Control file (Input/Background).</li>
+<li><code>-f</code>: Format (BAM).</li>
+<li><code>-g</code>: Scalable Genome Size (<code>hs</code> for human, <code>mm</code> for mouse).</li>
+<li><code>-n</code>: Name of the output prefix.</li>
+<li><code>-q 0.01</code>: The cutoff. Only keep peaks with a q-value (FDR) better than 0.01.</li>
+</ul>
+<h3 id="step-3-h3k27me3-broad-peak"><a class="header" href="#step-3-h3k27me3-broad-peak">Step 3: H3K27me3 (Broad Peak)</a></h3>
+<p>H3K27me3 (Methylation) creates wide, gentle hills. MACS2 needs to be told to look for “Broad” regions.</p>
+<p><strong>The Command:</strong></p>
+<pre><code class="language-bash">macs2 callpeak \
+  -t H3K27me3.bam \
+  -c Input.bam \
+  -f BAM \
+  -g hs \
+  -n H3K27me3 \
+  --broad \
+  --broad-cutoff 0.1 \
+  --outdir macs2_results
+</code></pre>
+<p><strong>Explanation:</strong></p>
+<ul>
+<li><code>--broad</code>: Tells MACS2 to link nearby peaks together into one big region.</li>
+<li><code>--broad-cutoff 0.1</code>: We accept a slightly weaker signal (0.1) because the signal is spread out over a wider area.</li>
+</ul>
+<h3 id="step-4-transcription-factors-eg-cebpa"><a class="header" href="#step-4-transcription-factors-eg-cebpa">Step 4: Transcription Factors (e.g., CEBPA)</a></h3>
+<p>TFs bind very tightly to tiny spots. We treat them exactly like H3K9ac (Narrow).</p>
+<p><strong>The Command:</strong></p>
+<pre><code class="language-bash">macs2 callpeak \
+  -t CEBPA.bam \
+  -c Input.bam \
+  -f BAM \
+  -g hs \
+  -n CEBPA \
+  -q 0.01 \
+  --outdir macs2_results
+</code></pre>
+<hr>
+<h2 id="the-outputs"><a class="header" href="#the-outputs">The Outputs</a></h2>
+<p>After running the commands, look in the <code>macs2_results</code> folder. You will see these files:</p>
+<ol>
+<li>
+<p><strong><code>NAME_peaks.narrowPeak</code></strong>:</p>
+<ul>
+<li><strong>What is it?</strong> The final list of peaks.</li>
+<li><strong>Format:</strong> BED format (Chr, Start, End, Name, Score…).</li>
+<li><strong>Use:</strong> Open this in IGV to see the bars under your peaks.</li>
+</ul>
+</li>
+<li>
+<p><strong><code>NAME_peaks.xls</code></strong>:</p>
+<ul>
+<li><strong>What is it?</strong> An Excel-friendly table.</li>
+<li><strong>Contents:</strong> Coordinates, fold-enrichment, p-values, and q-values.</li>
+</ul>
+</li>
+<li>
+<p><strong><code>NAME_summits.bed</code></strong>:</p>
+<ul>
+<li><strong>What is it?</strong> The single highest point (1bp) of each peak.</li>
+<li><strong>Use:</strong> Important for finding motifs (the exact DNA sequence the protein touched).</li>
+</ul>
+</li>
+</ol>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="tutorial-08-bam-to-bigwig-visualizing-the-signal"><a class="header" href="#tutorial-08-bam-to-bigwig-visualizing-the-signal">Tutorial 08: Bam to BigWig (Visualizing the Signal)</a></h1>
+<h2 id="basic-concept-the-traffic-map"><a class="header" href="#basic-concept-the-traffic-map">Basic Concept (The Traffic Map)</a></h2>
+<h3 id="why-bigwig"><a class="header" href="#why-bigwig">Why BigWig?</a></h3>
+<p>A <strong>BAM</strong> file gives you the location of every single “car” (read) on the road. It’s massive and slow to load.
+A <strong>BigWig</strong> file is like the <strong>Google Maps Traffic View</strong>. It doesn’t show you the individual cars; it just shows you a green, yellow, or red line indicating “Volume”.</p>
+<ul>
+<li><strong>Small &amp; Fast:</strong> Compact file size.</li>
+<li><strong>Visual:</strong> Perfect for viewing on a Genome Browser (IGV/UCSC).</li>
+</ul>
+<hr>
+<h2 id="execution-the-converter"><a class="header" href="#execution-the-converter">Execution (The Converter)</a></h2>
+<p>The <code>bamCoverage</code> tool converts a BAM file into a bigWig file. A bigWig file stores the read coverage across the genome in a compact format that is easy to load in genome browsers like IGV or UCSC. Each option in the command controls how the coverage is calculated.</p>
+<p>But first, we need to know the <strong>“Effective Genome Size”</strong>.</p>
+<h3 id="step-1-calculate-effective-genome-size"><a class="header" href="#step-1-calculate-effective-genome-size">Step 1: Calculate Effective Genome Size</a></h3>
+<p>The “Effective” size is the part of the genome that is actually mappable (not repetitive). Different species have different effective genome sizes. Total genome size is simply the full length of all chromosomes, including repeats, low-complexity regions, and stretches of Ns that cannot be mapped. Effective genome size refers only to the portion of the genome where reads can be uniquely aligned. Since the analysis is limited to chr11 and chr12, the effective genome size should be calculated using only these two chromosomes.</p>
+<p>There are <strong>two main ways</strong> to estimate effective genome size:</p>
+<ul>
+<li>
+<p><strong>Method 1: faSize (Fast &amp; Simple)</strong>
+The <strong>faSize</strong> tool reports:</p>
+<ul>
+<li>total bases</li>
+<li>number of N bases</li>
+<li>A/T/G/C bases</li>
+<li>GC content</li>
+</ul>
+<p>The <strong>non-N bases</strong> (total − Ns) are a good approximation of the mappable genome.</p>
+<p><strong>Step 1.1: Extract chr11 and chr12</strong></p>
+<pre><code class="language-bash">samtools faidx genome.fasta chr11 chr12 &gt; chr11_chr12.fasta
+</code></pre>
+<p><strong>Step 1.2: Get basic FASTA statistics</strong></p>
+<pre><code class="language-bash">faSize chr11_chr12.fasta
+</code></pre>
+<p><strong>Step 1.3: Get per-chromosome detailed stats</strong></p>
+<pre><code class="language-bash">faSize -detailed -tab chr11_chr12.fasta &gt; chr11_chr12.faSize.txt
+</code></pre>
+<p><strong>Step 1.4: Calculate the total effective genome size (non-N bases)</strong></p>
+<pre><code class="language-bash">awk '{nonN = $2 - $5; sum += nonN} END {print sum}' chr11_chr12.faSize.txt
+</code></pre>
+<p><strong>Example</strong></p>
+<pre><code>(chip) rajaishaqnabikhan@Mac % faSize chr11_chr12.fasta
+
+268361931 bases (690373 N's 267671558 real 267671558 upper 0 lower) in 2 sequences in 1 files
+Total size: mean 134180965.5 sd 1280791.7 min 133275309 (chr12) max 135086622 (chr11) median 135086622
+N count: mean 345186.5 sd 293723.0
+U count: mean 133835779.0 sd 987068.7
+L count: mean 0.0 sd 0.0
+%0.00 masked total, %0.00 masked real
+</code></pre>
+<pre><code>(chip) rajaishaqnabikhan@Mac  % awk '{nonN = $2 - $5; sum += nonN} END {print sum}' chr11_chr12.faSize.txt
+
+268361931
+
+</code></pre>
+</li>
+<li>
+<p><strong>Method 2: khmer (Accurate for unique reads)</strong>
+If multimapping reads are removed, the <strong>faSize method becomes less accurate</strong>.
+The <strong>khmer</strong> tool uses the reads themselves to estimate the effective genome size.</p>
+<p><strong>How it works</strong></p>
+<ul>
+<li>Breaks reads into <strong>k-mers</strong></li>
+<li>Counts <strong>unique</strong> k-mers</li>
+<li>Estimates the number of real, mappable bases</li>
+</ul>
+<p><strong>Typical usage</strong></p>
+<pre><code class="language-bash">unique-kmers.py -k 21 chr11_chr12.fasta
+</code></pre>
+<p><strong>Example</strong></p>
+<pre><code>(chip) rajaishaqnabikhan@Mac human % unique-kmers.py -k 21 chr11_chr12.fasta
+
+|| This is the script unique-kmers.py in khmer.
+|| You are running khmer version 3.0.0a3
+|| You are also using screed version 1.1.3
+||
+|| If you use this script in a publication, please cite EACH of the following:
+||
+||   * MR Crusoe et al., 2015. https://doi.org/10.12688/f1000research.6924.1
+||   * A. Döring et al. https://doi.org:80/10.1186/1471-2105-9-11
+||   * Irber and Brown. https://doi.org/10.1101/056846
+||
+|| Please see http://khmer.readthedocs.io/en/latest/citations.html for details.
+
+Estimated number of unique 21-mers in chr11_chr12.fasta: 220798375
+Total estimated number of unique 21-mers: 220798375
+</code></pre>
+<p><strong>Thus</strong>,</p>
+<p>Raw sequence length (non-N)          = 268,361,931 bp</p>
+<p>Unique 21-mer mappable portion       = 220,798,375 bp</p>
+<p>Difference (unmappable/repetitive)   = ~47.6 million bp</p>
+<p>So about 47.6 Mb of chr11+chr12 is repetitive, low complexity (centromeres, segmental duplications, satellite repeats), or otherwise not uniquely mappable with 21-mers.</p>
+<p>When we calculate effective genome size using faSize, the tool removes N regions but still includes repetitive and low-complexity sequence, because these regions contain real A/T/G/C bases and are mappable as long as multimapping reads are allowed. This makes faSize appropriate when the BAM files still contain multimappers. However, if multimapping reads are removed or MAPQ filtering is applied, the mappable genome becomes smaller because repeats and low-complexity regions no longer contribute usable signal. In that case, the khmer tool—especially unique-kmers.py—gives a better estimate because it counts only unique k-mers from the reads and naturally excludes repeats, low-complexity regions, and N stretches. For uniquely mapped data, the khmer-based estimate is the correct effective genome size to use.</p>
+<p>In our BAM file, multimapping reads have already been excluded and low-quality alignments removed by MAPQ filtering. Because these steps bias us toward uniquely mappable regions, we estimate the effective genome size using a k-mer–based approach (e.g. khmer).</p>
+</li>
+</ul>
+<h3 id="step-2-run-bamcoverage"><a class="header" href="#step-2-run-bamcoverage">Step 2: Run bamCoverage</a></h3>
+<p>Now we make the BigWig.</p>
+<pre><code class="language-bash">bamCoverage \
+  -b sample.bam \
+  -o sample.bw \
+  --normalizeUsing RPGC \
+  --effectiveGenomeSize 220798375 \
+  --binSize 10 \
+  --smoothLength 30 \
+  --numberOfProcessors 4 \
+  --ignoreDuplicates
+</code></pre>
+<hr>
+<h2 id="fine-tuning"><a class="header" href="#fine-tuning">Fine Tuning</a></h2>
+<h3 id="31-bin-size-resolution"><a class="header" href="#31-bin-size-resolution">3.1 Bin Size (Resolution)</a></h3>
+<ul>
+<li><strong>Concept:</strong> Think of this as the “Resolution” of your image.
+A bin is simply a small section of the genome. If the bin size is 100 base pairs, the chromosome is cut into pieces that are each 100 bases long. If the bin size is 1000 base pairs, each piece is much larger. When we make bigWig files, we don’t measure the signal at every single base. Instead, we take each bin and calculate the average signal inside that bin. This makes the data easier to compare and much faster to compute.</li>
+<li><strong>10 bp bin:</strong> High definition (HD). You see every detail, but the file is bigger. Small bins give very detailed tracks but create millions of bins, which slows down the analysis.</li>
+<li><strong>100 bp bin:</strong> Standard definition. Good for overview, faster to process. Larger bins, like 200 bp or 1000 bp, give less detail but are much faster and still good for things like correlation, PCA, and general quality checks. In most cases, larger bins (100–200 bp for a few chromosomes, around 1000 bp for whole-genome work) give results that are almost the same but cleaner and quicker to process.</li>
+</ul>
+<h3 id="32-smoothing-blurring-the-photo"><a class="header" href="#32-smoothing-blurring-the-photo">3.2 Smoothing (Blurring the Photo)</a></h3>
+<ul>
+<li><strong>Concept:</strong> Smoothing averages the signal of nearby bins.
+Smoothing reduces noise in the coverage track by averaging nearby bins.</li>
+<li><strong>Why use it?</strong> Raw data can be “pixelated” (jumpy). Smoothing applies a slight blur to make the biological peaks stand out against the background noise.
+Example: If bin size is 20 and smooth length is 60, then each point is the average of a bin plus its neighbors left and right.</li>
+<li><strong>Rule:</strong> If smoothLength &gt; binSize, it averages the neighbors. If the smoothing window is smaller than the bin size, it is ignored.</li>
+</ul>
+<h3 id="33-normalization-the-currency-exchange"><a class="header" href="#33-normalization-the-currency-exchange">3.3 Normalization (The Currency Exchange)</a></h3>
+<p>Samples have different sequencing depths (Total Reads). One sample might have 10 million reads, another 20 million.
+If we don’t adjust for that, a sample with more reads will always look “stronger,” even if the biology is the same. Normalization fixes this. It makes all samples easier to compare by putting them on the same scale.
+If we compare them directly, the 20M sample will look twice as strong. This is unfair.</p>
+<p><strong>Normalization Options:</strong>
+You can choose different ways to normalize your data, depending on what you want to compare.</p>
+<ol>
+<li><strong>CPM (Counts Per Million):</strong> The classic “Per Capita” correction. Corrects only for the total number of reads in your sample, which is enough when all bins are the same size.</li>
+<li><strong>RPKM (Reads Per Kilobase per Million):</strong> Corrects for how many reads you have and how big each bin is, so big bins don’t look stronger just because they are longer.</li>
+<li><strong>RPGC (Reads Per Genome Coverage):</strong> <em>Preferred for ChIP-seq.</em>
+<ul>
+<li><strong>Logic:</strong> “What would this signal look like if we had exactly 1x coverage of the genome?”</li>
+<li><strong>Why:</strong> It creates a standardized “Currency” (1x coverage) that makes biological sense. RPGC changes the data to show what it would look like if you had exactly 1× genome coverage, which is why it needs the effective genome size.</li>
+</ul>
+</li>
+</ol>
+<p>If you pick “None,” you see the raw, uncorrected coverage.</p>
+<hr>
+<h2 id="summary-9"><a class="header" href="#summary-9">Summary</a></h2>
+<ol>
+<li><strong>Format:</strong> Convert BAM (Raw Lists) to BigWig (Signal Tracks).</li>
+<li><strong>Calculation:</strong> Use <strong>Effective Genome Size</strong> to handle repeats correctly.</li>
+<li><strong>Normalization:</strong> Use <strong>RPGC</strong> to make fair comparisons between samples.</li>
+</ol>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="tutorial-09-visualization-the-camera-angles"><a class="header" href="#tutorial-09-visualization-the-camera-angles">Tutorial 09: Visualization (The Camera Angles)</a></h1>
+<h2 id="basic-concept-camera-modes"><a class="header" href="#basic-concept-camera-modes">Basic Concept (Camera Modes)</a></h2>
+<p>We want to visualize the “Average” pattern of our protein across all genes. To do this, we need to choose our <strong>Camera Mode</strong>:</p>
+<ol>
+<li>
+<p><strong>Portrait Mode (Reference-Point):</strong></p>
+<ul>
+<li><strong>Focus:</strong> One specific point (e.g., the Transcription Start Site, <strong>TSS</strong>).</li>
+<li><strong>Action:</strong> We stand at the TSS and look 3kb upstream and 10kb downstream.</li>
+<li><strong>Use Case:</strong> Great for seeing promoter activity (H3K9ac, Transcription Factors).</li>
+</ul>
+</li>
+<li>
+<p><strong>Panorama Mode (Scale-Regions):</strong></p>
+<ul>
+<li><strong>Focus:</strong> The entire gene body.</li>
+<li><strong>Action:</strong> Since genes are different lengths (short vs long), we stretch or compress them all to fit the same “frame” (e.g., 5000bp).</li>
+<li><strong>Use Case:</strong> Great for seeing broad marks that cover the whole gene (H3K27me3, H3K36me3).</li>
+</ul>
+</li>
+</ol>
+<p><strong>The Process:</strong></p>
+<ol>
+<li><strong>Prepare the Map (BED):</strong> Define where the genes are.</li>
+<li><strong>Create the Blueprint (Matrix):</strong> <code>computeMatrix</code> calculates the numbers.</li>
+<li><strong>Take the Photo (Plot):</strong> <code>plotHeatmap</code> or <code>plotProfile</code> draws the picture.</li>
+</ol>
+<hr>
+<h2 id="execution-the-blueprint--the-photo"><a class="header" href="#execution-the-blueprint--the-photo">Execution (The Blueprint &amp; The Photo)</a></h2>
+<h3 id="step-1-prep-bed-files-the-map"><a class="header" href="#step-1-prep-bed-files-the-map">Step 1: Prep BED Files (The Map)</a></h3>
+<p>We need clean BED files defining the TSS and the Gene Body. We extract these from the annotation (GTF) file.</p>
+<p><strong>A. Extract TSS (Portrait Mode)</strong>
+Run this <code>awk</code> script to get a 1bp position for every Transcript Start Site.</p>
+<pre><code class="language-bash">awk 'BEGIN{OFS="\t"} $3=="transcript" {                # keep only transcript rows  
+  if($7=="+")                                         # plus strand: TSS at start
+    print $1, $4-1, $4, $12, ".", $7;                 # [start-1, start) = 1 bp
+  else                                                # minus strand: TSS at end
+    print $1, $5-1, $5, $12, ".", $7                  # [end-1, end) = 1 bp
+}' gencode.v49.annotation.gtf |  
+tr -d '";' |                                          # remove quotes and semicolons
+sort -k1,1V -k2,2n &gt; tss.bed                          # sort by chrom, then start
+</code></pre>
+<p><strong>B. Extract Gene Bodies (Panorama Mode)</strong>
+Run this to get the full gene intervals.</p>
+<pre><code class="language-bash">awk 'BEGIN{OFS="\t"} $3=="gene" {                     # keep only gene rows
+  print $1, $4-1, $5, $10, ".", $7                    # full gene body
+}' gencode.v47.annotation.gtf | 
+tr -d '";' |                                          # clean attributes
+sort -k1,1V -k2,2n &gt; genes.bed
+</code></pre>
+<h3 id="build-the-matrix-the-blueprint"><a class="header" href="#build-the-matrix-the-blueprint">Build the Matrix (The Blueprint)</a></h3>
+<p>This command calculates the coverage scores for plotting.</p>
+<p><strong>Mode A: Reference-Point (TSS)</strong></p>
+<pre><code class="language-bash">computeMatrix reference-point \
+    --referencePoint TSS \
+    -b 3000 -a 10000 \                  # 3kb Before, 10kb After
+    -R tss.bed \                        # Regions (The Map)
+    -S sample1.bw sample2.bw \          # Signal (BigWigs)
+    --skipZeros \
+    -o matrix_TSS.gz \
+    --binSize 10 \
+    --numberOfProcessors 4
+</code></pre>
+<p><strong>Mode B: Scale-Regions (Gene Body)</strong></p>
+<pre><code class="language-bash">
+computeMatrix scale-regions \
+    -R genes.bed \
+    -S sample1.bw sample2.bw \
+    --regionBodyLength 5000 \           # Stretch all genes to 5kb
+    -b 1000 -a 1000 \                   # Add 1kb flanks
+    -o matrix_Body.gz \
+    --skipZeros \
+    --binSize 10
+</code></pre>
+<h3 id="step-3-plotting-the-photo"><a class="header" href="#step-3-plotting-the-photo">Step 3: Plotting (The Photo)</a></h3>
+<p>Now we turn the <code>matrix_TSS.gz</code> and <code>matrix_Body.gz</code> into plots.</p>
+<pre><code># per-group profile
+  plotProfile \
+    --matrixFile mat.gz \
+    --outFileName profile_group.pdf \
+    --perGroup \
+    --dpi 600 \
+    --legendLocation upper-right
+</code></pre>
+<pre><code># mean profile
+  plotProfile \
+    --matrixFile mat.gz \
+    --outFileName profile.pdf \
+    --dpi 600 \
+    --legendLocation upper-right
+</code></pre>
+<hr>
+<h2 id="reading-the-pictures"><a class="header" href="#reading-the-pictures">Reading the Pictures</a></h2>
+<hr><img width="1019" height="317" alt="Screenshot 2025-12-10 at 12 13 05 PM" src="https://github.com/user-attachments/assets/b583ba5a-0a30-4095-8060-f30ae5d26147" />
+<hr>
+<p>Each panel shows the expected hierarchy of promoter-proximal enrichment, and the contrast between marks is pretty stark.</p>
+<p>The <strong>input tracks</strong> sit between roughly 1.2 and 1.55 on the y-axis. That flat, low-amplitude range is exactly what you expect from a background signal with no real TSS enrichment.</p>
+<p>The <strong>two CEB profiles</strong> stay in the same neighborhood, about 1.25 to 1.5, with only small oscillations and a shallow dip at the TSS. They never rise above the background, which tells you the factor is either weakly bound or the data quality is modest.</p>
+<p><strong>H3K27me3</strong> is clearly different. Its signal climbs from about 1.7–2.0 in the flanks to peaks around 2.7–3.0 at the TSS in one replicate and about 2.5–2.75 in the other. That broad, mid-range elevation matches what you expect from a repressive domain mark.</p>
+<p><strong>H3K9ac</strong> is the outlier. Instead of hovering around 1–3, it shoots to 12 in one replicate and 25 in the other. Those tall, narrow spikes reflect strong, promoter-proximal acetylation and clean separation from background noise.</p>
+<hr><img width="1022" height="323" alt="Screenshot 2025-12-10 at 12 14 14 PM" src="https://github.com/user-attachments/assets/0c10ed9f-6ff9-43a1-82d6-0c029973c56f" />
+<hr>
+<p>Across all genes, the meta-profiles show clear and reproducible mark-specific patterns that are obvious from both the shape of the curves and their amplitude on the Y axis.</p>
+<p>The <strong>input tracks</strong> sit around <strong>~1.22–1.30</strong> along the entire region, with only a very small rise near the TSS, which confirms that the background structure is low and there are no major mapping or copy-number artifacts.</p>
+<p>In contrast, the <strong>ceb ChIP</strong> reaches <strong>~1.45–1.50</strong> at the TSS before dropping back to ~1.30 across the gene body, a pattern and magnitude that match promoter-restricted occupancy of a transcription factor.</p>
+<p><strong>H3K27me3</strong> shows a broader profile with TSS values rising to <strong>~2.0–2.2</strong> and gradually decaying toward ~1.5 at the TES, consistent with the expected spread of a repressive chromatin domain rather than a sharply localized promoter mark.</p>
+<p><strong>H3K9ac</strong> displays the highest dynamic range: the TSS peak reaches ~8–10 in one replicate and ~5 in the other, dropping to ~2–3 across the gene body, which is exactly the kind of focused acetylation seen at active promoters.</p>
+<p>The fact that replicates for each mark reach similar Y-axis heights and have nearly identical curve shapes indicates that the enrichment is real, reproducible, and well above the input background.</p>
+<hr>
+<h3 id="32-comparison-portrait-vs-panorama"><a class="header" href="#32-comparison-portrait-vs-panorama">3.2 Comparison: Portrait vs Panorama</a></h3>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th style="text-align: left">Mark</th><th style="text-align: left">Uses TSS Mode (Portrait)</th><th style="text-align: left">Uses Scaled Mode (Panorama)</th></tr>
+</thead>
+<tbody>
+<tr><td style="text-align: left"><strong>Input</strong></td><td style="text-align: left">Flat (~1.25).</td><td style="text-align: left">Flat (~1.25).</td></tr>
+<tr><td style="text-align: left"><strong>CEBPA</strong></td><td style="text-align: left">Small bump at TSS (~1.5).</td><td style="text-align: left">Bump at start, then flat.</td></tr>
+<tr><td style="text-align: left"><strong>H3K27me3</strong></td><td style="text-align: left">Broad peak (~2.0-3.0).</td><td style="text-align: left">Rise at start (~2.3), slope down gene body.</td></tr>
+<tr><td style="text-align: left"><strong>H3K9ac</strong></td><td style="text-align: left">Sharp spike (~25).</td><td style="text-align: left">Spike at start, rapid drop to ~1.</td></tr>
+</tbody>
+</table>
+</div>
+<p>This step takes the per-replicate matrix files generated by computeMatrix and converts each one into a heatmap and plot using a single command.</p>
+<pre><code> plotHeatmap -m mat.gz \                 #`matrix_TSS.gz` or `matrix_Body.gz`
+        -out profile_heat.pdf \
+        --colorMap jet \
+        --missingDataColor "#FFF6EB" \
+        --refPointLabel "TSS" \
+        --plotFileFormat pdf --dpi 600
+</code></pre>
+<hr><img width="852" height="436" alt="Screenshot 2025-12-10 at 12 47 38 PM" src="https://github.com/user-attachments/assets/57933355-b628-4b6f-a861-70bf54a60985" />
+<hr>
+<p>Input shows a flat, diffuse signal with no structured enrichment, consistent with background and technical bias.
+H3K9ac displays a sharp, TSS-centered peak with strong promoter-specific enrichment, indicating a successful ChIP and correct biological localization.</p>
+<h4 id="more"><a class="header" href="#more">More</a></h4>
+<p>Consider trying different parameters of the compute matrix and plotprofile/plotheatmap, and see how much they influence the plotting and representation. Consider having the bedfile of the lines/sines/pEl</p>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="tutorial-14-annotation--visualization"><a class="header" href="#tutorial-14-annotation--visualization">Tutorial 14: Annotation &amp; Visualization</a></h1>
+<h2 id="introduction-decoding-the-map"><a class="header" href="#introduction-decoding-the-map">Introduction: Decoding the Map</a></h2>
+<p>You have successfully defined your <strong>Peaks</strong> (GPS coordinates of protein binding). But coordinates alone don’t tell a biological story.
+<strong>Annotation</strong> is the process of cross-referencing these coordinates with a <strong>Gene Map</strong> (GTF) to answer:</p>
+<ul>
+<li>“Does my protein bind to Promoters?”</li>
+<li>“Is it hiding in Intergenic Deserts?”</li>
+<li>“Does it prefer Exons or Introns?”</li>
+</ul>
+<p>Below is the full interactive report generated by <strong>ChIPseeker</strong>.</p>
+<hr><iframe src="ChIP-seq_analysis_with_Chipseeker.html" width="100%" height="800px" style="border:none;"></iframe>
+<hr>
+<h2 id="how-to-interpret-the-figures-reference-guide"><a class="header" href="#how-to-interpret-the-figures-reference-guide">How to Interpret the Figures (Reference Guide)</a></h2>
+<p>Since the report above contains many plots, here is a guide on how to read the most important ones:</p>
+<h3 id="1-the-tss-heatmap-portrait-mode"><a class="header" href="#1-the-tss-heatmap-portrait-mode">1. The TSS Heatmap (Portrait Mode)</a></h3>
+<ul>
+<li><strong>What it shows:</strong> The binding intensity ±3000bp around the Transcription Start Site (TSS).</li>
+<li><strong>How to read it:</strong>
+<ul>
+<li><strong>Vertical Axis:</strong> Each line is one gene.</li>
+<li><strong>Horizontal Axis:</strong> Center is TSS. Left is Upstream, Right is Downstream.</li>
+<li><strong>Key Insight:</strong> A dark vertical stripe at the center (0) means your protein is a <strong>Strong Promoter Binder</strong> (like H3K9ac or Transcription Factors). A broad cloud means it’s a domain mark (like H3K27me3).</li>
+</ul>
+</li>
+</ul>
+<h3 id="2-the-average-profile-plot"><a class="header" href="#2-the-average-profile-plot">2. The Average Profile Plot</a></h3>
+<ul>
+<li><strong>What it shows:</strong> The average signal across all genes, summarized as a line graph.</li>
+<li><strong>How to read it:</strong>
+<ul>
+<li><strong>Sharp Spike at 0:</strong> Confirms precise positioning at promoters.</li>
+<li><strong>Dip (Valley) at 0:</strong> Indicates the protein binds <em>around</em> the TSS (like nucleosomes) but leaves the start site open.</li>
+</ul>
+</li>
+</ul>
+<h3 id="3-the-genomic-annotation-barplot"><a class="header" href="#3-the-genomic-annotation-barplot">3. The Genomic Annotation Barplot</a></h3>
+<ul>
+<li><strong>What it shows:</strong> Where your peaks land (Promoter vs. Intron vs. Distal Intergenic).</li>
+<li><strong>How to read it:</strong>
+<ul>
+<li><strong>High Promoter Fraction (&gt;50%):</strong> Your protein regulates genes directly (e.g., TFs, active histones).</li>
+<li><strong>High Distal Intergenic:</strong> Your protein might be an Enhancer-binding factor.</li>
+</ul>
+</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="chip-seq-pipeline-basic-commands-no-loops"><a class="header" href="#chip-seq-pipeline-basic-commands-no-loops">ChIP-seq Pipeline: Basic Commands (No Loops)</a></h1>
+<p>This guide shows the <strong>exact commands</strong> for every step of the pipeline. These are run for a single sample (e.g., <code>Sample1</code>), except for the “Compare Samples” section which is run once for all files.</p>
+<h3 id="1-alignment-bowtie2"><a class="header" href="#1-alignment-bowtie2">1. Alignment (Bowtie2)</a></h3>
+<pre><code class="language-bash">mkdir -p bowtie_align
+
+# Align to reference
+bowtie2 -x trim/ssindex \
+    -1 trim/Sample1_R1_val_1.fq.gz \
+    -2 trim/Sample1_R2_val_2.fq.gz \
+    -p 6 --no-unal \
+    -S bowtie_align/Sample1.sam
+</code></pre>
+<h3 id="2-sorting-and-indexing-samtools"><a class="header" href="#2-sorting-and-indexing-samtools">2. Sorting and Indexing (Samtools)</a></h3>
+<pre><code class="language-bash"># Sort and convert to BAM
+samtools sort -@ 6 -o bowtie_align/Sample1.sorted.bam bowtie_align/Sample1.sam
+
+# Index
+samtools index bowtie_align/Sample1.sorted.bam
+</code></pre>
+<h3 id="3-mark-duplicates-picard"><a class="header" href="#3-mark-duplicates-picard">3. Mark Duplicates (Picard)</a></h3>
+<p><em>Mark duplicates but keep them in the file.</em></p>
+<pre><code class="language-bash">mkdir -p Marked_duplicate3
+
+picard MarkDuplicates \
+    I=bowtie_align/Sample1.sorted.bam \
+    O=Marked_duplicate3/Sample1.marked.bam \
+    M=Marked_duplicate3/Sample1.marked_metrics.txt \
+    REMOVE_DUPLICATES=false \
+    VALIDATION_STRINGENCY=SILENT
+
+samtools index Marked_duplicate3/Sample1.marked.bam
+</code></pre>
+<h3 id="4-remove-duplicates-picard"><a class="header" href="#4-remove-duplicates-picard">4. Remove Duplicates (Picard)</a></h3>
+<p><em>Remove duplicates to create the final filtered file.</em></p>
+<pre><code class="language-bash">mkdir -p de_duplicate4
+
+picard MarkDuplicates \
+    I=bowtie_align/Sample1.sorted.bam \
+    O=de_duplicate4/Sample1.dedup.bam \
+    M=de_duplicate4/Sample1.dedup_metrics.txt \
+    REMOVE_DUPLICATES=true \
+    VALIDATION_STRINGENCY=SILENT
+
+samtools index de_duplicate4/Sample1.dedup.bam
+</code></pre>
+<h3 id="5-qc-metrics"><a class="header" href="#5-qc-metrics">5. QC Metrics</a></h3>
+<p><em>Generate mapping statistics, PBC complexity metrics, and Cross-Correlation.</em></p>
+<pre><code class="language-bash">mkdir -p bam_QC_PBC
+
+# 1. General Stats
+samtools flagstat de_duplicate4/Sample1.dedup.bam &gt; bam_QC_PBC/Sample1.flagstat.txt
+samtools stats de_duplicate4/Sample1.dedup.bam &gt; bam_QC_PBC/Sample1.stats.txt
+
+# 2. Library Complexity (PBC/NRF)
+#    a. Convert BAM to BED
+bedtools bamtobed -i de_duplicate4/Sample1.dedup.bam \
+    | awk 'BEGIN{OFS="\t"} ($6=="+"){print $1,$2,$2+1} ($6=="-"){print $1,$3-1,$3}' \
+    | sort -k1,1 -k2,2n \
+    &gt; bam_QC_PBC/Sample1.read5.bed
+
+#    b. Calculate Metrics
+uniq -c bam_QC_PBC/Sample1.read5.bed \
+    | awk '{
+        c=$1; total+=c; uniq++; if(c==1) single++; if(c==2) double++;
+      }
+      END{
+        if(total&gt;0) {
+            NRF=uniq/total; 
+            PBC1=single/uniq; 
+            PBC2=(double? single/double:"Inf");
+        } else { NRF=0; PBC1=0; PBC2=0; }
+        printf("NRF=%.3f\tPBC1=%.3f\tPBC2=%s\n", NRF, PBC1, PBC2);
+      }' &gt; bam_QC_PBC/Sample1.pbc.txt
+
+# 3. Cross-Correlation (SPP/Phantompeakqualtools)
+Rscript /opt/anaconda3/envs/chip/bin/run_spp.R \
+    -c=de_duplicate4/Sample1.dedup.bam \
+    -savp=bam_QC_PBC/Sample1_avp.pdf \
+    -out=bam_QC_PBC/Sample1_spp.qc.txt
+</code></pre>
+<h3 id="6-bigwig-generation-bamcoverage"><a class="header" href="#6-bigwig-generation-bamcoverage">6. BigWig Generation (bamCoverage)</a></h3>
+<pre><code class="language-bash">mkdir -p deeptools_QC
+
+bamCoverage \
+    -b de_duplicate4/Sample1.dedup.bam \
+    -o deeptools_QC/Sample1.bw \
+    --normalizeUsing RPGC \
+    --effectiveGenomeSize 2652783500 \
+    --binSize 10 \
+    --ignoreDuplicates
+</code></pre>
+<h3 id="7-global-analysis-compare-samples"><a class="header" href="#7-global-analysis-compare-samples">7. Global Analysis (Compare Samples)</a></h3>
+<p><em>Run these commands once you have bam files for ALL samples.</em></p>
+<pre><code class="language-bash"># 1. Create a summary of all samples
+#    (List all your bam files after -b)
+multiBamSummary bins \
+    -b de_duplicate4/Sample1.dedup.bam de_duplicate4/Sample2.dedup.bam \
+    --labels Sample1 Sample2 \
+    -o deeptools_QC/all_samples_bins.npz \
+    --outRawCounts deeptools_QC/all_samples_bins.tab
+
+# 2. Correlation Heatmap
+plotCorrelation \
+    -in deeptools_QC/all_samples_bins.npz \
+    --corMethod spearman \
+    --skipZeros \
+    --whatToPlot heatmap \
+    --colorMap RdYlBu \
+    --plotNumbers \
+    -o deeptools_QC/heatmap_SpearmanCorr.pdf
+
+# 3. PCA Plot
+plotPCA \
+    -in deeptools_QC/all_samples_bins.npz \
+    -o deeptools_QC/PCA.pdf \
+    -T "PCA of Binned Coverage" \
+    --transpose
+
+# 4. Fingerprint Plot
+plotFingerprint \
+    -b de_duplicate4/Sample1.dedup.bam de_duplicate4/Sample2.dedup.bam \
+    --labels Sample1 Sample2 \
+    --skipZeros \
+    --plotFile deeptools_QC/fingerprints.pdf
+</code></pre>
+<h3 id="8-profile-plotting-deeptools"><a class="header" href="#8-profile-plotting-deeptools">8. Profile Plotting (DeepTools)</a></h3>
+<pre><code class="language-bash"># 1. Prepare Region Files from GTF (Run once)
+#    TSS (Transcription Start Sites)
+awk 'BEGIN{OFS="\t"} $3=="transcript" { 
+      if($7=="+") print $1, $4-1, $4, $12, ".", $7; 
+      else        print $1, $5-1, $5, $12, ".", $7 
+    }' gencode.v49.annotation.gtf | tr -d '";' | sort -k1,1V -k2,2n &gt; deeptools_QC/tss.bed
+
+#    Gene Bodies
+awk 'BEGIN{OFS="\t"} $3=="gene" { 
+      print $1, $4-1, $5, $10, ".", $7 
+    }' gencode.v49.annotation.gtf | tr -d '";' | sort -k1,1V -k2,2n &gt; deeptools_QC/genes.bed
+
+
+# 2. TSS Profile
+computeMatrix reference-point \
+    --referencePoint TSS \
+    -b 3000 -a 10000 \
+    -R deeptools_QC/tss.bed \
+    -S deeptools_QC/Sample1.bw \
+    -o deeptools_QC/matrix_all_bw_TSS.gz \
+    --skipZeros
+
+plotProfile \
+    --matrixFile deeptools_QC/matrix_all_bw_TSS.gz \
+    --outFileName deeptools_QC/all_samples_TSS_profile.pdf \
+    --perGroup --refPointLabel TSS --plotType se
+
+
+# 3. Gene Body Profile
+computeMatrix scale-regions \
+    -R deeptools_QC/genes.bed \
+    -S deeptools_QC/Sample1.bw \
+    --regionBodyLength 5000 \
+    -b 1000 -a 1000 \
+    -o deeptools_QC/matrix_all_bw_scalar.gz \
+    --skipZeros
+
+plotProfile \
+    --matrixFile deeptools_QC/matrix_all_bw_scalar.gz \
+    --outFileName deeptools_QC/all_samples_scalar_profile.pdf \
+    --perGroup --plotType se
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="appendix-how-we-built-this-book"><a class="header" href="#appendix-how-we-built-this-book">Appendix: How We Built This Book</a></h1>
+<p>This tutorial documents the exact steps taken to turn our loose collection of tutorial files into this structured <strong>mdbook</strong>.</p>
+<h2 id="1-getting-started"><a class="header" href="#1-getting-started">1. Getting Started</a></h2>
+<p>The very first step is to get the code and set up the book tool.</p>
+<h3 id="step-1-clone-the-repository"><a class="header" href="#step-1-clone-the-repository">Step 1: Clone the Repository</a></h3>
+<p>We started by downloading the tutorial material from GitHub:</p>
+<pre><code class="language-bash">git clone https://github.com/your-username/Chipseq_analysis_tutorial.git
+cd Chipseq_analysis_tutorial
+</code></pre>
+<h3 id="step-2-install-mdbook"><a class="header" href="#step-2-install-mdbook">Step 2: Install mdbook</a></h3>
+<p>On macOS (using Homebrew):</p>
+<pre><code class="language-bash">brew install mdbook
+</code></pre>
+<h3 id="step-3-initialize-the-book"><a class="header" href="#step-3-initialize-the-book">Step 3: Initialize the Book</a></h3>
+<p>We initialized a new book structure inside our folder:</p>
+<pre><code class="language-bash">mdbook init my-first-book
+cd my-first-book
+</code></pre>
+<ul>
+<li>This created the <code>book.toml</code> configuration file and the <code>src/</code> directory.</li>
+</ul>
+<hr>
+<h2 id="2-organizing-the-content"><a class="header" href="#2-organizing-the-content">2. Organizing the Content</a></h2>
+<p>We moved our existing tutorial files into this new structure.</p>
+<h3 id="file-migration"><a class="header" href="#file-migration">File Migration</a></h3>
+<ul>
+<li><strong>Moved:</strong> All markdown files (<code>00_setup_environment.md</code> through <code>pipeline_tutorial_simple.md</code>) were moved into the <code>src/</code> directory.</li>
+<li><strong>Excluded:</strong> <code>02_bash_automation.ipynb</code> and the RMarkdown file remained in the root (for now) as they needed conversion.</li>
+</ul>
+<h3 id="configuration-summarymd"><a class="header" href="#configuration-summarymd">Configuration (<code>SUMMARY.md</code>)</a></h3>
+<p>We updated <code>src/SUMMARY.md</code> to define the order of chapters in the sidebar:</p>
+<pre><code class="language-markdown"># Summary
+- [Setup Environment](./00_setup_environment.md)
+...
+</code></pre>
+<hr>
+<h2 id="3-the-notebook-problem-ipynb"><a class="header" href="#3-the-notebook-problem-ipynb">3. The “Notebook” Problem (.ipynb)</a></h2>
+<p><strong>Issue:</strong> <code>mdbook</code> does not natively support Jupyter Notebooks.
+<strong>Solution:</strong> Convert them to standard Markdown.</p>
+<p><strong>Command Used:</strong></p>
+<pre><code class="language-bash"># Convert the notebook to markdown
+jupyter nbconvert --to markdown 02_bash_automation.ipynb
+
+# Move the result to src
+mv 02_bash_automation.md src/
+</code></pre>
+<hr>
+<h2 id="4-the-chipseeker-problem-html-reports"><a class="header" href="#4-the-chipseeker-problem-html-reports">4. The “ChIPseeker” Problem (HTML Reports)</a></h2>
+<p><strong>Issue:</strong> We had an RMarkdown report (<code>ChIP-seq_analysis_with_Chipseeker.html</code>) with interactive plots. Markdown cannot display dynamic HTML directly, but we wanted to keep the interactivity.</p>
+<p><strong>Solution:</strong> The Hybrid Wrapper (Iframe).</p>
+<ol>
+<li>
+<p><strong>Move the HTML:</strong> The <code>.html</code> file <strong>must</strong> be inside <code>src/</code> so it gets copied to the final website.</p>
+<pre><code class="language-bash">mv ChIP-seq_analysis_with_Chipseeker.html src/
+</code></pre>
+</li>
+<li>
+<p><strong>Create a Wrapper File:</strong> We created <code>src/14_chipseeker_annotation.md</code>.</p>
+</li>
+<li>
+<p><strong>Embed it:</strong> We used an HTML <code>&lt;iframe&gt;</code> tag inside the markdown file:</p>
+<pre><code class="language-html"># Annotation Tutorial
+
+(Normal text explaining the science goes here...)
+
+&lt;!-- This window shows the other file --&gt;
+&lt;iframe src="ChIP-seq_analysis_with_Chipseeker.html" width="100%" height="800px" style="border:none;"&gt;&lt;/iframe&gt;
+</code></pre>
+</li>
+</ol>
+<hr>
+<h2 id="5-building--serving"><a class="header" href="#5-building--serving">5. Building &amp; Serving</a></h2>
+<p>To see the book, we run:</p>
+<pre><code class="language-bash">mdbook serve --open
+</code></pre>
+<p>This serves the website at <code>http://localhost:3000</code> and auto-updates whenever we save a file.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+
+            </nav>
+
+        </div>
+
+        <template id=fa-eye><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M288 32c-80.8 0-145.5 36.8-192.6 80.6C48.6 156 17.3 208 2.5 243.7c-3.3 7.9-3.3 16.7 0 24.6C17.3 304 48.6 356 95.4 399.4C142.5 443.2 207.2 480 288 480s145.5-36.8 192.6-80.6c46.8-43.5 78.1-95.4 93-131.1c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C433.5 68.8 368.8 32 288 32zM432 256c0 79.5-64.5 144-144 144s-144-64.5-144-144s64.5-144 144-144s144 64.5 144 144zM288 192c0 35.3-28.7 64-64 64c-11.5 0-22.3-3-31.6-8.4c-.2 2.8-.4 5.5-.4 8.4c0 53 43 96 96 96s96-43 96-96s-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6z"/></svg></span></template>
+        <template id=fa-eye-slash><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M38.8 5.1C28.4-3.1 13.3-1.2 5.1 9.2S-1.2 34.7 9.2 42.9l592 464c10.4 8.2 25.5 6.3 33.7-4.1s6.3-25.5-4.1-33.7L525.6 386.7c39.6-40.6 66.4-86.1 79.9-118.4c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C465.5 68.8 400.8 32 320 32c-68.2 0-125 26.3-169.3 60.8L38.8 5.1zM223.1 149.5C248.6 126.2 282.7 112 320 112c79.5 0 144 64.5 144 144c0 24.9-6.3 48.3-17.4 68.7L408 294.5c5.2-11.8 8-24.8 8-38.5c0-53-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6c0 10.2-2.4 19.8-6.6 28.3l-90.3-70.8zm223.1 298L373 389.9c-16.4 6.5-34.3 10.1-53 10.1c-79.5 0-144-64.5-144-144c0-6.9 .5-13.6 1.4-20.2L83.1 161.5C60.3 191.2 44 220.8 34.5 243.7c-3.3 7.9-3.3 16.7 0 24.6c14.9 35.7 46.2 87.7 93 131.1C174.5 443.2 239.2 480 320 480c47.8 0 89.9-12.9 126.2-32.5z"/></svg></span></template>
+        <template id=fa-copy><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M502.6 70.63l-61.25-61.25C435.4 3.371 427.2 0 418.7 0H255.1c-35.35 0-64 28.66-64 64l.0195 256C192 355.4 220.7 384 256 384h192c35.2 0 64-28.8 64-64V93.25C512 84.77 508.6 76.63 502.6 70.63zM464 320c0 8.836-7.164 16-16 16H255.1c-8.838 0-16-7.164-16-16L239.1 64.13c0-8.836 7.164-16 16-16h128L384 96c0 17.67 14.33 32 32 32h47.1V320zM272 448c0 8.836-7.164 16-16 16H63.1c-8.838 0-16-7.164-16-16L47.98 192.1c0-8.836 7.164-16 16-16H160V128H63.99c-35.35 0-64 28.65-64 64l.0098 256C.002 483.3 28.66 512 64 512h192c35.2 0 64-28.8 64-64v-32h-47.1L272 448z"/></svg></span></template>
+        <template id=fa-play><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M73 39c-14.8-9.1-33.4-9.4-48.5-.9S0 62.6 0 80V432c0 17.4 9.4 33.4 24.5 41.9s33.7 8.1 48.5-.9L361 297c14.3-8.7 23-24.2 23-41s-8.7-32.2-23-41L73 39z"/></svg></span></template>
+        <template id=fa-clock-rotate-left><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M75 75L41 41C25.9 25.9 0 36.6 0 57.9V168c0 13.3 10.7 24 24 24H134.1c21.4 0 32.1-25.9 17-41l-30.8-30.8C155 85.5 203 64 256 64c106 0 192 86 192 192s-86 192-192 192c-40.8 0-78.6-12.7-109.7-34.4c-14.5-10.1-34.4-6.6-44.6 7.9s-6.6 34.4 7.9 44.6C151.2 495 201.7 512 256 512c141.4 0 256-114.6 256-256S397.4 0 256 0C185.3 0 121.3 28.7 75 75zm181 53c-13.3 0-24 10.7-24 24V256c0 6.4 2.5 12.5 7 17l72 72c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-65-65V152c0-13.3-10.7-24-24-24z"/></svg></span></template>
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr-ef4e11c1.min.js"></script>
+        <script src="mark-09e88c2c.min.js"></script>
+        <script src="searcher-c2a407aa.js"></script>
+
+        <script src="clipboard-1626706a.min.js"></script>
+        <script src="highlight-abc7f01d.js"></script>
+        <script src="book-a0b12cfe.js"></script>
+
+        <!-- Custom JS scripts -->
+
+        <script>
+        window.addEventListener('load', function() {
+            window.setTimeout(window.print, 100);
+        });
+        </script>
+
+
+    </div>
+    </body>
+</html>
