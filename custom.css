@@ -1,162 +1,151 @@
 /* Import Google Fonts */
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700&display=swap");
+/* Merriweather for Headings (Serif) & Inter for Body (Sans) */
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Merriweather:wght@300;400;700;900&display=swap");
 
 :root {
   /* Typography */
-  --font-sans: "Inter", system-ui, -apple-system, sans-serif;
-  --font-heading: "Outfit", sans-serif;
+  --font-sans: "Inter", system-ui, -apple-system, Helvetica, Arial, sans-serif;
+  --font-heading: "Merriweather", "Times New Roman", serif;
 
-  /* Brand Colors */
-  --brand-primary: #6366f1; /* Indigo */
-  --brand-secondary: #8b5cf6; /* Violet */
-  --brand-gradient: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
-
+  /* Academic Brand Colors */
+  --academic-blue: #1e3a8a; /* Deep Navy */
+  --academic-accent: #2563eb; /* Bright Blue for interactions */
+  --text-primary: #111827;
+  --text-secondary: #4b5563;
+  
   /* Spacing */
-  --radius-md: 8px;
-  --radius-lg: 12px;
+  --radius-sm: 4px;
 }
 
-/* Headings */
-h1, h2, h3, h4 {
+/* Headings - Serif & Professional */
+h1, h2, h3, h4, h5 {
   font-family: var(--font-heading);
   font-weight: 700;
-  letter-spacing: -0.02em;
-  color: var(--brand-primary); /* Default brand color for headings */
+  letter-spacing: normal;
+  color: var(--academic-blue);
+  margin-top: 1.5em; /* Breathing room */
 }
 
 h1 {
-  background: var(--brand-gradient);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  display: inline-block; /* Required for gradient text */
+  font-weight: 900;
+  border-bottom: 2px solid #e5e7eb;
+  padding-bottom: 0.3em;
+  color: #111827; /* Main title in black/dark grey */
 }
 
-/* Body Font Setup */
-/* We target the default class (.opensans) to replace it with Inter.
-   This allows the user to switch to "Serif" (.slab) or "Mono" (.source-code-pro) if they want. */
+/* Body Font Setup - Respecting Switcher */
 .opensans, .opensans body {
   font-family: var(--font-sans);
+  color: var(--text-primary);
+  line-height: 1.7; /* Improvement readability */
 }
-
-/* Ensure font size scaling works by using relative units (rem/em) for everything */
-/* mdbook handles the root font-size on html, so we just flow with it. */
 
 /* --- SIDEBAR & NAVIGATION --- */
 
 .sidebar {
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border-right: 1px solid rgba(255, 255, 255, 0.1);
-  background: var(--sidebar-bg); 
+  background-color: #f9fafb; /* Very light grey */
+  border-right: 1px solid #e5e7eb;
+  backdrop-filter: none; /* Remove glassmorphism */
 }
 
-/* Active Chapter Highlight */
-.chapter li.active > a {
-  color: var(--brand-primary) !important;
-  background: rgba(99, 102, 241, 0.1);
-  border-radius: var(--radius-md);
+.sidebar .chapter li {
+    color: var(--text-secondary);
+}
+
+.sidebar .chapter li.active > a {
+  color: var(--academic-blue) !important;
+  background-color: #eff6ff;
+  border-left: 3px solid var(--academic-blue);
+  border-radius: 0; /* Square edges for professionalism */
   font-weight: 600;
+  padding-left: 8px; /* Offset for border */
 }
 
-/* --- THEME SPECIFIC VIBRANCY --- */
+/* --- THEME SPECIFIC ADJUSTMENTS --- */
 
-/* LIGHT THEME */
+/* LIGHT THEME (Default Academic) */
 .light {
-  --bg: #FAFAFA;
-  --fg: #1e293b;
-  --sidebar-bg: linear-gradient(180deg, rgba(245, 247, 250, 0.9) 0%, rgba(255, 255, 255, 0.8) 100%);
-  --sidebar-fg: #475569;
-  --table-header-bg: #f1f5f9;
-  --quote-bg: #f8fafc;
-  --quote-border: #e2e8f0;
+  --bg: #ffffff;
+  --fg: #111827;
+  --quote-bg: #f9fafb;
+  --quote-border: #d1d5db;
 }
 
-.light h2, .light h3, .light h4 { color: #4f46e5; }
-.light .chapter li.active > a { color: #4f46e5 !important; background: rgba(79, 70, 229, 0.08); }
-
-
-/* RUST THEME (Warm) */
+/* RUST THEME (Sepia/Paper) */
 .rust {
-  --sidebar-bg: linear-gradient(180deg, rgba(60, 48, 41, 0.95) 0%, rgba(45, 35, 30, 0.9) 100%);
-  --brand-primary: #ffad66; 
+  --font-heading: "Merriweather", serif; /* Keep serif */
+  /* mdbook handles colors, we just ensure alignment */
 }
-.rust h1 { 
-    background: linear-gradient(135deg, #ffcba4 0%, #ffad66 100%); 
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-}
-.rust h2, .rust h3 { color: #ffcba4; }
+.rust h1, .rust h2, .rust h3 { color: #5c4033; }
 
 
-/* NAVY THEME (Dark/Cool) */
+/* NAVY THEME (Dark) */
 .navy {
+  --academic-blue: #93c5fd; /* Lighter blue for dark mode */
+  --text-primary: #f3f4f6;
   --bg: #0f172a;
-  --fg: #e2e8f0;
-  --sidebar-bg: linear-gradient(180deg, rgba(15, 23, 42, 0.9) 0%, rgba(30, 41, 59, 0.8) 100%);
-  --quote-bg: #1e293b;
-  --quote-border: #334155;
 }
-.navy h1 { 
-    background: linear-gradient(135deg, #818cf8 0%, #c084fc 100%); 
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-}
+.navy h1 { color: #f3f4f6; border-bottom-color: #374151; }
 
 
-/* --- GITHUB ALERTS --- */
+/* --- ACADEMIC ALERTS (Subdued) --- */
 
 blockquote {
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-sm);
   padding: 1rem 1.25rem;
   margin: 1.5rem 0;
   border-left: 4px solid var(--quote-border);
   background: var(--quote-bg);
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); /* Subtle lift */
-  font-style: normal;
+  font-style: italic; /* Classic look */
+  font-family: var(--font-heading); /* Serif for quotes */
+  color: var(--text-secondary);
 }
 
-/* Alert Colors - More Vibrant */
+/* Note - Blue */
 blockquote.alert-note {
-  border-left-color: #3b82f6; /* Bright Blue */
-  background: linear-gradient(to right, rgba(59, 130, 246, 0.1), transparent);
+  border-left-color: #1e3a8a;
+  background-color: #eff6ff;
+  color: #1e3a8a;
+  font-style: normal;
+  font-family: var(--font-sans);
 }
-blockquote.alert-note strong:first-child { color: #2563eb; }
+.navy blockquote.alert-note { background-color: rgba(30, 58, 138, 0.3); color: #bfdbfe; }
 
+/* Warning - Amber/Orange */
 blockquote.alert-warning {
-  border-left-color: #f59e0b; /* Amber */
-  background: linear-gradient(to right, rgba(245, 158, 11, 0.1), transparent);
+  border-left-color: #b45309;
+  background-color: #fffbeb;
   color: #92400e;
+  font-style: normal;
+  font-family: var(--font-sans);
 }
-.navy blockquote.alert-warning { color: #fcd34d; }
 
+/* Important - Purple */
 blockquote.alert-important {
-  border-left-color: #8b5cf6; /* Violet */
-  background: linear-gradient(to right, rgba(139, 92, 246, 0.1), transparent);
-}
-
-blockquote.alert-tip {
-  border-left-color: #10b981; /* Emerald */
-  background: linear-gradient(to right, rgba(16, 185, 129, 0.1), transparent);
+  border-left-color: #6d28d9;
+  background-color: #f5f3ff;
+  font-style: normal;
+  font-family: var(--font-sans);
 }
 
 
-/* --- BUTTONS & INTERACTIVE --- */
+/* --- BUTTONS & INTERACTION --- */
 
 .nav-chapters {
-  border-radius: 50%; /* Circle buttons */
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: var(--radius-sm);
+  transition: opacity 0.2s;
 }
 
 .nav-chapters:hover {
-  transform: scale(1.1);
-  background-color: var(--brand-primary);
-  color: white;
-  box-shadow: 0 10px 15px -3px rgba(99, 102, 241, 0.4);
+  text-decoration: none;
+  opacity: 0.8;
+  background: transparent; /* Minimalist */
+  color: var(--academic-blue);
 }
 
-/* Code Blocks */
+/* Code Blocks - Professional */
 pre {
-  border-radius: var(--radius-lg);
-  border: 1px solid rgba(128, 128, 128, 0.1);
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e5e7eb;
+  border-radius: var(--radius-sm);
+  background-color: #f8fafc; /* Slight contrast */
 }
