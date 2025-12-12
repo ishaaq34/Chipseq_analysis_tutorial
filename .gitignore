@@ -1,1 +1,26 @@
+# System Files
+.DS_Store
 ._*
+
+# mdbook Build Artifacts
+/book/
+
+# Python/Jupyter Checkpoints
+.ipynb_checkpoints/
+__pycache__/
+
+# R Data
+.RData
+.Rhistory
+
+# Large Data Files (Prevent accidental commit)
+*.fastq
+*.fastq.gz
+*.bam
+*.bai
+*.sam
+*.bw
+*.bigWig
+*.bed
+*.narrowPeak
+*.broadPeak
