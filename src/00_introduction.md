@@ -16,13 +16,8 @@ We believe you shouldn't just run code—you should understand it. Every chapter
 *   **Level 2: Execution (The "How"):** We provide the exact code, line-by-line, to run on your machine.
 *   **Level 3: Interpretation (The "So What?"):** We teach you how to read the output. A plot is useless if you don't know what a "good" result looks like.
 
-### 2. The "Trinity" of Peaks
-Most tutorials show you one easy transcription factor. We challenge you with the three distinct types of ChIP-seq data, so you are ready for anything:
-*   **The Sharp Peak:** *CEBPA* (Transcription Factor).
-*   **The Narrow Peak:** *H3K9ac* (Active Promoter Mark).
-*   **The Broad Domain:** *H3K27me3* (Repressive Polycomb Mark).
 
-### 3. A Complete Pipeline
+### 2. A Complete Pipeline
 We don't skip steps. You will go from:
 1.  **Downloading** raw FASTQ files from GEO.
 2.  **Aligning** reads with Bowtie2.
@@ -31,9 +26,6 @@ We don't skip steps. You will go from:
 5.  **Annotating** genomic features with ChIPseeker.
 
 ---
-
-## The Scientific Goal
-In this project, we are investigating how the transcription factor **CEBPA** cooperates with histone modifications to regulate the genome.
 
 ### Experimental Context
 These experiments were performed using the human **BLaER1** cell line. The cells were treated for 18 hours with three molecules:
@@ -45,7 +37,6 @@ These treatments activate specific signaling pathways in the cells and create a 
 
 **Data Availability:**
 *   [ENCODE Cart](https://www.encodeproject.org/carts/ca521f95-7835-4369-88a9-b89f98fb39ad/)
-*   [DOI](https://doi.org/doi:10.17989%2FENCSR255SDP)
 
 ### Study Design: Targets & Controls
 To study gene regulation under these conditions, several ChIP-seq experiments were carried out. These include:
