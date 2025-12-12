@@ -1,0 +1,151 @@
+/* Import Google Fonts */
+/* Merriweather for Headings (Serif) & Inter for Body (Sans) */
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Merriweather:wght@300;400;700;900&display=swap");
+
+:root {
+  /* Typography */
+  --font-sans: "Inter", system-ui, -apple-system, Helvetica, Arial, sans-serif;
+  --font-heading: "Merriweather", "Times New Roman", serif;
+
+  /* Academic Brand Colors */
+  --academic-blue: #1e3a8a; /* Deep Navy */
+  --academic-accent: #2563eb; /* Bright Blue for interactions */
+  --text-primary: #111827;
+  --text-secondary: #4b5563;
+  
+  /* Spacing */
+  --radius-sm: 4px;
+}
+
+/* Headings - Serif & Professional */
+h1, h2, h3, h4, h5 {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  letter-spacing: normal;
+  color: var(--academic-blue);
+  margin-top: 1.5em; /* Breathing room */
+}
+
+h1 {
+  font-weight: 900;
+  border-bottom: 2px solid #e5e7eb;
+  padding-bottom: 0.3em;
+  color: #111827; /* Main title in black/dark grey */
+}
+
+/* Body Font Setup - Respecting Switcher */
+.opensans, .opensans body {
+  font-family: var(--font-sans);
+  color: var(--text-primary);
+  line-height: 1.7; /* Improvement readability */
+}
+
+/* --- SIDEBAR & NAVIGATION --- */
+
+.sidebar {
+  background-color: #f9fafb; /* Very light grey */
+  border-right: 1px solid #e5e7eb;
+  backdrop-filter: none; /* Remove glassmorphism */
+}
+
+.sidebar .chapter li {
+    color: var(--text-secondary);
+}
+
+.sidebar .chapter li.active > a {
+  color: var(--academic-blue) !important;
+  background-color: #eff6ff;
+  border-left: 3px solid var(--academic-blue);
+  border-radius: 0; /* Square edges for professionalism */
+  font-weight: 600;
+  padding-left: 8px; /* Offset for border */
+}
+
+/* --- THEME SPECIFIC ADJUSTMENTS --- */
+
+/* LIGHT THEME (Default Academic) */
+.light {
+  --bg: #ffffff;
+  --fg: #111827;
+  --quote-bg: #f9fafb;
+  --quote-border: #d1d5db;
+}
+
+/* RUST THEME (Sepia/Paper) */
+.rust {
+  --font-heading: "Merriweather", serif; /* Keep serif */
+  /* mdbook handles colors, we just ensure alignment */
+}
+.rust h1, .rust h2, .rust h3 { color: #5c4033; }
+
+
+/* NAVY THEME (Dark) */
+.navy {
+  --academic-blue: #93c5fd; /* Lighter blue for dark mode */
+  --text-primary: #f3f4f6;
+  --bg: #0f172a;
+}
+.navy h1 { color: #f3f4f6; border-bottom-color: #374151; }
+
+
+/* --- ACADEMIC ALERTS (Subdued) --- */
+
+blockquote {
+  border-radius: var(--radius-sm);
+  padding: 1rem 1.25rem;
+  margin: 1.5rem 0;
+  border-left: 4px solid var(--quote-border);
+  background: var(--quote-bg);
+  font-style: italic; /* Classic look */
+  font-family: var(--font-heading); /* Serif for quotes */
+  color: var(--text-secondary);
+}
+
+/* Note - Blue */
+blockquote.alert-note {
+  border-left-color: #1e3a8a;
+  background-color: #eff6ff;
+  color: #1e3a8a;
+  font-style: normal;
+  font-family: var(--font-sans);
+}
+.navy blockquote.alert-note { background-color: rgba(30, 58, 138, 0.3); color: #bfdbfe; }
+
+/* Warning - Amber/Orange */
+blockquote.alert-warning {
+  border-left-color: #b45309;
+  background-color: #fffbeb;
+  color: #92400e;
+  font-style: normal;
+  font-family: var(--font-sans);
+}
+
+/* Important - Purple */
+blockquote.alert-important {
+  border-left-color: #6d28d9;
+  background-color: #f5f3ff;
+  font-style: normal;
+  font-family: var(--font-sans);
+}
+
+
+/* --- BUTTONS & INTERACTION --- */
+
+.nav-chapters {
+  border-radius: var(--radius-sm);
+  transition: opacity 0.2s;
+}
+
+.nav-chapters:hover {
+  text-decoration: none;
+  opacity: 0.8;
+  background: transparent; /* Minimalist */
+  color: var(--academic-blue);
+}
+
+/* Code Blocks - Professional */
+pre {
+  border: 1px solid #e5e7eb;
+  border-radius: var(--radius-sm);
+  background-color: #f8fafc; /* Slight contrast */
+}
