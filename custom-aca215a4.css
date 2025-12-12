@@ -7,11 +7,25 @@
   --font-sans: "Inter", system-ui, -apple-system, Helvetica, Arial, sans-serif;
   --font-heading: "Merriweather", "Times New Roman", serif;
 
-  /* Academic Brand Colors */
-  --academic-blue: #1e3a8a; /* Deep Navy */
-  --academic-accent: #2563eb; /* Bright Blue for interactions */
-  --text-primary: #111827;
-  --text-secondary: #4b5563;
+ # /* Academic Brand Colors */
+ # --academic-blue: #1e3a8a; /* Deep Navy */
+ # --academic-accent: #2563eb; /* Bright Blue for interactions */
+#--text-primary: #111827;
+ # --text-secondary: #4b5563;
+
+
+/* Academic Brand Colors — Bright Green Variant */
+--academic-green: #0a6934;       /* Deep Bright Green (primary brand color) */
+--academic-accent: #28b44a;      /* Energetic but professional accent green */
+--text-primary: #1a1a1a;         /* Clean, neutral dark text */
+--text-secondary: #5a6460;       /* Muted gray-green secondary text */
+--surface: #f3fbf5;              /* Soft green-tinted background for cards/surfaces */
+--surface-muted: #e4f3e9;        /* Slightly deeper muted surface */
+
+
+
+
+
   
   /* Spacing */
   --radius-sm: 4px;
