@@ -1,4 +1,4 @@
-# Tutorial 00: Setting Up Your Digital Lab Bench (Conda Environment)
+# 1 : Setting Up Your Digital Lab Bench (Conda Environment)
 
 ##  Basic Concept 
 
