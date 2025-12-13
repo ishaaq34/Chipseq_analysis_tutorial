@@ -22,8 +22,8 @@ We will use a command-line tool called `sed` (Stream Editor) to "search and repl
 If your files look like `SampleA.fastq.gz`, we just want to remove `.fastq.gz`.
 
 ```
-Sample1-Control_A_H3K9ac.fastq.gz
-Sample1-Control_B_H3K9ac.fastq.gz
+Control_A_H3K9ac.fastq.gz
+Control_B_H3K9ac.fastq.gz
 
 ```
 
@@ -39,8 +39,8 @@ cat sample_id.txt
 will give 
 
 ```
-Sample1-Control_A_H3K9ac
-Sample1-Control_B_H3K9ac
+Control_A_H3K9ac
+Control_B_H3K9ac
 ```
 
 
@@ -52,8 +52,15 @@ Sample1-Control_B_H3K9ac
 
 ### Scenario B: Paired-End Reads (Most Common)
 Paired-end data usually comes in pairs of files for *one* sample:
-*   `Experiment1_R1.fastq.gz` (Read 1)
-*   `Experiment1_R2.fastq.gz` (Read 2)
+
+
+```
+Control_A_H3K9ac_R1.fastq.gz
+Control_A_H3K9ac_R2.fastq.gz
+Control_B_H3K9ac_R1.fastq.gz
+Control_B_H3K9ac_R2.fastq.gz
+
+```
 
 We don't want "Experiment1" to appear twice in our list. We only want to grab the name *once*.
 
@@ -80,24 +87,25 @@ for sample in $(cat sample_id.txt); do
 
   echo "sample_id: $sample"
 
-  fq1="${sample}_R1_val_1.fastq.gz"
-  fq2="${sample}_R2_val_2.fastq.gz"
+  fq1="${sample}_R1.fastq.gz"
+  fq2="${sample}_R2.fastq.gz"
 
   echo "paired end:  $fq1  :  $fq2"
 
 done 
 ```
 
-    sample_id: Input1
-    paired end:  Input1_R1_val_1.fastq.gz  :  Input1_R2_val_2.fastq.gz
+    sample_id: Control_A_H3K9ac
+    paired end:  Control_A_H3K9ac_R1.fastq.gz  :  Control_A_H3K9ac_R2.fastq.gz
     
-    sample_id: Input2
-    paired end:  Input2_R1_val_1.fastq.gz  :  Input2_R2_val_2.fastq.gz
+    sample_id: Control_B_H3K9ac
+    paired end:    Control_B_H3K9ac_R1.fastq.gz  :  Control_B_H3K9ac_R2.fastq.gz
    
+
+
+  
     
-    sample_id: SampleA
-    paired end:  SampleA_R1_val_1.fastq.gz  :  SampleA_R2_val_2.fastq.gz
-   
+ 
     
 
 
