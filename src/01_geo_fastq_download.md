@@ -22,7 +22,7 @@ As we process data, we change formats. Think of it like this:
 
 ## Level 2: Fetching the data
 
-To download data, we use a tool called `fastq-dl`. It acts like a smart librarian—you just give it the ID number, and it deals with the complicated databases for you.
+To download data, we use a tool called [fastq-dl](https://github.com/rpetit3/fastq-dl). It acts like a smart librarian—you just give it the ID number, and it deals with the complicated databases for you.
 
 ### 2.1 Download a Single Sample
 If you have a Run ID (starts with **SRR** or **ERR**), use this command:
