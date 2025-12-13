@@ -24,13 +24,11 @@ If your files look like `SampleA.fastq.gz`, we just want to remove `.fastq.gz`.
 ```
 Control_A_H3K9ac.fastq.gz
 Control_B_H3K9ac.fastq.gz
-
 ```
 
 Run this command:
 ```bash
 ls *.fastq.gz | sed 's/.fastq.gz//' > sample_id.txt
-
 ```
 
 ```
