@@ -72,8 +72,9 @@ By listing only the `_R1` files, we get exactly one entry per sample. We then st
 You *could* just type the names into a text file yourself. However, that is prone to typos. Using `ls` ensures you only list files that actually exist.
 
 
+Since we know the Sample ID (e.g., Input1), we can just tell the robot: "Look for Input1 plus _R1 and Input1 plus _R2."
+
 ```bash
-%%bash
 
 for sample in $(cat sample_id.txt); do
 
@@ -84,28 +85,19 @@ for sample in $(cat sample_id.txt); do
 
   echo "paired end:  $fq1  :  $fq2"
 
-  echo "Command: bowtie2 -x index \
-    -1 $fq1 \
-    -2 $fq2 \
-    -p 6 --no-unal \
-    2> bowalign/${sample}.log | samtools sort -@ 6 -o bowalign/${sample}.sorted.bam"
-
-  echo ""   # blank line for readability
-
 done 
 ```
 
     sample_id: Input1
     paired end:  Input1_R1_val_1.fastq.gz  :  Input1_R2_val_2.fastq.gz
-    Command: bowtie2 -x index     -1 Input1_R1_val_1.fastq.gz     -2 Input1_R2_val_2.fastq.gz     -p 6 --no-unal     2> bowalign/Input1.log | samtools sort -@ 6 -o bowalign/Input1.sorted.bam
     
     sample_id: Input2
     paired end:  Input2_R1_val_1.fastq.gz  :  Input2_R2_val_2.fastq.gz
-    Command: bowtie2 -x index     -1 Input2_R1_val_1.fastq.gz     -2 Input2_R2_val_2.fastq.gz     -p 6 --no-unal     2> bowalign/Input2.log | samtools sort -@ 6 -o bowalign/Input2.sorted.bam
+   
     
     sample_id: SampleA
     paired end:  SampleA_R1_val_1.fastq.gz  :  SampleA_R2_val_2.fastq.gz
-    Command: bowtie2 -x index     -1 SampleA_R1_val_1.fastq.gz     -2 SampleA_R2_val_2.fastq.gz     -p 6 --no-unal     2> bowalign/SampleA.log | samtools sort -@ 6 -o bowalign/SampleA.sorted.bam
+   
     
 
 
