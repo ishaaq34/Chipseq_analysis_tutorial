@@ -21,10 +21,28 @@ We will use a command-line tool called `sed` (Stream Editor) to "search and repl
 ### Scenario A: Single-End Reads
 If your files look like `SampleA.fastq.gz`, we just want to remove `.fastq.gz`.
 
+```
+Sample1-Control_A_H3K9ac.fastq.gz
+Sample1-Control_B_H3K9ac.fastq.gz
+
+```
+
 Run this command:
 ```bash
 ls *.fastq.gz | sed 's/.fastq.gz//' > sample_id.txt
+
 ```
+
+```
+cat sample_id.txt
+```
+will give 
+
+```
+Sample1-Control_A_H3K9ac
+Sample1-Control_B_H3K9ac
+```
+
 
 **What did this do?**
 1.  `ls *.fastq.gz`: Listed all the files.
