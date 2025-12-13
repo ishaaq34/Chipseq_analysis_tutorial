@@ -91,7 +91,7 @@ Alignment (Bowtie2, HISAT2)
 Peak Calling (MACS2)
 
 
-Since we know the Sample ID (e.g., Input1), we can just tell the robot: "Look for Input1 plus _R1 and Input1 plus _R2."
+Since we know the Sample ID (e.g., Control_A_H3K9ac), we can just tell the robot: "Look for Control_A_H3K9ac plus _R1 and Control_A_H3K9ac plus _R2."
 
 ```bash
 
