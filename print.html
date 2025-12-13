@@ -37,7 +37,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-06c3d945.js";
+            window.path_to_searchindex_js = "searchindex-f85993b7.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-df4cee15.js"></script>
@@ -500,10 +500,10 @@ By listing only the <code>_R1</code> files, we get exactly one entry per sample.
 <p>You <em>could</em> just type the names into a text file yourself. However, that is prone to typos. Using <code>ls</code> ensures you only list files that actually exist.</p>
 <h2 id="ready-for-use"><a class="header" href="#ready-for-use">Ready for Use</a></h2>
 <p>Your sample_id.txt file can now be used in downstream pipeline loops for:</p>
-<p>Quality Control (FastQC, MultiQC)
-Adapter Trimming (Trim Galore)
-Alignment (Bowtie2, HISAT2)
-Peak Calling (MACS2)</p>
+<p>Quality Control (FastQC, MultiQC)</p>
+<p>Adapter Trimming (Trim Galore)</p>
+<p>Alignment (Bowtie2, HISAT2)</p>
+<p>Peak Calling (MACS2)</p>
 <p>Since we know the Sample ID (e.g., Input1), we can just tell the robot: “Look for Input1 plus _R1 and Input1 plus _R2.”</p>
 <pre><code class="language-bash">
 for sample in $(cat sample_id.txt); do
