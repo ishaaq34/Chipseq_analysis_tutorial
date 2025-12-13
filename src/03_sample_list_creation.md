@@ -83,8 +83,11 @@ You *could* just type the names into a text file yourself. However, that is pron
 Your sample_id.txt file can now be used in downstream pipeline loops for:
 
 Quality Control (FastQC, MultiQC)
+
 Adapter Trimming (Trim Galore)
+
 Alignment (Bowtie2, HISAT2)
+
 Peak Calling (MACS2)
 
 
