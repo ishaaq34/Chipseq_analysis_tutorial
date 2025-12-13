@@ -71,29 +71,44 @@ By listing only the `_R1` files, we get exactly one entry per sample. We then st
 ### Creating the List Manually?
 You *could* just type the names into a text file yourself. However, that is prone to typos. Using `ls` ensures you only list files that actually exist.
 
-### Verifying Your List
-Always check your list before running a pipeline!
 
 ```bash
-cat sample_id.txt
+%%bash
+
+for sample in $(cat sample_id.txt); do
+
+  echo "sample_id: $sample"
+
+  fq1="${sample}_R1_val_1.fastq.gz"
+  fq2="${sample}_R2_val_2.fastq.gz"
+
+  echo "paired end:  $fq1  :  $fq2"
+
+  echo "Command: bowtie2 -x index \
+    -1 $fq1 \
+    -2 $fq2 \
+    -p 6 --no-unal \
+    2> bowalign/${sample}.log | samtools sort -@ 6 -o bowalign/${sample}.sorted.bam"
+
+  echo ""   # blank line for readability
+
+done 
 ```
 
-**Good Output:**
-```text
-Control_Rep1
-Control_Rep2
-Treated_Rep1
-Treated_Rep2
-```
+    sample_id: Input1
+    paired end:  Input1_R1_val_1.fastq.gz  :  Input1_R2_val_2.fastq.gz
+    Command: bowtie2 -x index     -1 Input1_R1_val_1.fastq.gz     -2 Input1_R2_val_2.fastq.gz     -p 6 --no-unal     2> bowalign/Input1.log | samtools sort -@ 6 -o bowalign/Input1.sorted.bam
+    
+    sample_id: Input2
+    paired end:  Input2_R1_val_1.fastq.gz  :  Input2_R2_val_2.fastq.gz
+    Command: bowtie2 -x index     -1 Input2_R1_val_1.fastq.gz     -2 Input2_R2_val_2.fastq.gz     -p 6 --no-unal     2> bowalign/Input2.log | samtools sort -@ 6 -o bowalign/Input2.sorted.bam
+    
+    sample_id: SampleA
+    paired end:  SampleA_R1_val_1.fastq.gz  :  SampleA_R2_val_2.fastq.gz
+    Command: bowtie2 -x index     -1 SampleA_R1_val_1.fastq.gz     -2 SampleA_R2_val_2.fastq.gz     -p 6 --no-unal     2> bowalign/SampleA.log | samtools sort -@ 6 -o bowalign/SampleA.sorted.bam
+    
 
-**Bad Output (Common Mistake):**
-```text
-Control_Rep1.fastq.gz  <-- Extension wasn't removed!
-Control_Rep2.fastq.gz
-```
-*If you see the "Bad Output", check your `sed` command again.*
 
----
 
 ## Summary
 1.  **Goal:** Create a clean list of sample names (`sample_id.txt`).
