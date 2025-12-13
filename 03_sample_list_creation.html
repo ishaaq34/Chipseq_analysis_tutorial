@@ -36,7 +36,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-b2694c7e.js";
+            window.path_to_searchindex_js = "searchindex-b7172884.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-df4cee15.js"></script>
@@ -193,8 +193,8 @@
 <p>We will use a command-line tool called <code>sed</code> (Stream Editor) to “search and replace” the messy file extensions with nothing, leaving only the clean name.</p>
 <h3 id="scenario-a-single-end-reads"><a class="header" href="#scenario-a-single-end-reads">Scenario A: Single-End Reads</a></h3>
 <p>If your files look like <code>SampleA.fastq.gz</code>, we just want to remove <code>.fastq.gz</code>.</p>
-<pre><code>Sample1-Control_A_H3K9ac.fastq.gz
-Sample1-Control_B_H3K9ac.fastq.gz
+<pre><code>Control_A_H3K9ac.fastq.gz
+Control_B_H3K9ac.fastq.gz
 
 </code></pre>
 <p>Run this command:</p>
@@ -204,8 +204,8 @@ Sample1-Control_B_H3K9ac.fastq.gz
 <pre><code>cat sample_id.txt
 </code></pre>
 <p>will give</p>
-<pre><code>Sample1-Control_A_H3K9ac
-Sample1-Control_B_H3K9ac
+<pre><code>Control_A_H3K9ac
+Control_B_H3K9ac
 </code></pre>
 <p><strong>What did this do?</strong></p>
 <ol>
@@ -216,10 +216,12 @@ Sample1-Control_B_H3K9ac
 </ol>
 <h3 id="scenario-b-paired-end-reads-most-common"><a class="header" href="#scenario-b-paired-end-reads-most-common">Scenario B: Paired-End Reads (Most Common)</a></h3>
 <p>Paired-end data usually comes in pairs of files for <em>one</em> sample:</p>
-<ul>
-<li><code>Experiment1_R1.fastq.gz</code> (Read 1)</li>
-<li><code>Experiment1_R2.fastq.gz</code> (Read 2)</li>
-</ul>
+<pre><code>Control_A_H3K9ac_R1.fastq.gz
+Control_A_H3K9ac_R2.fastq.gz
+Control_B_H3K9ac_R1.fastq.gz
+Control_B_H3K9ac_R2.fastq.gz
+
+</code></pre>
 <p>We don’t want “Experiment1” to appear twice in our list. We only want to grab the name <em>once</em>.</p>
 <p>Run this command:</p>
 <pre><code class="language-bash">ls *_R1.fastq.gz | sed 's/_R1.fastq.gz//' &gt; sample_id.txt
@@ -235,22 +237,18 @@ for sample in $(cat sample_id.txt); do
 
   echo "sample_id: $sample"
 
-  fq1="${sample}_R1_val_1.fastq.gz"
-  fq2="${sample}_R2_val_2.fastq.gz"
+  fq1="${sample}_R1.fastq.gz"
+  fq2="${sample}_R2.fastq.gz"
 
   echo "paired end:  $fq1  :  $fq2"
 
 done 
 </code></pre>
-<pre><code>sample_id: Input1
-paired end:  Input1_R1_val_1.fastq.gz  :  Input1_R2_val_2.fastq.gz
+<pre><code>sample_id: Control_A_H3K9ac
+paired end:  Control_A_H3K9ac_R1.fastq.gz  :  Control_A_H3K9ac_R2.fastq.gz
 
-sample_id: Input2
-paired end:  Input2_R1_val_1.fastq.gz  :  Input2_R2_val_2.fastq.gz
-
-
-sample_id: SampleA
-paired end:  SampleA_R1_val_1.fastq.gz  :  SampleA_R2_val_2.fastq.gz
+sample_id: Control_B_H3K9ac
+paired end:    Control_B_H3K9ac_R1.fastq.gz  :  Control_B_H3K9ac_R2.fastq.gz
 </code></pre>
 <h2 id="summary"><a class="header" href="#summary">Summary</a></h2>
 <ol>
