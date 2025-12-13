@@ -462,11 +462,9 @@ In GEO, you will see a hierarchy. It’s important not to mix these up:</p>
 <p>If your files look like <code>SampleA.fastq.gz</code>, we just want to remove <code>.fastq.gz</code>.</p>
 <pre><code>Control_A_H3K9ac.fastq.gz
 Control_B_H3K9ac.fastq.gz
-
 </code></pre>
 <p>Run this command:</p>
 <pre><code class="language-bash">ls *.fastq.gz | sed 's/.fastq.gz//' &gt; sample_id.txt
-
 </code></pre>
 <pre><code>cat sample_id.txt
 </code></pre>
