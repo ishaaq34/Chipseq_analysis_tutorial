@@ -79,6 +79,15 @@ By listing only the `_R1` files, we get exactly one entry per sample. We then st
 You *could* just type the names into a text file yourself. However, that is prone to typos. Using `ls` ensures you only list files that actually exist.
 
 
+## Ready for Use
+Your sample_id.txt file can now be used in downstream pipeline loops for:
+
+Quality Control (FastQC, MultiQC)
+Adapter Trimming (Trim Galore)
+Alignment (Bowtie2, HISAT2)
+Peak Calling (MACS2)
+
+
 Since we know the Sample ID (e.g., Input1), we can just tell the robot: "Look for Input1 plus _R1 and Input1 plus _R2."
 
 ```bash
