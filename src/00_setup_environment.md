@@ -91,7 +91,7 @@ Let's make sure our tools are actually there. Run these commands:
 # Check if key tools are reachable
 which fastqc
 which bowtie2
-which macs2
+which macs3
 
 # Check versions to ensure successful installation
 fastqc --version
