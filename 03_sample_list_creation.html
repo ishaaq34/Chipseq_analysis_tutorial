@@ -36,7 +36,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-36136adb.js";
+            window.path_to_searchindex_js = "searchindex-b2694c7e.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-df4cee15.js"></script>
@@ -229,8 +229,8 @@ By listing only the <code>_R1</code> files, we get exactly one entry per sample.
 <hr>
 <h3 id="creating-the-list-manually"><a class="header" href="#creating-the-list-manually">Creating the List Manually?</a></h3>
 <p>You <em>could</em> just type the names into a text file yourself. However, that is prone to typos. Using <code>ls</code> ensures you only list files that actually exist.</p>
-<pre><code class="language-bash">%%bash
-
+<p>Since we know the Sample ID (e.g., Input1), we can just tell the robot: “Look for Input1 plus _R1 and Input1 plus _R2.”</p>
+<pre><code class="language-bash">
 for sample in $(cat sample_id.txt); do
 
   echo "sample_id: $sample"
@@ -240,27 +240,17 @@ for sample in $(cat sample_id.txt); do
 
   echo "paired end:  $fq1  :  $fq2"
 
-  echo "Command: bowtie2 -x index \
-    -1 $fq1 \
-    -2 $fq2 \
-    -p 6 --no-unal \
-    2&gt; bowalign/${sample}.log | samtools sort -@ 6 -o bowalign/${sample}.sorted.bam"
-
-  echo ""   # blank line for readability
-
 done 
 </code></pre>
 <pre><code>sample_id: Input1
 paired end:  Input1_R1_val_1.fastq.gz  :  Input1_R2_val_2.fastq.gz
-Command: bowtie2 -x index     -1 Input1_R1_val_1.fastq.gz     -2 Input1_R2_val_2.fastq.gz     -p 6 --no-unal     2&gt; bowalign/Input1.log | samtools sort -@ 6 -o bowalign/Input1.sorted.bam
 
 sample_id: Input2
 paired end:  Input2_R1_val_1.fastq.gz  :  Input2_R2_val_2.fastq.gz
-Command: bowtie2 -x index     -1 Input2_R1_val_1.fastq.gz     -2 Input2_R2_val_2.fastq.gz     -p 6 --no-unal     2&gt; bowalign/Input2.log | samtools sort -@ 6 -o bowalign/Input2.sorted.bam
+
 
 sample_id: SampleA
 paired end:  SampleA_R1_val_1.fastq.gz  :  SampleA_R2_val_2.fastq.gz
-Command: bowtie2 -x index     -1 SampleA_R1_val_1.fastq.gz     -2 SampleA_R2_val_2.fastq.gz     -p 6 --no-unal     2&gt; bowalign/SampleA.log | samtools sort -@ 6 -o bowalign/SampleA.sorted.bam
 </code></pre>
 <h2 id="summary"><a class="header" href="#summary">Summary</a></h2>
 <ol>
