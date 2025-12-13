@@ -43,29 +43,11 @@ channels:    # The "App Stores" where we find tools
 dependencies: # The tools we want to install
   - multiqc=1.31
   - fastqc=0.12.1
-  - numpy
-  - bowtie2=2.5.4
-  - pandas
-  - cutadapt=5.2
-  - trim-galore=0.6.10
-  - samtools=1.22.1
-  - macs2=2.2.9.1
-  - matplotlib
-  - pip
-  - openjdk
-  - python=3.10
-  - picard=3.4.0
-  - seaborn
-  - phantompeakqualtools
-  - bedtools
-  - ucsc-bedgraphtobigwig
-  - ucsc-facount
-  - ucsc-bigwiginfo
-  - ucsc-bigwigsummary
+  
 prefix: /opt/anaconda3/envs/chip 
 ```
 
-> **Note:** If you downloaded the file [00_chip_updated.yml](00_chip_updated.yml) . You can use that to install all the tools required for the Chip-seq analysis!
+> **Note:** If you downloaded the file [00_chip_updated.yml](https://github.com/ishaaq34/Chipseq_analysis_tutorial/blob/main/Chip.yml) . You can use that to install all the tools required for the Chip-seq analysis!
 
 ### Step 3: Build the Environment
 Now, let's look at the instructions to build the bench.
