@@ -3,65 +3,28 @@ channels:
   - conda-forge
   - bioconda
   - defaults
-
 dependencies:
-  # Core languages
-  - python=3.10
-  - r-base=4.4
-
-  # Core NGS / ChIP-seq CLI tools
-  - bowtie2
-  - samtools
-  - bedtools
-  - htslib
-  - macs3
-  - trim-galore
-  - cutadapt
-  - fastqc
-  - multiqc
-  - picard
-  - phantompeakqualtools
-  - ucsc-bedgraphtobigwig
-  - ucsc-bigwigsummary
-  - ucsc-bigwiginfo
-  - ucsc-facount
-
-  # R / Bioconductor bits needed by phantompeakqualtools and basic genomics
-  - bioconductor-biocgenerics
-  - bioconductor-s4vectors
-  - bioconductor-iranges
-  - bioconductor-genomicranges
-  - bioconductor-genomeinfodb
-  - bioconductor-genomeinfodbdata
-  - bioconductor-rhtslib
-  - bioconductor-rsamtools
-  - bioconductor-xvector
-  - bioconductor-zlibbioc
-  - bioconductor-ucsc.utils
-  - r-spp
-  - r-snow
-  - r-snowfall
-  - r-bitops
-  - r-catools
-  - r-httr
-  - r-jsonlite
-  - r-openssl
-  - r-curl
-
-  # Basic Python scientific stack for plotting / stats
-  - numpy
-  - scipy
-  - pandas
-  - matplotlib
-  - pysam
-  - pybigwig
-  - py2bit
-
-  # Misc small utilities that are actually helpful
-  - jq
-  - yq
-
+  - bedtools=2.31.1=he85ad4a_3
+  - bowtie2=2.5.4=hdd4e3a4_6
+  - cutadapt=5.2=py310ha49c9ca_0
+  - fastqc=0.12.1=hdfd78af_0
+  - fastp=1.0.1=hee05c9d_0
+  - fastq-dl=3.0.0=pyhdfd78af_0
+  - macs3=3.0.3=py310ha095e21_0
+  - multiqc=1.31=pyhdfd78af_0
+  - phantompeakqualtools=1.2.2=hdfd78af_1
+  - picard=3.4.0=hdfd78af_0
+  - pip=25.2=pyh8b19718_0
+  - python=3.10.19=hcd7f573_2_cpython
+  - r-base=4.4.2=h9e409d2_1
+  - samtools=1.22.1=h267f7b9_0
+  - trim-galore=0.6.10=hdfd78af_1
+  - ucsc-bedgraphtobigwig=482=h1643cc5_0
+  - ucsc-bigwiginfo=482=h5f814e5_0
+  - ucsc-bigwigsummary=482=h5f814e5_0
+  - ucsc-facount=482=h5f814e5_0
+  - ucsc-fasize=482=h5f814e5_0
+  - khmer=3.0.0a3=py310h3ddde84_7
   - pip:
       - deeptools==3.5.6
-      - deeptoolsintervals==0.1.9
-      - pillow==12.0.0
+prefix: /opt/anaconda3/envs/chip
