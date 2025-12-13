@@ -36,7 +36,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-f85993b7.js";
+            window.path_to_searchindex_js = "searchindex-2e5cce1f.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-df4cee15.js"></script>
@@ -237,7 +237,7 @@ By listing only the <code>_R1</code> files, we get exactly one entry per sample.
 <p>Adapter Trimming (Trim Galore)</p>
 <p>Alignment (Bowtie2, HISAT2)</p>
 <p>Peak Calling (MACS2)</p>
-<p>Since we know the Sample ID (e.g., Input1), we can just tell the robot: “Look for Input1 plus _R1 and Input1 plus _R2.”</p>
+<p>Since we know the Sample ID (e.g., Control_A_H3K9ac), we can just tell the robot: “Look for Control_A_H3K9ac plus _R1 and Control_A_H3K9ac plus _R2.”</p>
 <pre><code class="language-bash">
 for sample in $(cat sample_id.txt); do
 
