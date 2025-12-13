@@ -14,7 +14,7 @@ dependencies:
   - samtools
   - bedtools
   - htslib
-  - macs2
+  - macs3
   - trim-galore
   - cutadapt
   - fastqc
