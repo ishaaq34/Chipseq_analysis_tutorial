@@ -1,4 +1,4 @@
-# Tutorial 01: Getting the Raw Data (FASTQ)
+#  02: Getting the Raw Data (FASTQ)
 
 > [!NOTE]
 > **Project Context:** While this tutorial teaches you how to download data from SRA, our specific project utilizes **ENCODE** data (CEBPA, H3K27me3, H3K9ac). See the `README.md` for the specific file list. The `fastq-dl` tool is excellent for public SRA data, but ENCODE data is often downloaded directly from the ENCODE portal.
