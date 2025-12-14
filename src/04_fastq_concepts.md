@@ -12,10 +12,11 @@ Think of every read like a **Luggage Tag** with 4 lines of information:
 
 **Example Read:**
 ```text
-@SRR7298010.1 1/1                 <-- ID: Read #1
-NGATTTCTATTCTTGGAACCATTAAAA...    <-- DNA: "N" means the machine failed to call that base
-+SRR7298010.1 1/1                 <-- Spacer
-FFFFF:F#,,...                     <-- Quality: Matches the length of the DNA
+@SN227:495:CA0TUACXX:1:1106:1159:2114 1:N:0:ATCACG  <-- ID: Read #1
+GTAAAAAGATTACATATATATTTAAAGTACACTGTAATTCTTANCA    <-- DNA: "N" means the machine failed to call that base
++                                                  <-- Spacer
+FDFFFHHHHHJIJGIJIJJHJJJJJJIIJIJGIHFIIJJIIIIJG        <-- Quality: Each character encodes a Phred quality score (Illumina 1.8+, ASCII offset 33).
+
 ```
 
 ---
@@ -39,14 +40,13 @@ For paired-end data, we must process R1 and R2 together so they stay synchronize
 ```bash
 fastp -i in.R1.fq.gz -I in.R2.fq.gz \
       -o out.R1.fq.gz -O out.R2.fq.gz \
-      -f 3 -t 2
+     
 ```
-*   `-f 3`: Trim 3 bases from the front (optional, if you know the start is bad).
-*   `-t 2`: Trim 2 bases from the tail.
+
 
 **What does fastp do automatically?**
-*   **Quality Filtering:** Drops reads if too many bases have low scores (default: Phred < 15).
-*   **Length Filtering:** Drops reads that become too short after trimming (default: < 15bp).
+*   **Quality Filtering:** Drops reads if too many bases have low scores (default: Phred -q < 15).
+*   **Length Filtering:** Drops reads that become too short after trimming (default: -l < 15bp).
 *   **Adapter Removal:** Finds and cuts off adapter sequences automatically.
 
 ---
@@ -72,12 +72,18 @@ gzcat sample.fastq.gz | awk 'NR%4==2 {b+=length($0)} END{print b " bases"}'
 
 ### 3.2 Batch Processing
 If you have 50 files, you can use a script to run `fastp` on all of them in parallel.
-The `fastp` developers provide a handy script called `parallel.py`:
+The `fastp` developers provide a handy script called  [parallel.py](https://github.com/OpenGene/fastp/blob/master/parallel.py):
 
 ```bash
 # Process 3 files at a time (-f 3), using 2 threads per file (-t 2)
 python parallel.py -i /raw_data_folder -o /clean_data_folder -r /report_folder -f 3 -t 2
 ```
+-f 3
+This sets the batch size. The script will process 3 files at a time.
+
+-t 2
+This sets the number of threads used for each task. Here each file is processed with 2 threads.
+
 This automatically finds pairs and generates HTML reports for every sample.
 
 ---
