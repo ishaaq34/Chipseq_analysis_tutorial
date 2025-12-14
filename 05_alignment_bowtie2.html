@@ -36,7 +36,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-70a42ee4.js";
+            window.path_to_searchindex_js = "searchindex-203683db.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-df4cee15.js"></script>
@@ -176,7 +176,7 @@
                 <div id="mdbook-content" class="content">
                     <main>
                         <h1 id="tutorial-04-alignment-solving-the-jigsaw-puzzle"><a class="header" href="#tutorial-04-alignment-solving-the-jigsaw-puzzle">Tutorial 04: Alignment (Solving the Jigsaw Puzzle)</a></h1>
-<h2 id="level-1-basic-concept-the-puzzle"><a class="header" href="#level-1-basic-concept-the-puzzle">Level 1: Basic Concept (The “Puzzle”)</a></h2>
+<h2 id="basic-concept-the-puzzle"><a class="header" href="#basic-concept-the-puzzle">Basic Concept (The “Puzzle”)</a></h2>
 <p>Imagine your Reference Genome is the <strong>Picture on the Puzzle Box</strong> (a complete image of the DNA).
 Your Reads (FASTAS) are the millions of tiny <strong>Puzzle Pieces</strong> scattered on the floor.</p>
 <p><strong>Alignment</strong> is simply picking up every piece and finding exactly where it fits on the picture.</p>
@@ -186,7 +186,7 @@ Your Reads (FASTAS) are the millions of tiny <strong>Puzzle Pieces</strong> scat
 <li><strong>The Output:</strong> A <strong>BAM File</strong>. This is the digital record of where every piece belongs.</li>
 </ul>
 <hr>
-<h2 id="level-2-execution-solving-it"><a class="header" href="#level-2-execution-solving-it">Level 2: Execution (Solving It)</a></h2>
+<h2 id="execution-solving-it"><a class="header" href="#execution-solving-it">Execution (Solving It)</a></h2>
 <h3 id="step-1-the-index-building-the-map"><a class="header" href="#step-1-the-index-building-the-map">Step 1: The Index (Building the Map)</a></h3>
 <p>Before Bowtie2 can work, it needs to process the reference genome into a format it can search quickly. This is called an <strong>Index</strong>.</p>
 <pre><code class="language-bash"># Example syntax: bowtie2-build [genome.fa] [prefix_name]
@@ -208,7 +208,7 @@ bowtie2 -x hg38_index \                  # 1. The Reference Map
 </code></pre>
 <p><strong>Run Bowtie2 alignment for a single sample</strong></p>
 <pre><code># Run Bowtie2 alignment for a single sample
-bowtie2 -x trim/ssindex \
+bowtie2 -x hg38_index \
   -u trim/Sample1.clean.fq.gz \
   -p 6 --no-unal \
   2&gt; bowalign/Sample1.log | samtools sort -@ 6 -o bowalign/Sample1.sorted.bam
@@ -220,11 +220,7 @@ We always “index” the BAM file. Think of this as creating a <strong>Table of
 </code></pre>
 <h3 id="output-structure"><a class="header" href="#output-structure"><strong>Output Structure</strong></a></h3>
 <p>After running this step, your directory should look like:</p>
-<pre><code>trim/
- ├── ssindex.1.bt2
- ├── ssindex.2.bt2
- └── ... (Bowtie2 index files)
-
+<pre><code>
 bowalign/
  ├── Sample1.log
  ├── Sample1.sorted.bam
@@ -232,7 +228,7 @@ bowalign/
 </code></pre>
 <p>Once this single run completes successfully, you can confidently automate for all samples.</p>
 <h3 id="step-3-automation-loop"><a class="header" href="#step-3-automation-loop">Step 3: Automation Loop</a></h3>
-<p>Through <a href="https://github.com/ishaaq34/Chipseq_analysis_tutorial/blob/main/src/03_sample_list_creation.md#ready-for-use">Sample list section</a>  Here is the script to run this for all your samples:</p>
+<p>Through <a href="https://github.com/ishaaq34/Chipseq_analysis_tutorial/blob/main/src/03_sample_list_creation.md#ready-for-use">Sample list section</a> ,  Here is the script to run this for all your samples:</p>
 <pre><code class="language-bash">#!/bin/bash
 mkdir -p bowalign
 
@@ -250,7 +246,7 @@ for sample in $(cat sample_id.txt); do
 done
 </code></pre>
 <hr>
-<h2 id="level-3-optimization--qc"><a class="header" href="#level-3-optimization--qc">Level 3: Optimization &amp; QC</a></h2>
+<h2 id="optimization"><a class="header" href="#optimization">Optimization</a></h2>
 <h3 id="optimization-threads-vs-jobs"><a class="header" href="#optimization-threads-vs-jobs">Optimization: Threads vs. Jobs</a></h3>
 <p>You have a limited number of CPU cores (computers brains). You can use them in two ways:</p>
 <ol>
@@ -266,6 +262,34 @@ done
 </li>
 </ol>
 <p><strong>Rule of Thumb:</strong> <code>bowtie2</code> stops getting faster after about <strong>8 threads</strong>. Don’t give it 50 threads; it’s a waste!</p>
+<p><a href="https://www.jefftk.com/p/benchmarking-bowtie2-threading">Benchmarking Bowtie2 Threading - Jeff Kaufman (2023)</a></p>
+<p><a href="https://wiki.csi.cuny.edu/HPCCWiki/BOWTIE2">BOWTIE2 - HPCC Wiki</a></p>
+<p><a href="https://github.com/samtools/samtools/issues">Guidance with using multiple threads with samtools - GitHub</a></p>
+<p><strong>Example with GNU Parallel</strong>:</p>
+<pre><code>cat sample_id.txt | parallel -j 3 '                     # -j 3 → runs 3 samples (jobs) in parallel
+
+  bowtie2 -x hg38_index \
+    -1 trim/${sample}_R1.clean.fq.gz  \
+    -2 trim/${sample}_R2.clean.fq.gz  \
+    -p 4 --no-unal \                                   # -p 4 → bowtie2 uses 4 CPU threads per sample
+    2&gt; bowalign/{}.log | samtools sort -@ 2 \           # -@ 2 → samtools sort uses 2 CPU threads per sample
+    -o bowalign/{}.sorted.bam
+
+  samtools index bowalign/{}.sorted.bam                 # samtools index is single-threaded
+'
+</code></pre>
+<p>Effective CPU usage (implied by this setup)</p>
+<ul>
+<li>
+<p>Per sample:  4 threads (bowtie2) + 2 threads (samtools sort) = 6 threads</p>
+</li>
+<li>
+<p>Total at once: 3 parallel jobs × 6 threads = 18 CPU threads</p>
+</li>
+<li>
+<p>Adjust based on available CPU cores and memory.</p>
+</li>
+</ul>
 <h3 id="quality-check-samtools-flagstat"><a class="header" href="#quality-check-samtools-flagstat">Quality Check: <code>samtools flagstat</code></a></h3>
 <p>Did the alignment work? Let’s check the score.</p>
 <pre><code class="language-bash">samtools flagstat bowalign/Sample1.sorted.bam
