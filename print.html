@@ -37,7 +37,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-203683db.js";
+            window.path_to_searchindex_js = "searchindex-482c7eab.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-df4cee15.js"></script>
@@ -745,9 +745,68 @@ done
 </ul>
 <p><strong>Goal:</strong> We want to keep the “popular pages” (real biological signal) but throw away the “accidental machine copies” (PCR duplicates) so they don’t trick us into thinking a random spot is important.</p>
 <hr>
-<h2 id="2-execution-marking--removing-duplicates"><a class="header" href="#2-execution-marking--removing-duplicates">2. Execution: Marking &amp; Removing Duplicates</a></h2>
-<p>We use a tool called <strong>Picard</strong> to find these “accidental copies.” It looks for reads that start and end at the exact same position. If it finds 10 identical reads, it keeps the best one and marks the other 9 as duplicates.</p>
-<h3 id="step-33-mark-duplicates-be-careful"><a class="header" href="#step-33-mark-duplicates-be-careful">Step 3.3: Mark Duplicates (Be Careful!)</a></h3>
+<h2 id="2-understanding-the-details"><a class="header" href="#2-understanding-the-details">2. Understanding the Details</a></h2>
+<p>For those who want to understand the “under the hood” mechanics, here is what are different types of duplicates and  the Read Groups .</p>
+<h3 id="pcr-vs-optical-duplicates"><a class="header" href="#pcr-vs-optical-duplicates">PCR vs. Optical Duplicates</a></h3>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>Type</th><th>Origin</th><th>Typical Cause</th><th>Implication</th></tr>
+</thead>
+<tbody>
+<tr><td><strong>PCR Duplicates</strong></td><td>Library Prep</td><td>Over-cycling (amplifying DNA too much)</td><td>Shows low library complexity (not enough unique DNA to start with).</td></tr>
+<tr><td><strong>Optical Duplicates</strong></td><td>Sequencer</td><td>Camera errors reads the same cluster as two</td><td>Technical glitch on the flow cell.</td></tr>
+</tbody>
+</table>
+</div>
+<h3 id="the-role-of-read-groups-rg"><a class="header" href="#the-role-of-read-groups-rg">The Role of Read Groups (RG)</a></h3>
+<p>A <strong>Read Group</strong> is a tag that tells the software “this read came from Sample A, Run 1.”</p>
+<ul>
+<li><strong>Why is it vital?</strong> If you merge two different samples (e.g., Replicate 1 and Replicate 2), you might have two different reads that coincidentally map to the same spot.</li>
+<li>Without Read Groups, Picard acts blindly: “These look identical! Delete one!” -&gt; <strong>Data Loss.</strong></li>
+<li>With Read Groups, Picard sees: “Oh, one is from Replicate 1 and one is from Replicate 2. They are different samples. Keep both!”</li>
+</ul>
+<p>*<strong>Full hierarchy in RGing</strong></p>
+<pre><code>RGSM  → biological sample (Control H3k9ac)
+  └── RGLB → library prep (usually lib1 however if Different library preps (even from same sample) RGLB=lib1 RGLB=lib2 )
+        └── RGPU → flowcell + lane (from header of Fastq file )
+              └── RGID → unique ID tying it all together (replicates of Control H3k9ac: Control H3k9ac_R1, ControlH3k9ac_R2 )
+
+
+</code></pre>
+<h2 id="3-marking--removing-duplicates-why-picard-is-unique"><a class="header" href="#3-marking--removing-duplicates-why-picard-is-unique">3. Marking &amp; Removing Duplicates: Why Picard is Unique</a></h2>
+<p><strong>Picard</strong> stands out among duplicate-marking tools because it:</p>
+<ul>
+<li>Distinguishes <strong>optical vs. PCR duplicates</strong> during QC reporting.</li>
+<li>Leverages <strong>read group (RG) identifiers</strong> to avoid over-collapsing reads when combining multiple replicates or lanes.</li>
+<li>Provides metrics for each library or sample, enabling fine-grained quality control.</li>
+</ul>
+<p>Picard’s RG-aware logic ensures duplicates are flagged <strong>within</strong>, but not <strong>across</strong>, biological replicates or lanes — preventing false duplicate marking when BAMs are merged.</p>
+<hr>
+<h1 id="31-adding-rgs-to-each-bam-file"><a class="header" href="#31-adding-rgs-to-each-bam-file">3.1 Adding RGs to each Bam file</a></h1>
+<p><strong>Minimal augmented RG setup (merge BAM replicates)</strong></p>
+<p>This read-group configuration is designed for the simplest defensible case: merging biological or technical ChIP-seq replicates and proceeding directly to peak calling.</p>
+<pre><code>picard AddOrReplaceReadGroups \
+  I=H3K9ac_R1.bam \                 # Input BAM file (aligned, typically coordinate-sorted)
+  O=H3K9ac_R1.RG.bam \              # Output BAM with read-group (RG) tags added/replaced
+  RGID=H3K9ac_R1 \                  # Read Group ID: corresponds to: one replicate , If a replicate spans multiple lanes, you will have multiple RGIDs per replicate.
+  RGSM=H39kac \                     # biological sample
+
+</code></pre>
+<p><strong>Minimal augmented RG setup (optical duplicates enabled)</strong></p>
+<p>This configuration extends the previous one by adding the minimum required metadata to make optical duplicate detection meaningful.
+The addition of RGPU, encoding the flowcell and lane, defines the physical neighborhood in which optical duplicates can occur.</p>
+<pre><code>picard AddOrReplaceReadGroups \
+  I=H3K9ac_R1.bam \
+  O=H3K9ac_R1.RG.bam \
+  RGID=H3K9ac_R1 \
+  RGSM=H3K9ac \
+  RGPL=ILLUMINA \                  # REQUIRED for optical duplicate logic
+  RGPU=CA0TUACXX.1                 # REQUIRED: flowcell.lane (from FASTQ header)
+</code></pre>
+<p>More from <a href="https://broadinstitute.github.io/picard/command-line-overview.html#AddOrReplaceReadGroups">GATK: Read Groups</a>
+<a href="https://gatk.broadinstitute.org/hc/en-us/articles/360037052812-MarkDuplicates-Picard">Picard markduplicates</a></p>
+<h3 id="step-32-mark-duplicates-be-careful"><a class="header" href="#step-32-mark-duplicates-be-careful">Step 3.2: Mark Duplicates (Be Careful!)</a></h3>
 <p>First, we will just <strong>mark</strong> the duplicates but <strong>keep them</strong> in the file. This is like highlighting the duplicate pages in yellow but not throwing them in the trash yet. This is important for Quality Control (QC) to see how bad the duplication problem is.</p>
 <pre><code class="language-bash"># ----- 3.3 Mark duplicates (keep all reads, just mark) -----
 # Create a folder for results
@@ -766,7 +825,7 @@ picard MarkDuplicates \
 <li><code>M=...</code>: Metrics file (report card showing how many duplicates were found).</li>
 <li><code>REMOVE_DUPLICATES=false</code>: Crucial! identifying them, not deleting them.</li>
 </ul>
-<h3 id="step-34-remove-duplicates-clean-up"><a class="header" href="#step-34-remove-duplicates-clean-up">Step 3.4: Remove Duplicates (Clean Up)</a></h3>
+<h3 id="step-33-remove-duplicates-clean-up"><a class="header" href="#step-33-remove-duplicates-clean-up">Step 3.3: Remove Duplicates (Clean Up)</a></h3>
 <p>Now that we’ve checked the quality, we create a “clean” version of our data for analysis. We remove the marked duplicates so they don’t interfere with peak calling.</p>
 <pre><code class="language-bash"># ----- 3.4 Create a duplicate-removed BAM by filtering marked BAM -----
 # Create a folder for final results
@@ -787,41 +846,25 @@ echo "Duplicates removed. Clean file is ready."
 <li><code>REMOVE_DUPLICATES=true</code>: This time, we actually delete the highlighted duplicates.</li>
 </ul>
 <hr>
-<h2 id="3-understanding-the-details"><a class="header" href="#3-understanding-the-details">3. Understanding the Details</a></h2>
-<p>For those who want to understand the “under the hood” mechanics, here is how Picard distinguishes different types of duplicates and why Read Groups matter.</p>
-<h3 id="pcr-vs-optical-duplicates"><a class="header" href="#pcr-vs-optical-duplicates">PCR vs. Optical Duplicates</a></h3>
-<p>Picard is smart enough to tell <em>why</em> a duplicate happened:</p>
-<div class="table-wrapper">
-<table>
-<thead>
-<tr><th>Type</th><th>Origin</th><th>Typical Cause</th><th>Implication</th></tr>
-</thead>
-<tbody>
-<tr><td><strong>PCR Duplicates</strong></td><td>Library Prep</td><td>Over-cycling (amplifying DNA too much)</td><td>Shows low library complexity (not enough unique DNA to start with).</td></tr>
-<tr><td><strong>Optical Duplicates</strong></td><td>Sequencer</td><td>Camera errors reads the same cluster as two</td><td>Technical glitch on the flow cell.</td></tr>
-</tbody>
-</table>
-</div>
-<h3 id="pcr-duplicates-vs-biological-signal"><a class="header" href="#pcr-duplicates-vs-biological-signal">PCR Duplicates vs. Biological Signal</a></h3>
-<p>How do we know it’s a duplicate and not a strong signal?</p>
-<ul>
-<li><strong>Duplicates:</strong> Reads start and end at the <em>exact</em> same base pair.</li>
-<li><strong>Real Signal:</strong> Reads pile up in the same <em>region</em> (peak), but they have slightly different start/end points (staggered).</li>
-</ul>
-<h3 id="the-role-of-read-groups-rg"><a class="header" href="#the-role-of-read-groups-rg">The Role of Read Groups (RG)</a></h3>
-<p>A <strong>Read Group</strong> is a tag that tells the software “this read came from Sample A, Run 1.”</p>
-<ul>
-<li><strong>Why is it vital?</strong> If you merge two different samples (e.g., Replicate 1 and Replicate 2), you might have two different reads that coincidentally map to the same spot.</li>
-<li>Without Read Groups, Picard acts blindly: “These look identical! Delete one!” -&gt; <strong>Data Loss.</strong></li>
-<li>With Read Groups, Picard sees: “Oh, one is from Replicate 1 and one is from Replicate 2. They are different samples. Keep both!”</li>
-</ul>
-<p><strong>Picard’s Superpower:</strong> It checks for duplicates <em>within</em> a Read Group, never <em>across</em> them.</p>
-<h3 id="references"><a class="header" href="#references">References</a></h3>
-<ul>
-<li><a href="https://www.biostars.org/p/318974/">Biostars: Duplicate marking</a></li>
-<li><a href="https://gatk.broadinstitute.org/hc/en-us/articles/360035890671-Read-groups">GATK: Read Groups</a></li>
-<li><a href="https://broadinstitute.github.io/picard/command-line-overview.html#AddOrReplaceReadGroups">Picard Documentation</a></li>
-</ul>
+<h2 id="4-samtools"><a class="header" href="#4-samtools">4. Samtools</a></h2>
+<p>Samtools provides a lightweight and reliable way to handle duplicates without relying on read groups. The following steps use samtools to correctly prepare paired-end reads and mark or remove duplicate fragments.</p>
+<pre><code># Paired-end mates are placed next to each other. It Groups reads by read name
+samtools collate -o namecollate.bam example.bam
+
+# it operates on the adjacent read pairs to synchronize mate flags , compute fragment-level information and add mate-related tags
+
+samtools fixmate -m namecollate.bam fixmate.bam
+
+# Coordinate sort for duplicate marking
+
+samtools sort -o positionsort.bam fixmate.bam
+
+# Mark or remove duplicates (-r after the markdup ) 
+samtools markdup positionsort.bam markdup.bam
+
+</code></pre>
+<p>This samtools-based workflow is simpler than Picard and avoids the need for read-group metadata, while still providing accurate duplicate detection for paired-end data. It is well suited for ChIP-seq and other enrichment-based analyses where straightforward duplicate handling is sufficient.</p>
+<p>https://www.htslib.org/algorithms/duplicate.html</p>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="tutorial-05-library-complexity-the-street-photographer"><a class="header" href="#tutorial-05-library-complexity-the-street-photographer">Tutorial 05: Library Complexity (The “Street Photographer”)</a></h1>
 <h2 id="level-1-basic-concept-the-photographer"><a class="header" href="#level-1-basic-concept-the-photographer">Level 1: Basic Concept (The Photographer)</a></h2>
