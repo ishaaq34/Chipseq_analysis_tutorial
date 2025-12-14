@@ -1,6 +1,6 @@
 # Tutorial 04: Alignment (Solving the Jigsaw Puzzle)
 
-## Level 1: Basic Concept (The "Puzzle")
+## Basic Concept (The "Puzzle")
 
 Imagine your Reference Genome is the **Picture on the Puzzle Box** (a complete image of the DNA).
 Your Reads (FASTAS) are the millions of tiny **Puzzle Pieces** scattered on the floor.
@@ -12,7 +12,7 @@ Your Reads (FASTAS) are the millions of tiny **Puzzle Pieces** scattered on the 
 
 ---
 
-## Level 2: Execution (Solving It)
+## Execution (Solving It)
 
 ### Step 1: The Index (Building the Map)
 Before Bowtie2 can work, it needs to process the reference genome into a format it can search quickly. This is called an **Index**.
@@ -45,7 +45,7 @@ bowtie2 -x hg38_index \                  # 1. The Reference Map
 
 ```
 # Run Bowtie2 alignment for a single sample
-bowtie2 -x trim/ssindex \
+bowtie2 -x hg38_index \
   -u trim/Sample1.clean.fq.gz \
   -p 6 --no-unal \
   2> bowalign/Sample1.log | samtools sort -@ 6 -o bowalign/Sample1.sorted.bam
@@ -63,10 +63,6 @@ samtools index bowalign/Sample1.sorted.bam
 ### **Output Structure**
 After running this step, your directory should look like:
 ```
-trim/
- ├── ssindex.1.bt2
- ├── ssindex.2.bt2
- └── ... (Bowtie2 index files)
 
 bowalign/
  ├── Sample1.log
@@ -79,7 +75,7 @@ Once this single run completes successfully, you can confidently automate for al
 
 ### Step 3: Automation Loop 
 
-Through [Sample list section](https://github.com/ishaaq34/Chipseq_analysis_tutorial/blob/main/src/03_sample_list_creation.md#ready-for-use)  Here is the script to run this for all your samples:
+Through [Sample list section](https://github.com/ishaaq34/Chipseq_analysis_tutorial/blob/main/src/03_sample_list_creation.md#ready-for-use) ,  Here is the script to run this for all your samples:
 
 ```bash
 #!/bin/bash
@@ -101,7 +97,7 @@ done
 
 ---
 
-## Level 3: Optimization & QC
+## Optimization 
 
 ### Optimization: Threads vs. Jobs
 You have a limited number of CPU cores (computers brains). You can use them in two ways:
@@ -112,6 +108,40 @@ You have a limited number of CPU cores (computers brains). You can use them in t
     *   *Best for:* Many small samples (RNA-seq, small genomes).
 
 **Rule of Thumb:** `bowtie2` stops getting faster after about **8 threads**. Don't give it 50 threads; it's a waste!
+
+ [Benchmarking Bowtie2 Threading - Jeff Kaufman (2023)](https://www.jefftk.com/p/benchmarking-bowtie2-threading)
+
+ [BOWTIE2 - HPCC Wiki](https://wiki.csi.cuny.edu/HPCCWiki/BOWTIE2)
+
+ [Guidance with using multiple threads with samtools - GitHub](https://github.com/samtools/samtools/issues)
+
+
+**Example with GNU Parallel**:
+
+```
+cat sample_id.txt | parallel -j 3 '                     # -j 3 → runs 3 samples (jobs) in parallel
+
+  bowtie2 -x hg38_index \
+    -1 trim/${sample}_R1.clean.fq.gz  \
+    -2 trim/${sample}_R2.clean.fq.gz  \
+    -p 4 --no-unal \                                   # -p 4 → bowtie2 uses 4 CPU threads per sample
+    2> bowalign/{}.log | samtools sort -@ 2 \           # -@ 2 → samtools sort uses 2 CPU threads per sample
+    -o bowalign/{}.sorted.bam
+
+  samtools index bowalign/{}.sorted.bam                 # samtools index is single-threaded
+'
+```
+
+
+Effective CPU usage (implied by this setup)
+
+- Per sample:  4 threads (bowtie2) + 2 threads (samtools sort) = 6 threads
+
+- Total at once: 3 parallel jobs × 6 threads = 18 CPU threads
+
+- Adjust based on available CPU cores and memory.
+
+
 
 ### Quality Check: `samtools flagstat`
 Did the alignment work? Let's check the score.
