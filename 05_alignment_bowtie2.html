@@ -36,7 +36,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-6167dcd0.js";
+            window.path_to_searchindex_js = "searchindex-70a42ee4.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-df4cee15.js"></script>
@@ -196,22 +196,43 @@ bowtie2-build hg38.fa hg38_index
 <h3 id="step-2-single-sample-alignment"><a class="header" href="#step-2-single-sample-alignment">Step 2: Single Sample Alignment</a></h3>
 <p>We use a “Pipe” (<code>|</code>) to connect two tools: <code>bowtie2</code> aligns the data, and <code>samtools</code> sorts it immediately.</p>
 <p><strong>Why Sort?</strong> A puzzle is useless if the pieces are in random order. We sort them by chromosome location (Left to Right) so we can look at them later.</p>
-<p><strong>Run this command:</strong></p>
+<p><strong>Run Bowtie2 alignment for paired end (R1 and R2) sample</strong></p>
 <pre><code class="language-bash">mkdir -p bowalign
 
 bowtie2 -x hg38_index \                  # 1. The Reference Map
   -1 trim/Sample1_R1.clean.fq.gz \       # 2. Input Read 1
   -2 trim/Sample1_R2.clean.fq.gz \       # 3. Input Read 2
-  -p 6 --no-unal \                       # 4. Use 6 threads, ignore unmapped trash
+  -p 6 --no-unal \                       # 4. Use 6 threads,  `--no-unal` — suppresses unaligned reads in the output.
   2&gt; bowalign/Sample1.log |              # 5. Save the log file...
   samtools sort -@ 6 -o bowalign/Sample1.sorted.bam  # 6. ...and sort the result!
+</code></pre>
+<p><strong>Run Bowtie2 alignment for a single sample</strong></p>
+<pre><code># Run Bowtie2 alignment for a single sample
+bowtie2 -x trim/ssindex \
+  -u trim/Sample1.clean.fq.gz \
+  -p 6 --no-unal \
+  2&gt; bowalign/Sample1.log | samtools sort -@ 6 -o bowalign/Sample1.sorted.bam
+
 </code></pre>
 <p><strong>Final Touch:</strong>
 We always “index” the BAM file. Think of this as creating a <strong>Table of Contents</strong> so the computer can jump to any chromosome instantly.</p>
 <pre><code class="language-bash">samtools index bowalign/Sample1.sorted.bam
 </code></pre>
+<h3 id="output-structure"><a class="header" href="#output-structure"><strong>Output Structure</strong></a></h3>
+<p>After running this step, your directory should look like:</p>
+<pre><code>trim/
+ ├── ssindex.1.bt2
+ ├── ssindex.2.bt2
+ └── ... (Bowtie2 index files)
+
+bowalign/
+ ├── Sample1.log
+ ├── Sample1.sorted.bam
+ └── Sample1.sorted.bam.bai
+</code></pre>
+<p>Once this single run completes successfully, you can confidently automate for all samples.</p>
 <h3 id="step-3-automation-loop"><a class="header" href="#step-3-automation-loop">Step 3: Automation Loop</a></h3>
-<p>Here is the script to run this for all your samples:</p>
+<p>Through <a href="https://github.com/ishaaq34/Chipseq_analysis_tutorial/blob/main/src/03_sample_list_creation.md#ready-for-use">Sample list section</a>  Here is the script to run this for all your samples:</p>
 <pre><code class="language-bash">#!/bin/bash
 mkdir -p bowalign
 
