@@ -36,7 +36,7 @@ h1, h2, h3, h4, h5 {
   font-family: var(--font-heading);
   font-weight: 700;
   letter-spacing: normal;
-  color: var(--academic-blue);
+  color: var(--academic-green);
   margin-top: 1.5em; /* Breathing room */
 }
 
@@ -69,7 +69,7 @@ h1 {
 .sidebar .chapter li.active > a {
   color: var(--academic-blue) !important;
   background-color: #eff6ff;
-  border-left: 3px solid var(--academic-blue);
+  border-left: 3px solid var(--academic-green);
   border-radius: 0; /* Square edges for professionalism */
   font-weight: 600;
   padding-left: 8px; /* Offset for border */
