@@ -42,9 +42,9 @@ h1, h2, h3, h4, h5 {
 
 h1 {
   font-weight: 900;
-  border-bottom: 2px solid #e5e7eb;
+  border-bottom: 2px solid var(--surface-muted);
   padding-bottom: 0.3em;
-  color: #111827; /* Main title in black/dark grey */
+  color: var(--text-primary); /* Main title in dark neutral */
 }
 
 /* Body Font Setup - Respecting Switcher */
@@ -57,8 +57,8 @@ h1 {
 /* --- SIDEBAR & NAVIGATION --- */
 
 .sidebar {
-  background-color: #f9fafb; /* Very light grey */
-  border-right: 1px solid #e5e7eb;
+  background-color: var(--surface); /* Soft green tint */
+  border-right: 1px solid var(--surface-muted);
   backdrop-filter: none; /* Remove glassmorphism */
 }
 
@@ -67,9 +67,9 @@ h1 {
 }
 
 .sidebar .chapter li.active > a {
-  color: var(--academic-blue) !important;
-  background-color: #eff6ff;
-  border-left: 3px solid var(--academic-green);
+  color: var(--academic-green) !important;
+  background-color: var(--surface-muted);
+  border-left: 3px solid var(--academic-accent);
   border-radius: 0; /* Square edges for professionalism */
   font-weight: 600;
   padding-left: 8px; /* Offset for border */
@@ -80,9 +80,9 @@ h1 {
 /* LIGHT THEME (Default Academic) */
 .light {
   --bg: #ffffff;
-  --fg: #111827;
-  --quote-bg: #f9fafb;
-  --quote-border: #d1d5db;
+  --fg: var(--text-primary);
+  --quote-bg: var(--surface);
+  --quote-border: var(--academic-green);
 }
 
 /* RUST THEME (Sepia/Paper) */
@@ -95,11 +95,15 @@ h1 {
 
 /* NAVY THEME (Dark) */
 .navy {
-  --academic-blue: #93c5fd; /* Lighter blue for dark mode */
-  --text-primary: #f3f4f6;
-  --bg: #0f172a;
+  --academic-green: #4ade80; /* Brighter green for dark mode */
+  --academic-accent: #86efac;
+  --text-primary: #f0fdf4;
+  --text-secondary: #dcfce7;
+  --surface: #064e3b; /* Dark green bg */
+  --surface-muted: #065f46;
+  --bg: #022c22; /* Very dark green/black */
 }
-.navy h1 { color: #f3f4f6; border-bottom-color: #374151; }
+.navy h1 { color: #f0fdf4; border-bottom-color: #065f46; }
 
 
 /* --- ACADEMIC ALERTS (Subdued) --- */
@@ -115,17 +119,18 @@ blockquote {
   color: var(--text-secondary);
 }
 
-/* Note - Blue */
+/* Note - Primary Green */
 blockquote.alert-note {
-  border-left-color: #1e3a8a;
-  background-color: #eff6ff;
-  color: #1e3a8a;
+  border-left-color: var(--academic-green);
+  background-color: var(--surface);
+  color: var(--academic-green);
   font-style: normal;
   font-family: var(--font-sans);
 }
-.navy blockquote.alert-note { background-color: rgba(30, 58, 138, 0.3); color: #bfdbfe; }
+.navy blockquote.alert-note { background-color: rgba(6, 78, 59, 0.5); color: #86efac; }
 
-/* Warning - Amber/Orange */
+
+/* Warning - Amber/Orange (Keep distinct) */
 blockquote.alert-warning {
   border-left-color: #b45309;
   background-color: #fffbeb;
@@ -134,10 +139,11 @@ blockquote.alert-warning {
   font-family: var(--font-sans);
 }
 
-/* Important - Purple */
+/* Important - Accent Green/Teal */
 blockquote.alert-important {
-  border-left-color: #6d28d9;
-  background-color: #f5f3ff;
+  border-left-color: var(--academic-accent);
+  background-color: var(--surface-muted);
+  color: var(--academic-green);
   font-style: normal;
   font-family: var(--font-sans);
 }
@@ -154,7 +160,7 @@ blockquote.alert-important {
   text-decoration: none;
   opacity: 0.8;
   background: transparent; /* Minimalist */
-  color: var(--academic-blue);
+  color: var(--academic-accent);
 }
 
 /* Code Blocks - Professional */
