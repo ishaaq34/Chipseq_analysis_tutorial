@@ -24,20 +24,32 @@ bowtie2-build hg38.fa hg38_index
 *You only do this once!*
 
 ### Step 2: Single Sample Alignment
+
 We use a "Pipe" (`|`) to connect two tools: `bowtie2` aligns the data, and `samtools` sorts it immediately.
 
 **Why Sort?** A puzzle is useless if the pieces are in random order. We sort them by chromosome location (Left to Right) so we can look at them later.
 
-**Run this command:**
+**Run Bowtie2 alignment for paired end (R1 and R2) sample**
 ```bash
 mkdir -p bowalign
 
 bowtie2 -x hg38_index \                  # 1. The Reference Map
   -1 trim/Sample1_R1.clean.fq.gz \       # 2. Input Read 1
   -2 trim/Sample1_R2.clean.fq.gz \       # 3. Input Read 2
-  -p 6 --no-unal \                       # 4. Use 6 threads, ignore unmapped trash
+  -p 6 --no-unal \                       # 4. Use 6 threads,  `--no-unal` — suppresses unaligned reads in the output.
   2> bowalign/Sample1.log |              # 5. Save the log file...
   samtools sort -@ 6 -o bowalign/Sample1.sorted.bam  # 6. ...and sort the result!
+```
+
+**Run Bowtie2 alignment for a single sample**
+
+```
+# Run Bowtie2 alignment for a single sample
+bowtie2 -x trim/ssindex \
+  -u trim/Sample1.clean.fq.gz \
+  -p 6 --no-unal \
+  2> bowalign/Sample1.log | samtools sort -@ 6 -o bowalign/Sample1.sorted.bam
+
 ```
 
 **Final Touch:**
@@ -46,8 +58,28 @@ We always "index" the BAM file. Think of this as creating a **Table of Contents*
 samtools index bowalign/Sample1.sorted.bam
 ```
 
-### Step 3: Automation Loop
-Here is the script to run this for all your samples:
+
+
+### **Output Structure**
+After running this step, your directory should look like:
+```
+trim/
+ ├── ssindex.1.bt2
+ ├── ssindex.2.bt2
+ └── ... (Bowtie2 index files)
+
+bowalign/
+ ├── Sample1.log
+ ├── Sample1.sorted.bam
+ └── Sample1.sorted.bam.bai
+```
+
+Once this single run completes successfully, you can confidently automate for all samples.
+
+
+### Step 3: Automation Loop 
+
+Through [Sample list section](https://github.com/ishaaq34/Chipseq_analysis_tutorial/blob/main/src/03_sample_list_creation.md#ready-for-use)  Here is the script to run this for all your samples:
 
 ```bash
 #!/bin/bash
