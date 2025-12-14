@@ -37,7 +37,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-2e5cce1f.js";
+            window.path_to_searchindex_js = "searchindex-6167dcd0.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-df4cee15.js"></script>
@@ -539,10 +539,11 @@ paired end:    Control_B_H3K9ac_R1.fastq.gz  :  Control_B_H3K9ac_R2.fastq.gz
 <li><strong>Line 4 (The Quality):</strong> A string of weird characters (<code>F:F#,,...</code>). This is the <strong>Trust Score</strong>. Each character represents the probability that the corresponding base in Line 2 is wrong.</li>
 </ol>
 <p><strong>Example Read:</strong></p>
-<pre><code class="language-text">@SRR7298010.1 1/1                 &lt;-- ID: Read #1
-NGATTTCTATTCTTGGAACCATTAAAA...    &lt;-- DNA: "N" means the machine failed to call that base
-+SRR7298010.1 1/1                 &lt;-- Spacer
-FFFFF:F#,,...                     &lt;-- Quality: Matches the length of the DNA
+<pre><code class="language-text">@SN227:495:CA0TUACXX:1:1106:1159:2114 1:N:0:ATCACG  &lt;-- ID: Read #1
+GTAAAAAGATTACATATATATTTAAAGTACACTGTAATTCTTANCA    &lt;-- DNA: "N" means the machine failed to call that base
++                                                  &lt;-- Spacer
+FDFFFHHHHHJIJGIJIJJHJJJJJJIIJIJGIHFIIJJIIIIJG        &lt;-- Quality: Each character encodes a Phred quality score (Illumina 1.8+, ASCII offset 33).
+
 </code></pre>
 <hr>
 <h2 id="level-2-execution-the-car-wash"><a class="header" href="#level-2-execution-the-car-wash">Level 2: Execution (The Car Wash)</a></h2>
@@ -560,16 +561,12 @@ fastp -i raw_sample.fastq.gz -o clean_sample.fastq.gz
 <p>For paired-end data, we must process R1 and R2 together so they stay synchronized.</p>
 <pre><code class="language-bash">fastp -i in.R1.fq.gz -I in.R2.fq.gz \
       -o out.R1.fq.gz -O out.R2.fq.gz \
-      -f 3 -t 2
+     
 </code></pre>
-<ul>
-<li><code>-f 3</code>: Trim 3 bases from the front (optional, if you know the start is bad).</li>
-<li><code>-t 2</code>: Trim 2 bases from the tail.</li>
-</ul>
 <p><strong>What does fastp do automatically?</strong></p>
 <ul>
-<li><strong>Quality Filtering:</strong> Drops reads if too many bases have low scores (default: Phred &lt; 15).</li>
-<li><strong>Length Filtering:</strong> Drops reads that become too short after trimming (default: &lt; 15bp).</li>
+<li><strong>Quality Filtering:</strong> Drops reads if too many bases have low scores (default: Phred -q &lt; 15).</li>
+<li><strong>Length Filtering:</strong> Drops reads that become too short after trimming (default: -l &lt; 15bp).</li>
 <li><strong>Adapter Removal:</strong> Finds and cuts off adapter sequences automatically.</li>
 </ul>
 <hr>
@@ -590,10 +587,14 @@ gzcat sample.fastq.gz | awk 'NR%4==2 {b+=length($0)} END{print b " bases"}'
 </ul>
 <h3 id="32-batch-processing"><a class="header" href="#32-batch-processing">3.2 Batch Processing</a></h3>
 <p>If you have 50 files, you can use a script to run <code>fastp</code> on all of them in parallel.
-The <code>fastp</code> developers provide a handy script called <code>parallel.py</code>:</p>
+The <code>fastp</code> developers provide a handy script called  <a href="https://github.com/OpenGene/fastp/blob/master/parallel.py">parallel.py</a>:</p>
 <pre><code class="language-bash"># Process 3 files at a time (-f 3), using 2 threads per file (-t 2)
 python parallel.py -i /raw_data_folder -o /clean_data_folder -r /report_folder -f 3 -t 2
 </code></pre>
+<p>-f 3
+This sets the batch size. The script will process 3 files at a time.</p>
+<p>-t 2
+This sets the number of threads used for each task. Here each file is processed with 2 threads.</p>
 <p>This automatically finds pairs and generates HTML reports for every sample.</p>
 <hr>
 <h2 id="summary-3"><a class="header" href="#summary-3">Summary</a></h2>
