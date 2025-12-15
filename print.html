@@ -37,7 +37,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-335c0b03.js";
+            window.path_to_searchindex_js = "searchindex-c31d5f04.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-df4cee15.js"></script>
@@ -448,7 +448,7 @@ In GEO, you will see a hierarchy. It’s important not to mix these up:</p>
 <p><strong>Project Context:</strong> In our specific analysis (see <code>README.md</code>), our files are named with ENCODE IDs (e.g., <code>ENCFF327JFG</code>). When you run the commands below on our dataset, your <code>sample_id.txt</code> will contain these IDs instead of “Sample1” or “Experiment1”.</p>
 </blockquote>
 <h2 id="level-1-basic-concept-the-roll-call"><a class="header" href="#level-1-basic-concept-the-roll-call">Level 1: Basic Concept (The “Roll Call”)</a></h2>
-<p>Imagine you have a classroom with 100 students. If you want to give everyone a grade, you don’t want to type out “Student_John_Doe_Homework_Final_v2.docx” every single time. You just want a simple list of names like “John”, “Sarah”, “Mike”.</p>
+<p>Imagine you have a classroom with 100 students. If you want to give everyone a grade, you don’t want to type out <code>"Student_John_Doe_Homework_Final_v2.docx"</code> every single time. You just want a simple list of names like <code>"John"</code>, <code>"Sarah" </code>, <code>"Mike"</code>.</p>
 <p>In bioinformatics, we feel the same way about our files.</p>
 <ul>
 <li><strong>The Problem:</strong> Our files have long, messy names like <code>Sample1_Rep1_R1.fastq.gz</code>.</li>
@@ -487,7 +487,7 @@ Control_B_H3K9ac_R1.fastq.gz
 Control_B_H3K9ac_R2.fastq.gz
 
 </code></pre>
-<p>We don’t want “Experiment1” to appear twice in our list. We only want to grab the name <em>once</em>.</p>
+<p>We don’t want <code>"Experiment1" </code> to appear twice in our list. We only want to grab the name <em>once</em>.</p>
 <p>Run this command:</p>
 <pre><code class="language-bash">ls *_R1.fastq.gz | sed 's/_R1.fastq.gz//' &gt; sample_id.txt
 </code></pre>
@@ -497,12 +497,19 @@ By listing only the <code>_R1</code> files, we get exactly one entry per sample.
 <h3 id="creating-the-list-manually"><a class="header" href="#creating-the-list-manually">Creating the List Manually?</a></h3>
 <p>You <em>could</em> just type the names into a text file yourself. However, that is prone to typos. Using <code>ls</code> ensures you only list files that actually exist.</p>
 <h2 id="ready-for-use"><a class="header" href="#ready-for-use">Ready for Use</a></h2>
-<p>Your sample_id.txt file can now be used in downstream pipeline loops for:</p>
+<p>Your <code>sample_id.txt</code> file can now be used in downstream pipeline loops for:</p>
+<ul>
+<li>
 <p>Quality Control (FastQC, MultiQC)</p>
+</li>
+<li>
 <p>Adapter Trimming (Trim Galore)</p>
+</li>
+<li>
 <p>Alignment (Bowtie2, HISAT2)</p>
-<p>Peak Calling (MACS2)</p>
-<p>Since we know the Sample ID (e.g., Control_A_H3K9ac), we can just tell the robot: “Look for Control_A_H3K9ac plus _R1 and Control_A_H3K9ac plus _R2.”</p>
+</li>
+</ul>
+<p>Since we know the <code>Sample ID (e.g., Control_A_H3K9ac)</code>, we can just tell the robot: <code>"Look for Control_A_H3K9ac plus _R1 </code> and <code>Control_A_H3K9ac plus _R2 </code></p>
 <pre><code class="language-bash">
 for sample in $(cat sample_id.txt); do
 
