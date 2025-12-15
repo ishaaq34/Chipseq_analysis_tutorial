@@ -84,7 +84,7 @@ H3K9ac_ENCFF193NPE.chr11_12.bam   #1  BAM file name (input to SPP QC)
   
 ---
 
-<img width="906" height="607" alt="Screenshot 2025-12-15 at 6 59 26 PM" src="https://github.com/user-attachments/assets/a40e0cc6-6c96-4e60-bf11-a0114897464c" />
+<img width="758" height="504" alt="Screenshot 2025-12-15 at 9 23 05 PM" src="https://github.com/user-attachments/assets/696f703d-a182-466f-aeb3-bf19a07b0272" />
 
 
 ---
