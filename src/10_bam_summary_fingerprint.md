@@ -1,6 +1,6 @@
 # Tutorial 07: Advanced QC with deepTools (The "Health Checkup")
 
-## Basic Concept (The Health Check)
+## 1. Basic Concept (The Health Check)
 
 Before we call peaks, we must perform a **Health Checkup** on our data.
 *   **The Census (Fingerprint):** Are the reads spread out evenly (Socialist/Input) or concentrated in specific spots (Capitalist/ChIP)?
@@ -11,7 +11,7 @@ We use a suite of tools called **deepTools** to generate these reports.
 
 ---
 
-## Execution (Running the Tests)
+## 2. Running the QC of bam files before Peak Calling
 
 ### 2.1 Fingerprint Plot
 Checks if the IP worked (Enrichment).
@@ -79,7 +79,7 @@ plotPCA \
 
 ---
 
-## Level 3: Advanced Analysis (Reading the Charts)
+## Level 3: Reading the Charts
 
 ### 3.1 Interpreting the Fingerprint (The Census)
 This plot shows the cumulative read distribution across the genome. Good ChIP libraries show a clear separation between ChIP and input samples, with ChIP curves rising earlier due to enriched regions. Flat, overlapping curves usually indicate poor enrichment or over-background signal.
@@ -93,9 +93,7 @@ This plot shows the cumulative read distribution across the genome. Good ChIP li
 | Sample Type | Interpretation |
 | :--- | :--- |
 | **Input** | Close to the diagonal. Reads are uniformly distributed, behaving like ideal background. |
-| **H3K9ac (Active)** | Strong "Elbow". Reads concentrated in a small fraction of bins (focal peaks), showing a strong bend away from the diagonal. |
-| **H3K27me3 (Broad)** | In between. Enrichment is present but more diffuse, so the curve is less sharp than H3K9ac. |
-| **ceb ChIP** | Slightly lower than Input. Modest enrichment, close to background. |
+| **H3K9ac** | Strong "Elbow". Reads concentrated in a small fraction of bins (focal peaks), showing a strong bend away from the diagonal. |
 
 ### 3.2 Interpreting Coverage
 Next, we look at the overall coverage distribution in each BAM using plotCoverage. This reveals whether some samples are globally under-sequenced, dominated by a few high-coverage regions, or heavily affected by duplicated reads. We restrict to high-quality, non-duplicate reads to make the distributions comparable.
