@@ -71,9 +71,6 @@ picard AddOrReplaceReadGroups \
 
 ```
 
-
-
-
 **Minimal augmented RG setup (optical duplicates enabled)**
 
 This configuration extends the previous one by adding the minimum required metadata to make optical duplicate detection meaningful. 
@@ -167,4 +164,4 @@ samtools markdup positionsort.bam markdup.bam
 This samtools-based workflow is simpler than Picard and avoids the need for read-group metadata, while still providing accurate duplicate detection for paired-end data. It is well suited for ChIP-seq and other enrichment-based analyses where straightforward duplicate handling is sufficient.
 
 
-https://www.htslib.org/algorithms/duplicate.html
+More [samtools](https://www.htslib.org/algorithms/duplicate.html)
