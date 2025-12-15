@@ -37,7 +37,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-d69d7b11.js";
+            window.path_to_searchindex_js = "searchindex-dfb62054.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-df4cee15.js"></script>
@@ -1212,7 +1212,7 @@ Rscript /opt/anaconda3/envs/chip/bin/run_spp.R \
 </ol>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="tutorial-07-advanced-qc-with-deeptools-the-health-checkup"><a class="header" href="#tutorial-07-advanced-qc-with-deeptools-the-health-checkup">Tutorial 07: Advanced QC with deepTools (The “Health Checkup”)</a></h1>
-<h2 id="basic-concept-the-health-check"><a class="header" href="#basic-concept-the-health-check">Basic Concept (The Health Check)</a></h2>
+<h2 id="1-basic-concept-the-health-check"><a class="header" href="#1-basic-concept-the-health-check">1. Basic Concept (The Health Check)</a></h2>
 <p>Before we call peaks, we must perform a <strong>Health Checkup</strong> on our data.</p>
 <ul>
 <li><strong>The Census (Fingerprint):</strong> Are the reads spread out evenly (Socialist/Input) or concentrated in specific spots (Capitalist/ChIP)?</li>
@@ -1221,7 +1221,7 @@ Rscript /opt/anaconda3/envs/chip/bin/run_spp.R \
 </ul>
 <p>We use a suite of tools called <strong>deepTools</strong> to generate these reports.</p>
 <hr>
-<h2 id="execution-running-the-tests"><a class="header" href="#execution-running-the-tests">Execution (Running the Tests)</a></h2>
+<h2 id="2-running-the-qc-of-bam-files-before-peak-calling"><a class="header" href="#2-running-the-qc-of-bam-files-before-peak-calling">2. Running the QC of bam files before Peak Calling</a></h2>
 <h3 id="21-fingerprint-plot"><a class="header" href="#21-fingerprint-plot">2.1 Fingerprint Plot</a></h3>
 <p>Checks if the IP worked (Enrichment).</p>
 <pre><code class="language-bash">plotFingerprint \
@@ -1276,7 +1276,7 @@ Rscript /opt/anaconda3/envs/chip/bin/run_spp.R \
   --outFileNameData pca.tab                 # Save underlying PCA coordinates
 </code></pre>
 <hr>
-<h2 id="level-3-advanced-analysis-reading-the-charts"><a class="header" href="#level-3-advanced-analysis-reading-the-charts">Level 3: Advanced Analysis (Reading the Charts)</a></h2>
+<h2 id="level-3-reading-the-charts"><a class="header" href="#level-3-reading-the-charts">Level 3: Reading the Charts</a></h2>
 <h3 id="31-interpreting-the-fingerprint-the-census"><a class="header" href="#31-interpreting-the-fingerprint-the-census">3.1 Interpreting the Fingerprint (The Census)</a></h3>
 <p>This plot shows the cumulative read distribution across the genome. Good ChIP libraries show a clear separation between ChIP and input samples, with ChIP curves rising earlier due to enriched regions. Flat, overlapping curves usually indicate poor enrichment or over-background signal.</p>
 <hr><img width="755" height="574" alt="Screenshot 2025-12-10 at 12 02 40 PM" src="https://github.com/user-attachments/assets/db1e7f33-6775-4705-b6b3-62a4c0bf7405" />
@@ -1288,9 +1288,7 @@ Rscript /opt/anaconda3/envs/chip/bin/run_spp.R \
 </thead>
 <tbody>
 <tr><td style="text-align: left"><strong>Input</strong></td><td style="text-align: left">Close to the diagonal. Reads are uniformly distributed, behaving like ideal background.</td></tr>
-<tr><td style="text-align: left"><strong>H3K9ac (Active)</strong></td><td style="text-align: left">Strong “Elbow”. Reads concentrated in a small fraction of bins (focal peaks), showing a strong bend away from the diagonal.</td></tr>
-<tr><td style="text-align: left"><strong>H3K27me3 (Broad)</strong></td><td style="text-align: left">In between. Enrichment is present but more diffuse, so the curve is less sharp than H3K9ac.</td></tr>
-<tr><td style="text-align: left"><strong>ceb ChIP</strong></td><td style="text-align: left">Slightly lower than Input. Modest enrichment, close to background.</td></tr>
+<tr><td style="text-align: left"><strong>H3K9ac</strong></td><td style="text-align: left">Strong “Elbow”. Reads concentrated in a small fraction of bins (focal peaks), showing a strong bend away from the diagonal.</td></tr>
 </tbody>
 </table>
 </div>
