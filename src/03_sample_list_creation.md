@@ -5,7 +5,7 @@
 
 ## Level 1: Basic Concept (The "Roll Call")
 
-Imagine you have a classroom with 100 students. If you want to give everyone a grade, you don't want to type out "Student_John_Doe_Homework_Final_v2.docx" every single time. You just want a simple list of names like "John", "Sarah", "Mike".
+Imagine you have a classroom with 100 students. If you want to give everyone a grade, you don't want to type out `"Student_John_Doe_Homework_Final_v2.docx"` every single time. You just want a simple list of names like `"John"`, `"Sarah" `, `"Mike"`.
 
 In bioinformatics, we feel the same way about our files.
 *   **The Problem:** Our files have long, messy names like `Sample1_Rep1_R1.fastq.gz`.
@@ -60,7 +60,7 @@ Control_B_H3K9ac_R2.fastq.gz
 
 ```
 
-We don't want "Experiment1" to appear twice in our list. We only want to grab the name *once*.
+We don't want `"Experiment1" ` to appear twice in our list. We only want to grab the name *once*.
 
 Run this command:
 ```bash
@@ -78,18 +78,19 @@ You *could* just type the names into a text file yourself. However, that is pron
 
 
 ## Ready for Use
-Your sample_id.txt file can now be used in downstream pipeline loops for:
-
-Quality Control (FastQC, MultiQC)
-
-Adapter Trimming (Trim Galore)
-
-Alignment (Bowtie2, HISAT2)
-
-Peak Calling (MACS2)
+Your `sample_id.txt` file can now be used in downstream pipeline loops for:
 
 
-Since we know the Sample ID (e.g., Control_A_H3K9ac), we can just tell the robot: "Look for Control_A_H3K9ac plus _R1 and Control_A_H3K9ac plus _R2."
+* Quality Control (FastQC, MultiQC)
+
+* Adapter Trimming (Trim Galore)
+
+* Alignment (Bowtie2, HISAT2)
+
+
+
+
+Since we know the `Sample ID (e.g., Control_A_H3K9ac)`, we can just tell the robot: `"Look for Control_A_H3K9ac plus _R1 ` and `Control_A_H3K9ac plus _R2 `
 
 ```bash
 
@@ -116,9 +117,6 @@ done
   
     
  
-    
-
-
 
 ## Summary
 1.  **Goal:** Create a clean list of sample names (`sample_id.txt`).
