@@ -182,3 +182,18 @@ pre {
   border-radius: var(--radius-sm);
   background-color: #f8fafc;
 }
+
+
+
+/* Code blocks – clearer contrast vs body text */
+pre,
+code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+  font-size: 14px;        /* Smaller than body (16px) */
+  line-height: 1.45;      /* Denser, technical feel */
+}
+
+/* Inline code should not overpower text */
+code {
+  padding: 0.15em 0.35em;
+}
