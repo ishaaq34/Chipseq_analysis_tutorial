@@ -38,6 +38,9 @@ Here are the files we are analyzing. In real life, you should make a table like 
 | ENCFF110SOB        | Control ChIP-seq | Input      | Input_ENCFF110SOB.bam         |
 | ENCFF919XCV      | Control ChIP-seq | Input      | Input_ENCFF919XCV.bam        |
 
+
+---
+
 Simplest and easiet way to donwload all the bam files in the working folder
 
 ```
