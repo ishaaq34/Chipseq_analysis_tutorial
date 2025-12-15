@@ -36,7 +36,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-5d811eaa.js";
+            window.path_to_searchindex_js = "searchindex-335c0b03.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-df4cee15.js"></script>
@@ -206,7 +206,7 @@ bowtie2 -x hg38_index \                  # 1. The Reference Map
   2&gt; bowalign/Sample1.log |              # 5. Save the log file...
   samtools sort -@ 6 -o bowalign/Sample1.sorted.bam  # 6. ...and sort the result!
 </code></pre>
-<p><strong>Run Bowtie2 alignment for a single sample</strong></p>
+<p><strong>Run Bowtie2 alignment for a single-end sample</strong></p>
 <pre><code># Run Bowtie2 alignment for a single sample
 bowtie2 -x hg38_index \
   -u trim/Sample1.clean.fq.gz \
