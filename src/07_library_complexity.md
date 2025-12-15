@@ -41,7 +41,9 @@ uniq -c QC_results/Sample1.read5.bed \
 ```bash
 cat QC_results/Sample1.pbc.txt
 ```
-
+```
+NRF=0.997	PBC1=0.997	PBC2=360.061
+```
 ---
 
 
