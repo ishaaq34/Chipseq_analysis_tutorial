@@ -1523,8 +1523,8 @@ Total estimated number of unique 21-mers: 220798375
 </code></pre>
 <p><strong>Thus</strong>,</p>
 <p><strong>Raw sequence length (non-N)</strong>          = <code> 268,361,931 bp</code></p>
-<p>Unique 21-mer mappable portion       = <code>220,798,375 bp</code></p>
-<p>Difference (unmappable/repetitive)   = <code>~47.6 million bp</code></p>
+<p><strong>Unique 21-mer mappable portion</strong>       = <code>220,798,375 bp</code></p>
+<p><strong>Difference (unmappable/repetitive)</strong>   = <code>~47.6 million bp</code></p>
 <p>So about<code>47.6 Mb of chr11+chr12</code> is repetitive, low complexity (centromeres, segmental duplications, satellite repeats), or otherwise not uniquely mappable with <code>21-mers</code>.</p>
 <p>When we calculate effective genome size using <code>faSize</code>, the tool <code>removes N  regions</code> but still includes <code>repetitive and low-complexity sequence</code>, because these regions contain real A/T/G/C bases and are mappable as long as multimapping reads are allowed. This makes <code>faSize</code> appropriate when the BAM files still contain multimappers.</p>
 <p>However, if <code>multimapping reads are removed</code> or <code>MAPQ filtering is applied</code>, the mappable genome becomes smaller because <code>repeats and low-complexity regions no longer contribute usable signal</code>. In that case, the <code>khmer</code> tool unique-kmers.py—gives a better estimate because it counts only <code>unique k-mers</code> from the reads and naturally <code>excludes repeats, low-complexity regions, and N stretches</code>. For <code>uniquely mapped data</code>, the khmer-based estimate is the correct effective genome size to use.</p>
