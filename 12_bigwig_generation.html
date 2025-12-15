@@ -36,7 +36,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-dfb62054.js";
+            window.path_to_searchindex_js = "searchindex-6cdd5635.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-df4cee15.js"></script>
@@ -262,12 +262,13 @@ Estimated number of unique 21-mers in chr11_chr12.fasta: 220798375
 Total estimated number of unique 21-mers: 220798375
 </code></pre>
 <p><strong>Thus</strong>,</p>
-<p>Raw sequence length (non-N)          = 268,361,931 bp</p>
-<p>Unique 21-mer mappable portion       = 220,798,375 bp</p>
-<p>Difference (unmappable/repetitive)   = ~47.6 million bp</p>
-<p>So about 47.6 Mb of chr11+chr12 is repetitive, low complexity (centromeres, segmental duplications, satellite repeats), or otherwise not uniquely mappable with 21-mers.</p>
-<p>When we calculate effective genome size using faSize, the tool removes N regions but still includes repetitive and low-complexity sequence, because these regions contain real A/T/G/C bases and are mappable as long as multimapping reads are allowed. This makes faSize appropriate when the BAM files still contain multimappers. However, if multimapping reads are removed or MAPQ filtering is applied, the mappable genome becomes smaller because repeats and low-complexity regions no longer contribute usable signal. In that case, the khmer tool—especially unique-kmers.py—gives a better estimate because it counts only unique k-mers from the reads and naturally excludes repeats, low-complexity regions, and N stretches. For uniquely mapped data, the khmer-based estimate is the correct effective genome size to use.</p>
-<p>In our BAM file, multimapping reads have already been excluded and low-quality alignments removed by MAPQ filtering. Because these steps bias us toward uniquely mappable regions, we estimate the effective genome size using a k-mer–based approach (e.g. khmer).</p>
+<p><strong>Raw sequence length (non-N)</strong>          = <code> 268,361,931 bp</code></p>
+<p>Unique 21-mer mappable portion       = <code>220,798,375 bp</code></p>
+<p>Difference (unmappable/repetitive)   = <code>~47.6 million bp</code></p>
+<p>So about<code>47.6 Mb of chr11+chr12</code> is repetitive, low complexity (centromeres, segmental duplications, satellite repeats), or otherwise not uniquely mappable with <code>21-mers</code>.</p>
+<p>When we calculate effective genome size using <code>faSize</code>, the tool <code>removes N  regions</code> but still includes <code>repetitive and low-complexity sequence</code>, because these regions contain real A/T/G/C bases and are mappable as long as multimapping reads are allowed. This makes <code>faSize</code> appropriate when the BAM files still contain multimappers.</p>
+<p>However, if <code>multimapping reads are removed</code> or <code>MAPQ filtering is applied</code>, the mappable genome becomes smaller because <code>repeats and low-complexity regions no longer contribute usable signal</code>. In that case, the <code>khmer</code> tool unique-kmers.py—gives a better estimate because it counts only <code>unique k-mers</code> from the reads and naturally <code>excludes repeats, low-complexity regions, and N stretches</code>. For <code>uniquely mapped data</code>, the khmer-based estimate is the correct effective genome size to use.</p>
+<p>In our BAM file, <code>multimapping reads</code> have already been <code>excluded and low-quality alignments removed by MAPQ filtering</code>. Because these steps bias us toward uniquely mappable regions, we estimate the <code>effective genome size using a k-mer–based approach (e.g. khmer)</code>.</p>
 </li>
 </ul>
 <h3 id="step-2-run-bamcoverage"><a class="header" href="#step-2-run-bamcoverage">Step 2: Run bamCoverage</a></h3>
@@ -323,6 +324,8 @@ You can choose different ways to normalize your data, depending on what you want
 <li><strong>Calculation:</strong> Use <strong>Effective Genome Size</strong> to handle repeats correctly.</li>
 <li><strong>Normalization:</strong> Use <strong>RPGC</strong> to make fair comparisons between samples.</li>
 </ol>
+<p>More
+<a href="https://deeptools.readthedocs.io/en/develop/content/tools/bamCoverage.html">bamCoverage</a></p>
 
                     </main>
 
