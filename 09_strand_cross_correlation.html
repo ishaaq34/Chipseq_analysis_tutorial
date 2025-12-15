@@ -36,7 +36,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-b75f1ea0.js";
+            window.path_to_searchindex_js = "searchindex-3fa1f78b.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-df4cee15.js"></script>
@@ -176,7 +176,7 @@
                 <div id="mdbook-content" class="content">
                     <main>
                         <h1 id="tutorial-07-strand-cross-correlation-the-echo"><a class="header" href="#tutorial-07-strand-cross-correlation-the-echo">Tutorial 07: Strand Cross-Correlation (The Echo)</a></h1>
-<h2 id="level-1-basic-concept-the-echo"><a class="header" href="#level-1-basic-concept-the-echo">Level 1: Basic Concept (The Echo)</a></h2>
+<h2 id="1-basic-concept-the-echo"><a class="header" href="#1-basic-concept-the-echo">1: Basic Concept (The Echo)</a></h2>
 <h3 id="why-do-we-see-two-peaks"><a class="header" href="#why-do-we-see-two-peaks">Why do we see two peaks?</a></h3>
 <p>When you do ChIP-seq, the DNA fragments are 3D objects, about 200bp long, with the protein in the middle.
 However, the sequencer only reads the <strong>Ends</strong> of these fragments (5’ ends).</p>
@@ -195,7 +195,7 @@ However, the sequencer only reads the <strong>Ends</strong> of these fragments (
 <hr><img width="639" height="403" alt="Screenshot 2025-12-10 at 11 39 06 AM" src="https://github.com/user-attachments/assets/cfc18aa5-2c0d-4772-ad2a-f4ae8c0f578d" />
 <p><em>(Source:<a href="https://www.nature.com/articles/nmeth.1246">Genome-wide analysis of transcription factor binding sites based on ChIP-Seq data</a></em></p>
 <hr>
-<h2 id="level-2-execution-phantompeakqualtools"><a class="header" href="#level-2-execution-phantompeakqualtools">Level 2: Execution (PhantomPeakQualTools)</a></h2>
+<h2 id="2-phantompeakqualtools"><a class="header" href="#2-phantompeakqualtools">2: PhantomPeakQualTools</a></h2>
 <p>We use a tool called <code>run_spp.R</code> (part of <a href="https://github.com/kundajelab/phantompeakqualtools">PhantomPeakQualTools</a> to calculate this. It finds the “Best Match” distance.</p>
 <h3 id="the-command"><a class="header" href="#the-command">The Command</a></h3>
 <pre><code class="language-bash"># Run PhantomPeakQualTools
@@ -235,13 +235,19 @@ Rscript /opt/anaconda3/envs/chip/bin/run_spp.R \
 </li>
 </ol>
 <p><code>Sample1_spp.qc.txt</code> provides numeric QC metrics</p>
-<pre><code>   **COL5** : provides Phantom peak 
-   **COL3** : provides Fragment length peak
-   **COL4** : These numbers show how well the forward and reverse reads match at the fragment length.
-   **COL6** : corr_phantomPeak. This is the match at the phantom peak. If this is much lower than the real fragment peak (COL4), that means the ChIP is good.
-   **COL8**:  min_corr.This is the lowest cross-correlation value. It represents the background noise level. Lower values here mean a clearer signal-to-noise contrast.
+<pre><code>H3K9ac_ENCFF193NPE.chr11_12.bam   #1  BAM file name (input to SPP QC)
+3411159                          #2  Number of reads used
+220                              #3  Estimated fragment length (bp)
+0.545418                         #4  Cross-correlation at fragment length
+55                               #5  Phantom peak shift (bp)
+0.501850                         #6  Cross-correlation at phantom peak
+1500                             #7  Maximum strand shift tested (bp)
+0.373681                         #8  Minimum cross-correlation (background)
+1.459581                         #9  NSC – Normalized Strand Cross-correlation
+1.339926                         #10 RSC – Relative Strand Cross-correlation
+1                               #11 SPP quality tag (1 = good)
 </code></pre>
-<hr><img width="681" height="498" alt="image2" src="https://github.com/user-attachments/assets/f58d1127-7733-47f1-81e7-5bee8abfefb8" />
+<hr><img width="906" height="607" alt="Screenshot 2025-12-15 at 6 59 26 PM" src="https://github.com/user-attachments/assets/a40e0cc6-6c96-4e60-bf11-a0114897464c" />
 <hr>
 <h3 id="32-the-metrics-nsc--rsc"><a class="header" href="#32-the-metrics-nsc--rsc">3.2 The Metrics (NSC &amp; RSC)</a></h3>
 <p>We compare the Height of the Real Peak (Signal) to the Phantom Peak (Noise).</p>
