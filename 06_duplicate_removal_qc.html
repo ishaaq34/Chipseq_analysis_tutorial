@@ -36,7 +36,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-b0670950.js";
+            window.path_to_searchindex_js = "searchindex-fd3b6a74.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-df4cee15.js"></script>
@@ -248,15 +248,17 @@ The addition of RGPU, encoding the flowcell and lane, defines the physical neigh
 <h3 id="step-32-mark-duplicates-be-careful"><a class="header" href="#step-32-mark-duplicates-be-careful">Step 3.2: Mark Duplicates (Be Careful!)</a></h3>
 <p>First, we will just <strong>mark</strong> the duplicates but <strong>keep them</strong> in the file. This is like highlighting the duplicate pages in yellow but not throwing them in the trash yet. This is important for Quality Control (QC) to see how bad the duplication problem is.</p>
 <pre><code class="language-bash"># ----- 3.3 Mark duplicates (keep all reads, just mark) -----
-# Create a folder for results
-mkdir -p marked_reads
+
 
 # Run Picard MarkDuplicates
 picard MarkDuplicates \
   I=sample01.bam \
-  O=marked_reads/sample01.marked.bam \
-  M=marked_reads/metrics.txt \
+  O=sample01.marked.bam \
+  M=metrics.txt \
   REMOVE_DUPLICATES=false
+
+# Index the new file
+samtools index sample01.marked.bam
 </code></pre>
 <ul>
 <li><code>I="$bam"</code>: Input BAM file.</li>
@@ -267,19 +269,17 @@ picard MarkDuplicates \
 <h3 id="step-33-remove-duplicates-clean-up"><a class="header" href="#step-33-remove-duplicates-clean-up">Step 3.3: Remove Duplicates (Clean Up)</a></h3>
 <p>Now that we’ve checked the quality, we create a “clean” version of our data for analysis. We remove the marked duplicates so they don’t interfere with peak calling.</p>
 <pre><code class="language-bash"># ----- 3.4 Create a duplicate-removed BAM by filtering marked BAM -----
-# Create a folder for final results
-mkdir -p final_clean_bam
+
 
 # Run Picard to REMOVE duplicates
 picard MarkDuplicates \
   I=sample01.bam \
-  O=final_clean_bam/sample01.dedup.bam \
-  M=final_clean_bam/dedup_metrics.txt \
+  O=sample01.dedup.bam \
+  M=dedup_metrics.txt \
   REMOVE_DUPLICATES=true
 
 # Index the new file
-samtools index final_clean_bam/sample01.dedup.bam
-echo "Duplicates removed. Clean file is ready."
+samtools index sample01.dedup.bam
 </code></pre>
 <ul>
 <li><code>REMOVE_DUPLICATES=true</code>: This time, we actually delete the highlighted duplicates.</li>
@@ -298,8 +298,11 @@ samtools fixmate -m namecollate.bam fixmate.bam
 
 samtools sort -o positionsort.bam fixmate.bam
 
-# Mark or remove duplicates (-r after the markdup ) 
+# Mark or remove duplicates (-r after the markdup for deduplication) 
 samtools markdup positionsort.bam markdup.bam
+
+# Index the new file
+samtools index markdup.bam
 
 </code></pre>
 <p>This samtools-based workflow is simpler than Picard and avoids the need for read-group metadata, while still providing accurate duplicate detection for paired-end data. It is well suited for ChIP-seq and other enrichment-based analyses where straightforward duplicate handling is sufficient.</p>
