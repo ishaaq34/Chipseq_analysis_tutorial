@@ -1,5 +1,4 @@
 /* Import Google Fonts */
-/* Merriweather for Headings (Serif) & Inter for Body (Sans) */
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Merriweather:wght@300;400;700;900&display=swap");
 
 :root {
@@ -7,77 +6,92 @@
   --font-sans: "Inter", system-ui, -apple-system, Helvetica, Arial, sans-serif;
   --font-heading: "Merriweather", "Times New Roman", serif;
 
- # /* Academic Brand Colors */
- # --academic-blue: #1e3a8a; /* Deep Navy */
- # --academic-accent: #2563eb; /* Bright Blue for interactions */
-#--text-primary: #111827;
- # --text-secondary: #4b5563;
+  /* Academic Brand Colors — Bright Green Variant */
+  --academic-green: #0a6934;
+  --academic-accent: #28b44a;
+  --text-primary: #1a1a1a;
+  --text-secondary: #5a6460;
+  --surface: #f3fbf5;
+  --surface-muted: #e4f3e9;
 
-
-/* Academic Brand Colors — Bright Green Variant */
---academic-green: #0a6934;       /* Deep Bright Green (primary brand color) */
---academic-accent: #28b44a;      /* Energetic but professional accent green */
---text-primary: #1a1a1a;         /* Clean, neutral dark text */
---text-secondary: #5a6460;       /* Muted gray-green secondary text */
---surface: #f3fbf5;              /* Soft green-tinted background for cards/surfaces */
---surface-muted: #e4f3e9;        /* Slightly deeper muted surface */
-
-
-
-
-
-  
   /* Spacing */
   --radius-sm: 4px;
 }
 
-/* Headings - Serif & Professional */
-h1, h2, h3, h4, h5 {
+/* ========================= */
+/* BODY TEXT (from earlier)  */
+/* ========================= */
+
+body {
+  font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--text-primary);
+}
+
+p,
+li {
+  font-size: 16px;
+}
+
+/* ========================= */
+/* HEADINGS (from earlier)   */
+/* ========================= */
+
+h1,
+h2,
+h3,
+h4,
+h5 {
   font-family: var(--font-heading);
-  font-weight: 700;
   letter-spacing: normal;
   color: var(--academic-green);
-  margin-top: 1.5em; /* Breathing room */
+  margin-top: 1.5em;
 }
 
 h1 {
-  font-weight: 900;
+  font-size: 32px; /* 2rem */
+  font-weight: 700;
+  color: var(--text-primary);
   border-bottom: 2px solid var(--surface-muted);
   padding-bottom: 0.3em;
-  color: var(--text-primary); /* Main title in dark neutral */
 }
 
-/* Body Font Setup - Respecting Switcher */
-.opensans, .opensans body {
-  font-family: var(--font-sans);
-  color: var(--text-primary);
-  line-height: 1.7; /* Improvement readability */
+h2 {
+  font-size: 24px; /* 1.5rem */
+  font-weight: 600;
 }
 
-/* --- SIDEBAR & NAVIGATION --- */
+h3 {
+  font-size: 20px; /* 1.25rem */
+  font-weight: 600;
+}
+
+/* ========================= */
+/* SIDEBAR & NAVIGATION      */
+/* ========================= */
 
 .sidebar {
-  background-color: var(--surface); /* Soft green tint */
+  background-color: var(--surface);
   border-right: 1px solid var(--surface-muted);
-  backdrop-filter: none; /* Remove glassmorphism */
 }
 
 .sidebar .chapter li {
-    color: var(--text-secondary);
+  color: var(--text-secondary);
 }
 
 .sidebar .chapter li.active > a {
   color: var(--academic-green) !important;
   background-color: var(--surface-muted);
   border-left: 3px solid var(--academic-accent);
-  border-radius: 0; /* Square edges for professionalism */
   font-weight: 600;
-  padding-left: 8px; /* Offset for border */
+  padding-left: 8px;
 }
 
-/* --- THEME SPECIFIC ADJUSTMENTS --- */
+/* ========================= */
+/* THEMES                    */
+/* ========================= */
 
-/* LIGHT THEME (Default Academic) */
 .light {
   --bg: #ffffff;
   --fg: var(--text-primary);
@@ -85,28 +99,30 @@ h1 {
   --quote-border: var(--academic-green);
 }
 
-/* RUST THEME (Sepia/Paper) */
-.rust {
-  --font-heading: "Merriweather", serif; /* Keep serif */
-  /* mdbook handles colors, we just ensure alignment */
+.rust h1,
+.rust h2,
+.rust h3 {
+  color: #5c4033;
 }
-.rust h1, .rust h2, .rust h3 { color: #5c4033; }
 
-
-/* NAVY THEME (Dark) */
 .navy {
-  --academic-green: #4ade80; /* Brighter green for dark mode */
+  --academic-green: #4ade80;
   --academic-accent: #86efac;
   --text-primary: #f0fdf4;
   --text-secondary: #dcfce7;
-  --surface: #064e3b; /* Dark green bg */
+  --surface: #064e3b;
   --surface-muted: #065f46;
-  --bg: #022c22; /* Very dark green/black */
+  --bg: #022c22;
 }
-.navy h1 { color: #f0fdf4; border-bottom-color: #065f46; }
 
+.navy h1 {
+  color: #f0fdf4;
+  border-bottom-color: #065f46;
+}
 
-/* --- ACADEMIC ALERTS (Subdued) --- */
+/* ========================= */
+/* BLOCKQUOTES & ALERTS      */
+/* ========================= */
 
 blockquote {
   border-radius: var(--radius-sm);
@@ -114,12 +130,11 @@ blockquote {
   margin: 1.5rem 0;
   border-left: 4px solid var(--quote-border);
   background: var(--quote-bg);
-  font-style: italic; /* Classic look */
-  font-family: var(--font-heading); /* Serif for quotes */
+  font-style: italic;
+  font-family: var(--font-heading);
   color: var(--text-secondary);
 }
 
-/* Note - Primary Green */
 blockquote.alert-note {
   border-left-color: var(--academic-green);
   background-color: var(--surface);
@@ -127,10 +142,7 @@ blockquote.alert-note {
   font-style: normal;
   font-family: var(--font-sans);
 }
-.navy blockquote.alert-note { background-color: rgba(6, 78, 59, 0.5); color: #86efac; }
 
-
-/* Warning - Amber/Orange (Keep distinct) */
 blockquote.alert-warning {
   border-left-color: #b45309;
   background-color: #fffbeb;
@@ -139,7 +151,6 @@ blockquote.alert-warning {
   font-family: var(--font-sans);
 }
 
-/* Important - Accent Green/Teal */
 blockquote.alert-important {
   border-left-color: var(--academic-accent);
   background-color: var(--surface-muted);
@@ -148,8 +159,9 @@ blockquote.alert-important {
   font-family: var(--font-sans);
 }
 
-
-/* --- BUTTONS & INTERACTION --- */
+/* ========================= */
+/* INTERACTION               */
+/* ========================= */
 
 .nav-chapters {
   border-radius: var(--radius-sm);
@@ -157,15 +169,16 @@ blockquote.alert-important {
 }
 
 .nav-chapters:hover {
-  text-decoration: none;
   opacity: 0.8;
-  background: transparent; /* Minimalist */
   color: var(--academic-accent);
 }
 
-/* Code Blocks - Professional */
+/* ========================= */
+/* CODE BLOCKS               */
+/* ========================= */
+
 pre {
   border: 1px solid #e5e7eb;
   border-radius: var(--radius-sm);
-  background-color: #f8fafc; /* Slight contrast */
+  background-color: #f8fafc;
 }
