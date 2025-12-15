@@ -18,6 +18,10 @@ This tutorial uses real data from **BLaER1 cells** (human immune cells).
 
 ---
 
+**Data Availability:**
+*   [ENCODE Cart](https://www.encodeproject.org/carts/ca521f95-7835-4369-88a9-b89f98fb39ad/)
+
+
 ## Execution (The Checklist)
 
 ### 2.1 Sample Table
@@ -33,6 +37,22 @@ Here are the files we are analyzing. In real life, you should make a table like 
 | ENCFF534IPX      | Histone ChIP-seq | H3K9ac     | H3K9ac_ENCFF534IPX.bam       |
 | ENCFF110SOB        | Control ChIP-seq | Input      | Input_ENCFF110SOB.bam         |
 | ENCFF919XCV      | Control ChIP-seq | Input      | Input_ENCFF919XCV.bam        |
+
+Simplest and easiet way to donwload all the bam files in the working folder
+
+```
+cat <<EOF | xargs -n 2 -P 4 wget -c -O
+ceb_ENCFF327JFG.bam        https://www.encodeproject.org/files/ENCFF327JFG/@@download/ENCFF327JFG.bam
+ceb_ENCFF744SVA.bam        https://www.encodeproject.org/files/ENCFF744SVA/@@download/ENCFF744SVA.bam
+H3K27me3_ENCFF164ALR.bam   https://www.encodeproject.org/files/ENCFF164ALR/@@download/ENCFF164ALR.bam
+H3K27me3_ENCFF532DQH.bam   https://www.encodeproject.org/files/ENCFF532DQH/@@download/ENCFF532DQH.bam
+H3K9ac_ENCFF193NPE.bam     https://www.encodeproject.org/files/ENCFF193NPE/@@download/ENCFF193NPE.bam
+H3K9ac_ENCFF534IPX.bam     https://www.encodeproject.org/files/ENCFF534IPX/@@download/ENCFF534IPX.bam
+Input_ENCFF110SOB.bam      https://www.encodeproject.org/files/ENCFF110SOB/@@download/ENCFF110SOB.bam
+Input_ENCFF919XCV.bam      https://www.encodeproject.org/files/ENCFF919XCV/@@download/ENCFF919XCV.bam
+EOF
+
+```
 
 ### 2.2 Basic Checks
 Before processing, we verify the BAM files are healthy.
