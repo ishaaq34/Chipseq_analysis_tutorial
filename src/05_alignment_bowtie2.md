@@ -41,7 +41,7 @@ bowtie2 -x hg38_index \                  # 1. The Reference Map
   samtools sort -@ 6 -o bowalign/Sample1.sorted.bam  # 6. ...and sort the result!
 ```
 
-**Run Bowtie2 alignment for a single sample**
+**Run Bowtie2 alignment for a single-end sample**
 
 ```
 # Run Bowtie2 alignment for a single sample
