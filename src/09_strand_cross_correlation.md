@@ -1,6 +1,6 @@
 # Tutorial 07: Strand Cross-Correlation (The Echo)
 
-## Level 1: Basic Concept (The Echo)
+##  1: Basic Concept (The Echo)
 
 ### Why do we see two peaks?
 When you do ChIP-seq, the DNA fragments are 3D objects, about 200bp long, with the protein in the middle.
@@ -24,7 +24,7 @@ Imagine you shout **"HELLO"** (Forward Reads). A split second later, you hear th
 
 ---
 
-## Level 2: Execution (PhantomPeakQualTools)
+## 2: PhantomPeakQualTools
 
 
 
@@ -65,17 +65,27 @@ The output plot (`Sample1_spp.qc.pdf`) usually shows TWO peaks. This is where qu
 
 
   `Sample1_spp.qc.txt` provides numeric QC metrics 
-  
-       **COL5** : provides Phantom peak 
-       **COL3** : provides Fragment length peak
-       **COL4** : These numbers show how well the forward and reverse reads match at the fragment length.
-       **COL6** : corr_phantomPeak. This is the match at the phantom peak. If this is much lower than the real fragment peak (COL4), that means the ChIP is good.
-       **COL8**:  min_corr.This is the lowest cross-correlation value. It represents the background noise level. Lower values here mean a clearer signal-to-noise contrast.
+
+```
+H3K9ac_ENCFF193NPE.chr11_12.bam   #1  BAM file name (input to SPP QC)
+3411159                          #2  Number of reads used
+220                              #3  Estimated fragment length (bp)
+0.545418                         #4  Cross-correlation at fragment length
+55                               #5  Phantom peak shift (bp)
+0.501850                         #6  Cross-correlation at phantom peak
+1500                             #7  Maximum strand shift tested (bp)
+0.373681                         #8  Minimum cross-correlation (background)
+1.459581                         #9  NSC – Normalized Strand Cross-correlation
+1.339926                         #10 RSC – Relative Strand Cross-correlation
+1                               #11 SPP quality tag (1 = good)
+```
+
 
   
 ---
 
-<img width="681" height="498" alt="image2" src="https://github.com/user-attachments/assets/f58d1127-7733-47f1-81e7-5bee8abfefb8" />
+<img width="906" height="607" alt="Screenshot 2025-12-15 at 6 59 26 PM" src="https://github.com/user-attachments/assets/a40e0cc6-6c96-4e60-bf11-a0114897464c" />
+
 
 ---
 
