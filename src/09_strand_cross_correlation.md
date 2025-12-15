@@ -99,7 +99,7 @@ We compare the Height of the Real Peak (Signal) to the Phantom Peak (Noise).
 | **NSC** | Normalized Strand Cross-correlation | **Signal-to-Noise Ratio.** How much higher is the Real Peak (COL4) than the flat background (COL8)? (COL4 / COL8) | **> 1.05** |
 | **RSC** | Relative Strand Cross-correlation | **Signal vs Phantom.** Is the Real Peak (COL4) clearly stronger than the Phantom Peak (COL6)? ((COL4 – COL8) / (COL6 – COL8)) | **> 0.8** |
 
-### 3.3 Interpreting Your Data (Example Analysis)
+### 3.3 Interpreting the Data (Example Analysis)
 
 ---
 
