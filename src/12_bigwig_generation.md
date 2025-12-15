@@ -108,17 +108,19 @@ There are **two main ways** to estimate effective genome size:
     ```
     **Thus**,
 
-    Raw sequence length (non-N)          = 268,361,931 bp
+    **Raw sequence length (non-N)**          = ` 268,361,931 bp`
 
-    Unique 21-mer mappable portion       = 220,798,375 bp
+    Unique 21-mer mappable portion       = `220,798,375 bp`
 
-    Difference (unmappable/repetitive)   = ~47.6 million bp
+    Difference (unmappable/repetitive)   = `~47.6 million bp`
 
-    So about 47.6 Mb of chr11+chr12 is repetitive, low complexity (centromeres, segmental duplications, satellite repeats), or otherwise not uniquely mappable with 21-mers.
+    So about`47.6 Mb of chr11+chr12` is repetitive, low complexity (centromeres, segmental duplications, satellite repeats), or otherwise not uniquely mappable with `21-mers`.
 
-    When we calculate effective genome size using faSize, the tool removes N regions but still includes repetitive and low-complexity sequence, because these regions contain real A/T/G/C bases and are mappable as long as multimapping reads are allowed. This makes faSize appropriate when the BAM files still contain multimappers. However, if multimapping reads are removed or MAPQ filtering is applied, the mappable genome becomes smaller because repeats and low-complexity regions no longer contribute usable signal. In that case, the khmer tool—especially unique-kmers.py—gives a better estimate because it counts only unique k-mers from the reads and naturally excludes repeats, low-complexity regions, and N stretches. For uniquely mapped data, the khmer-based estimate is the correct effective genome size to use.
+    When we calculate effective genome size using `faSize`, the tool `removes N  regions` but still includes `repetitive and low-complexity sequence`, because these regions contain real A/T/G/C bases and are mappable as long as multimapping reads are allowed. This makes `faSize` appropriate when the BAM files still contain multimappers. 
+    
+    However, if `multimapping reads are removed` or `MAPQ filtering is applied`, the mappable genome becomes smaller because `repeats and low-complexity regions no longer contribute usable signal`. In that case, the `khmer` tool unique-kmers.py—gives a better estimate because it counts only `unique k-mers` from the reads and naturally `excludes repeats, low-complexity regions, and N stretches`. For `uniquely mapped data`, the khmer-based estimate is the correct effective genome size to use.
 
-    In our BAM file, multimapping reads have already been excluded and low-quality alignments removed by MAPQ filtering. Because these steps bias us toward uniquely mappable regions, we estimate the effective genome size using a k-mer–based approach (e.g. khmer).
+    In our BAM file, `multimapping reads` have already been `excluded and low-quality alignments removed by MAPQ filtering`. Because these steps bias us toward uniquely mappable regions, we estimate the `effective genome size using a k-mer–based approach (e.g. khmer)`.
 
 ### Step 2: Run bamCoverage
 Now we make the BigWig.
@@ -172,3 +174,9 @@ If you pick “None,” you see the raw, uncorrected coverage.
 1.  **Format:** Convert BAM (Raw Lists) to BigWig (Signal Tracks).
 2.  **Calculation:** Use **Effective Genome Size** to handle repeats correctly.
 3.  **Normalization:** Use **RPGC** to make fair comparisons between samples.
+
+
+More
+[bamCoverage](https://deeptools.readthedocs.io/en/develop/content/tools/bamCoverage.html)
+
+
