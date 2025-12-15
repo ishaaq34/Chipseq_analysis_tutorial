@@ -99,15 +99,17 @@ First, we will just **mark** the duplicates but **keep them** in the file. This 
 
 ```bash
 # ----- 3.3 Mark duplicates (keep all reads, just mark) -----
-# Create a folder for results
-mkdir -p marked_reads
+
 
 # Run Picard MarkDuplicates
 picard MarkDuplicates \
   I=sample01.bam \
-  O=marked_reads/sample01.marked.bam \
-  M=marked_reads/metrics.txt \
+  O=sample01.marked.bam \
+  M=metrics.txt \
   REMOVE_DUPLICATES=false
+
+# Index the new file
+samtools index sample01.marked.bam
 ```
 
 *   `I="$bam"`: Input BAM file.
@@ -121,19 +123,17 @@ Now that we've checked the quality, we create a "clean" version of our data for 
 
 ```bash
 # ----- 3.4 Create a duplicate-removed BAM by filtering marked BAM -----
-# Create a folder for final results
-mkdir -p final_clean_bam
+
 
 # Run Picard to REMOVE duplicates
 picard MarkDuplicates \
   I=sample01.bam \
-  O=final_clean_bam/sample01.dedup.bam \
-  M=final_clean_bam/dedup_metrics.txt \
+  O=sample01.dedup.bam \
+  M=dedup_metrics.txt \
   REMOVE_DUPLICATES=true
 
 # Index the new file
-samtools index final_clean_bam/sample01.dedup.bam
-echo "Duplicates removed. Clean file is ready."
+samtools index sample01.dedup.bam
 ```
 
 *   `REMOVE_DUPLICATES=true`: This time, we actually delete the highlighted duplicates.
@@ -156,8 +156,11 @@ samtools fixmate -m namecollate.bam fixmate.bam
 
 samtools sort -o positionsort.bam fixmate.bam
 
-# Mark or remove duplicates (-r after the markdup ) 
+# Mark or remove duplicates (-r after the markdup for deduplication) 
 samtools markdup positionsort.bam markdup.bam
+
+# Index the new file
+samtools index markdup.bam
 
 ```
 
