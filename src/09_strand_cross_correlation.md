@@ -64,7 +64,7 @@ The output plot (`Sample1_spp.qc.pdf`) usually shows TWO peaks. This is where qu
     *   **Meaning:** Represents **Background Noise**.
 
 
-  `Sample1_spp.qc.txt` provides numeric QC metrics 
+  `Sample1_spp.qc.txt` provides numeric QC metrics in colunmns from 1-11
 
 ```
 H3K9ac_ENCFF193NPE.chr11_12.bam   #1  BAM file name (input to SPP QC)
