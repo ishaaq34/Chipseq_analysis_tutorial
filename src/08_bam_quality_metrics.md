@@ -1,6 +1,6 @@
 # Tutorial 06: Experiment Design & BAM Quality Control
 
-##  Basic Concept (The Experiment & The File)
+## 1. Basic Concept (The Experiment & The File)
 
 ### 1.1 The Experiment Story
 This tutorial uses real data from **BLaER1 cells** (human immune cells).
@@ -22,7 +22,7 @@ This tutorial uses real data from **BLaER1 cells** (human immune cells).
 *   [ENCODE Cart](https://www.encodeproject.org/carts/ca521f95-7835-4369-88a9-b89f98fb39ad/)
 
 
-## Execution (The Checklist)
+## 2. Data used in the tutorial
 
 ### 2.1 Sample Table
 Here are the files we are analyzing. In real life, you should make a table like this to track your work.
@@ -41,7 +41,7 @@ Here are the files we are analyzing. In real life, you should make a table like 
 
 ---
 
-Simplest and easiet way to donwload all the bam files in the working folder
+### 2.2 Simplest and easiet way to donwload all the bam files in the working folder
 
 ```
 cat <<EOF | xargs -n 2 -P 4 wget -c -O
@@ -57,41 +57,53 @@ EOF
 
 ```
 
-### 2.2 Basic Checks
+## 3. Basic Quality Checks
 Before processing, we verify the BAM files are healthy.
 
-**1. Create a smaller test file (Optional)**
+**3.1. Create a smaller test file (Optional)**
 Working with full genomes takes time. For testing, we can extract just chromosome 11 and 12:
 ```bash
 samtools view -b -h sample.bam chr11 chr12 | samtools sort -o sample.chr11_12.bam
 ```
 
-**2. Get Alignment Stats**
+**3.2. Get Alignment Stats**
 ```bash
 # Quick summary
 samtools flagstat sample.bam > sample.flagstat.txt
 
-# Detailed stats
-samtools stats sample.bam > sample.stats.txt
+
 ```
 
 ---
+**Interpreting `flagstat`**
 
-## Quality Control
-
-### 3.1 Interpreting `flagstat`
 What do the numbers mean?
 
 ```text
-2565563 + 0 in total          # Total raw reads.
-2565563 + 0 mapped (100%)     # Success! 100% of reads found a home on the genome.
-0 + 0 duplicates              # 0 duplicates found (if un-marked).
-0 + 0 paired in sequencing    # These are Single-End reads (0 paired).
+
+2565563 + 0 in total (QC-passed reads + QC-failed reads)        # Total reads in this BAM; all passed QC
+2565563 + 0 primary                                            # All reads are primary alignments
+0 + 0 secondary                                                # No secondary alignments; no multimappers kept
+0 + 0 supplementary                                            # No supplementary/chimeric alignments
+0 + 0 duplicates                                               # No PCR/optical duplicates recorded (relevant for Picard marked duplicates).
+0 + 0 primary duplicates                                       # Same as above; no duplicate flags present
+2565563 + 0 mapped (100.00% : N/A)                             # Every read in the file is mapped
+2565563 + 0 primary mapped (100.00% : N/A)                     # All primary reads are mapped
+0 + 0 paired in sequencing                                     # Single-end data; no paired-end flags present
+0 + 0 read1                                                    # No read1 because this is not paired-end
+0 + 0 read2                                                    # No read2 for the same reason
+0 + 0 properly paired (N/A : N/A)                              # Paired-end metric; irrelevant for single-end data
+0 + 0 with itself and mate mapped                              # Paired-end metric; not applicable
+0 + 0 singletons (N/A : N/A)                                   # Not meaningful for single-end data
+0 + 0 with mate mapped to a different chr                      # Paired-end metric; not applicable
+0 + 0 with mate mapped to a different chr (mapQ>=5)            # Same paired-end metric; irrelevant here
+
+
 ```
 *   **Goal:** High mapping % (>80%).
 *   **Warning:** If mapping is low (<50%), you may have the wrong organism or bad sequencing.
 
-### 3.2 Multimapping & The "Lost GPS"
+### 3.3 Multimapping & The "Lost GPS"
 Sometimes a read is repetitive (e.g., "ATATATAT"). It fits in 50 different places on the genome.
 The aligner doesn't know which spot is correct, so it gives it a **Low MAPQ Score** (Mapping Quality).
 
