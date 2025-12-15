@@ -36,7 +36,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-482c7eab.js";
+            window.path_to_searchindex_js = "searchindex-5d811eaa.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-df4cee15.js"></script>
@@ -200,6 +200,10 @@
 </li>
 </ul>
 <hr>
+<p><strong>Data Availability:</strong></p>
+<ul>
+<li><a href="https://www.encodeproject.org/carts/ca521f95-7835-4369-88a9-b89f98fb39ad/">ENCODE Cart</a></li>
+</ul>
 <h2 id="execution-the-checklist"><a class="header" href="#execution-the-checklist">Execution (The Checklist)</a></h2>
 <h3 id="21-sample-table"><a class="header" href="#21-sample-table">2.1 Sample Table</a></h3>
 <p>Here are the files we are analyzing. In real life, you should make a table like this to track your work.</p>
@@ -220,6 +224,19 @@
 </tbody>
 </table>
 </div>
+<p>Simplest and easiet way to donwload all the bam files in the working folder</p>
+<pre><code>cat &lt;&lt;EOF | xargs -n 2 -P 4 wget -c -O
+ceb_ENCFF327JFG.bam        https://www.encodeproject.org/files/ENCFF327JFG/@@download/ENCFF327JFG.bam
+ceb_ENCFF744SVA.bam        https://www.encodeproject.org/files/ENCFF744SVA/@@download/ENCFF744SVA.bam
+H3K27me3_ENCFF164ALR.bam   https://www.encodeproject.org/files/ENCFF164ALR/@@download/ENCFF164ALR.bam
+H3K27me3_ENCFF532DQH.bam   https://www.encodeproject.org/files/ENCFF532DQH/@@download/ENCFF532DQH.bam
+H3K9ac_ENCFF193NPE.bam     https://www.encodeproject.org/files/ENCFF193NPE/@@download/ENCFF193NPE.bam
+H3K9ac_ENCFF534IPX.bam     https://www.encodeproject.org/files/ENCFF534IPX/@@download/ENCFF534IPX.bam
+Input_ENCFF110SOB.bam      https://www.encodeproject.org/files/ENCFF110SOB/@@download/ENCFF110SOB.bam
+Input_ENCFF919XCV.bam      https://www.encodeproject.org/files/ENCFF919XCV/@@download/ENCFF919XCV.bam
+EOF
+
+</code></pre>
 <h3 id="22-basic-checks"><a class="header" href="#22-basic-checks">2.2 Basic Checks</a></h3>
 <p>Before processing, we verify the BAM files are healthy.</p>
 <p><strong>1. Create a smaller test file (Optional)</strong>
