@@ -110,9 +110,9 @@ There are **two main ways** to estimate effective genome size:
 
     **Raw sequence length (non-N)**          = ` 268,361,931 bp`
 
-    Unique 21-mer mappable portion       = `220,798,375 bp`
+    **Unique 21-mer mappable portion**       = `220,798,375 bp`
 
-    Difference (unmappable/repetitive)   = `~47.6 million bp`
+    **Difference (unmappable/repetitive)**   = `~47.6 million bp`
 
     So about`47.6 Mb of chr11+chr12` is repetitive, low complexity (centromeres, segmental duplications, satellite repeats), or otherwise not uniquely mappable with `21-mers`.
 
