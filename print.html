@@ -37,7 +37,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-79c80805.js";
+            window.path_to_searchindex_js = "searchindex-b75f1ea0.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-df4cee15.js"></script>
@@ -947,7 +947,7 @@ uniq -c QC_results/Sample1.read5.bed \
 </ol>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="tutorial-06-experiment-design--bam-quality-control"><a class="header" href="#tutorial-06-experiment-design--bam-quality-control">Tutorial 06: Experiment Design &amp; BAM Quality Control</a></h1>
-<h2 id="basic-concept-the-experiment--the-file"><a class="header" href="#basic-concept-the-experiment--the-file">Basic Concept (The Experiment &amp; The File)</a></h2>
+<h2 id="1-basic-concept-the-experiment--the-file"><a class="header" href="#1-basic-concept-the-experiment--the-file">1. Basic Concept (The Experiment &amp; The File)</a></h2>
 <h3 id="11-the-experiment-story"><a class="header" href="#11-the-experiment-story">1.1 The Experiment Story</a></h3>
 <p>This tutorial uses real data from <strong>BLaER1 cells</strong> (human immune cells).</p>
 <ul>
@@ -975,7 +975,7 @@ uniq -c QC_results/Sample1.read5.bed \
 <ul>
 <li><a href="https://www.encodeproject.org/carts/ca521f95-7835-4369-88a9-b89f98fb39ad/">ENCODE Cart</a></li>
 </ul>
-<h2 id="execution-the-checklist"><a class="header" href="#execution-the-checklist">Execution (The Checklist)</a></h2>
+<h2 id="2-data-used-in-the-tutorial"><a class="header" href="#2-data-used-in-the-tutorial">2. Data used in the tutorial</a></h2>
 <h3 id="21-sample-table"><a class="header" href="#21-sample-table">2.1 Sample Table</a></h3>
 <p>Here are the files we are analyzing. In real life, you should make a table like this to track your work.</p>
 <div class="table-wrapper">
@@ -996,7 +996,7 @@ uniq -c QC_results/Sample1.read5.bed \
 </table>
 </div>
 <hr>
-<p>Simplest and easiet way to donwload all the bam files in the working folder</p>
+<h3 id="22-simplest-and-easiet-way-to-donwload-all-the-bam-files-in-the-working-folder"><a class="header" href="#22-simplest-and-easiet-way-to-donwload-all-the-bam-files-in-the-working-folder">2.2 Simplest and easiet way to donwload all the bam files in the working folder</a></h3>
 <pre><code>cat &lt;&lt;EOF | xargs -n 2 -P 4 wget -c -O
 ceb_ENCFF327JFG.bam        https://www.encodeproject.org/files/ENCFF327JFG/@@download/ENCFF327JFG.bam
 ceb_ENCFF744SVA.bam        https://www.encodeproject.org/files/ENCFF744SVA/@@download/ENCFF744SVA.bam
@@ -1009,33 +1009,46 @@ Input_ENCFF919XCV.bam      https://www.encodeproject.org/files/ENCFF919XCV/@@dow
 EOF
 
 </code></pre>
-<h3 id="22-basic-checks"><a class="header" href="#22-basic-checks">2.2 Basic Checks</a></h3>
+<h2 id="3-basic-quality-checks"><a class="header" href="#3-basic-quality-checks">3. Basic Quality Checks</a></h2>
 <p>Before processing, we verify the BAM files are healthy.</p>
-<p><strong>1. Create a smaller test file (Optional)</strong>
+<p><strong>3.1. Create a smaller test file (Optional)</strong>
 Working with full genomes takes time. For testing, we can extract just chromosome 11 and 12:</p>
 <pre><code class="language-bash">samtools view -b -h sample.bam chr11 chr12 | samtools sort -o sample.chr11_12.bam
 </code></pre>
-<p><strong>2. Get Alignment Stats</strong></p>
+<p><strong>3.2. Get Alignment Stats</strong></p>
 <pre><code class="language-bash"># Quick summary
 samtools flagstat sample.bam &gt; sample.flagstat.txt
 
-# Detailed stats
-samtools stats sample.bam &gt; sample.stats.txt
+
 </code></pre>
 <hr>
-<h2 id="quality-control"><a class="header" href="#quality-control">Quality Control</a></h2>
-<h3 id="31-interpreting-flagstat"><a class="header" href="#31-interpreting-flagstat">3.1 Interpreting <code>flagstat</code></a></h3>
+<p><strong>Interpreting <code>flagstat</code></strong></p>
 <p>What do the numbers mean?</p>
-<pre><code class="language-text">2565563 + 0 in total          # Total raw reads.
-2565563 + 0 mapped (100%)     # Success! 100% of reads found a home on the genome.
-0 + 0 duplicates              # 0 duplicates found (if un-marked).
-0 + 0 paired in sequencing    # These are Single-End reads (0 paired).
+<pre><code class="language-text">
+2565563 + 0 in total (QC-passed reads + QC-failed reads)        # Total reads in this BAM; all passed QC
+2565563 + 0 primary                                            # All reads are primary alignments
+0 + 0 secondary                                                # No secondary alignments; no multimappers kept
+0 + 0 supplementary                                            # No supplementary/chimeric alignments
+0 + 0 duplicates                                               # No PCR/optical duplicates recorded (relevant for Picard marked duplicates).
+0 + 0 primary duplicates                                       # Same as above; no duplicate flags present
+2565563 + 0 mapped (100.00% : N/A)                             # Every read in the file is mapped
+2565563 + 0 primary mapped (100.00% : N/A)                     # All primary reads are mapped
+0 + 0 paired in sequencing                                     # Single-end data; no paired-end flags present
+0 + 0 read1                                                    # No read1 because this is not paired-end
+0 + 0 read2                                                    # No read2 for the same reason
+0 + 0 properly paired (N/A : N/A)                              # Paired-end metric; irrelevant for single-end data
+0 + 0 with itself and mate mapped                              # Paired-end metric; not applicable
+0 + 0 singletons (N/A : N/A)                                   # Not meaningful for single-end data
+0 + 0 with mate mapped to a different chr                      # Paired-end metric; not applicable
+0 + 0 with mate mapped to a different chr (mapQ&gt;=5)            # Same paired-end metric; irrelevant here
+
+
 </code></pre>
 <ul>
 <li><strong>Goal:</strong> High mapping % (&gt;80%).</li>
 <li><strong>Warning:</strong> If mapping is low (&lt;50%), you may have the wrong organism or bad sequencing.</li>
 </ul>
-<h3 id="32-multimapping--the-lost-gps"><a class="header" href="#32-multimapping--the-lost-gps">3.2 Multimapping &amp; The “Lost GPS”</a></h3>
+<h3 id="33-multimapping--the-lost-gps"><a class="header" href="#33-multimapping--the-lost-gps">3.3 Multimapping &amp; The “Lost GPS”</a></h3>
 <p>Sometimes a read is repetitive (e.g., “ATATATAT”). It fits in 50 different places on the genome.
 The aligner doesn’t know which spot is correct, so it gives it a <strong>Low MAPQ Score</strong> (Mapping Quality).</p>
 <ul>
