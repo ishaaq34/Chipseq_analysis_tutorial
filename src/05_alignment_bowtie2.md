@@ -1,4 +1,4 @@
-# Tutorial 04: Alignment (Solving the Jigsaw Puzzle)
+# 04: Alignment (Solving the Jigsaw Puzzle)
 
 ## Basic Concept (The "Puzzle")
 
@@ -19,27 +19,49 @@ Before Bowtie2 can work, it needs to process the reference genome into a format 
 
 ```bash
 # Example syntax: bowtie2-build [genome.fa] [prefix_name]
-bowtie2-build index/ce.fa index/ce_index            # ce.fa = C. elegans reference genome
+bowtie2-build genome_index/ce.fa genome_index/ce_index            # ce.fa = C. elegans reference genome
 ```
 
 *You only do this once!*
 
-You can download the C. elegans reference genome from Ensembl using the following link:  [C. elegans genome](https://ftp.ensembl.org/pub/release-115/fasta/caenorhabditis_elegans/dna/Caenorhabditis_elegans.WBcel235.dna.toplevel.fa.gz).  Place it in the index directory, decompress it, and rename the file to `ce.fa`
+You can download the C. elegans reference genome from Ensembl using the following link:  [C. elegans genome](https://ftp.ensembl.org/pub/release-115/fasta/caenorhabditis_elegans/dna/Caenorhabditis_elegans.WBcel235.dna.toplevel.fa.gz).  Place it in the **genome_index** directory, decompress it, and rename the file to `ce.fa`
  
+
+## After Indexing (Bowtie2)
+
+```text
+chipseq_tutorial/
+├── fastq_raw/
+│   └── ...
+├── fastq_cleaned/                ← Fastp cleaned reads
+│   └── ...
+├── fastp_reports/
+│   └── ...
+├── genome_index/           ← Bowtie2 index files
+│   ├── ce_index.1.bt2
+│   ├── ce_index.2.bt2
+│   ├── ce_index.3.bt2
+│   ├── ce_index.4.bt2
+│   ├── ce_index.rev.1.bt2
+│   └── ce_index.rev.2.bt2
+└── sample_id.txt
+```
+
+
 
 ### Step 2: Single Sample Alignment
 
 We use a "Pipe" (`|`) to connect two tools: `bowtie2` aligns the data, and `samtools` sorts it immediately.
 
-**Why Sort?** A puzzle is useless if the pieces are in random order. We sort them by chromosome location (Left to Right) so we can look at them later.
+**Why Sort?** A puzzle is useless if the pieces are in random order. We sort them by chromosome location (Left to Right) so we can look at them later. And we are working on clean pieces **(fastq files in the fastq_cleaned folder)** for alignment 
 
 **Run Bowtie2 alignment for paired end (R1 and R2) sample**
 ```bash
 mkdir -p bowalign
 
-bowtie2 -x  index/ce_index  \                  # 1. The Reference Map
-  -1 fastq_cleaned/Sample1_R1.clean.fastq.gz \       # 2. Input Read 1
-  -2 fastq_cleaned/Sample1_R2.clean.fastq.gz \       # 3. Input Read 2
+bowtie2 -x  genome_index/ce_index  \                  # 1. The Reference Map
+  -1 fastq_cleaned/Sample1_R1.clean.fastq.gz \       # 2. Input Read 1 assume - SRR7297994_R1.clean.fastq.gz
+  -2 fastq_cleaned/Sample1_R2.clean.fastq.gz \       # 3. Input Read 2 - SRR7297994_R2.clean.fastq.gz
   -p 6 --no-unal \                       # 4. Use 6 threads,  `--no-unal` — suppresses unaligned reads in the output.
   2> bowalign/Sample1.log |              # 5. Save the log file...
   samtools sort -@ 6 -o bowalign/Sample1.sorted.bam  # 6. ...and sort the result!
@@ -49,8 +71,8 @@ bowtie2 -x  index/ce_index  \                  # 1. The Reference Map
 
 ```
 # Run Bowtie2 alignment for a single sample
-bowtie2 -x index/ce_index \
-  -u trim/Sample1.clean.fq.gz \
+bowtie2 -x genome_index/ce_index \
+  -u fastq_cleaned/SRR7297994.clean.fastq.gz \
   -p 6 --no-unal \
   2> bowalign/Sample1.log | samtools sort -@ 6 -o bowalign/Sample1.sorted.bam
 
@@ -69,9 +91,9 @@ After running this step, your directory should look like:
 ```
 
 bowalign/
- ├── Sample1.log
- ├── Sample1.sorted.bam
- └── Sample1.sorted.bam.bai
+ ├── SRR7297994.log
+ ├── SRR7297994.sorted.bam
+ └── SRR7297994.sorted.bam.bai
 ```
 
 Once this single run completes successfully, you can confidently automate for all samples.
@@ -79,25 +101,24 @@ Once this single run completes successfully, you can confidently automate for al
 
 ### Step 3: Automation Loop 
 
-Through [Sample list section](https://github.com/ishaaq34/Chipseq_analysis_tutorial/blob/main/src/03_sample_list_creation.md#ready-for-use) ,  Here is the script to run this for all your samples:
+Through [Sample list section](https://github.com/ishaaq34/Chipseq_analysis_tutorial/blob/main/src/03_sample_list_creation.md#ready-for-use) ,  here is the script to run this for all your samples:
 
 ```
 #!/bin/bash
 set -euo pipefail
 
-OUTDIR="bowalign"
-THREADS=6
+mkdir -p bowalign bowalign_log
 
-mkdir -p "$OUTDIR"
 
 while read -r sample; do
   echo "Aligning $sample"
 
-  bowtie2 -x index/ce_index \
+  bowtie2 -x genome_index/ce_index \
     -1 fastq_cleaned/${sample}_R1.clean.fq.gz" \
     -2 fastq_cleaned/${sample}_R2.clean.fq.gz" \
-    -p "$THREADS" --no-unal \
-  | samtools sort -@ "$THREADS" -o "${OUTDIR}/${sample}.sorted.bam"
+    -p 6 --no-unal \
+    2> bowalign_log/${sample}.bowtie2.log"
+  | samtools sort -@ 6 -o bowalign/${sample}.sorted.bam"
 
   samtools index "${OUTDIR}/${sample}.sorted.bam"
 
@@ -129,13 +150,17 @@ You have a limited number of CPU cores (computers brains). You can use them in t
 **Example with GNU Parallel**:
 
 ```
+#!/bin/bash
+set -euo pipefail
+mkdir -p bowalign bowalign_log
+
 cat sample_id.txt | parallel -j 3 '                     # -j 3 → runs 3 samples (jobs) in parallel
 
-  bowtie2 -x index/ce_index \
+  bowtie2 -x genome_index/ce_index \
     -1 fastq_cleaned/${sample}_R1.clean.fq.gz  \
     -2 fastq_cleaned/${sample}_R2.clean.fq.gz  \
     -p 4 --no-unal \                                   # -p 4 → bowtie2 uses 4 CPU threads per sample
-    2> bowalign/{}.log | samtools sort -@ 2 \           # -@ 2 → samtools sort uses 2 CPU threads per sample
+    2>  bowalign_log/{}.log | samtools sort -@ 2 \           # -@ 2 → samtools sort uses 2 CPU threads per sample
     -o bowalign/{}.sorted.bam
 
   samtools index bowalign/{}.sorted.bam                 # samtools index is single-threaded
@@ -150,6 +175,42 @@ Effective CPU usage (implied by this setup)
 - Total at once: 3 parallel jobs × 6 threads = 18 CPU threads
 
 - Adjust based on available CPU cores and memory.
+
+
+## After Alignment (Bowtie2)
+
+```text
+chipseq_tutorial/
+├── fastq_fastq_raw/
+│   └── ...
+├── fastq_fastq_cleaned/
+│   └── ...
+├── fastp_reports/
+│   └── ...
+├── genome_index/
+│   └── ...
+├── bowalign/                ← Aligned BAM files
+│   ├── SRR7297994.sorted.bam
+│   ├── SRR7297994.sorted.bam.bai
+│   ├── SRR7297995.sorted.bam
+│   ├── SRR7297995.sorted.bam.bai
+│   ├── SRR7297998.sorted.bam
+│   ├── SRR7297998.sorted.bam.bai
+│   ├── SRR7298003.sorted.bam
+│   ├── SRR7298003.sorted.bam.bai
+│   └── ...
+├── bowalign_log/            ← Alignment statistics
+│   ├── SRR7297994.log
+│   ├── SRR7297995.log
+│   ├── SRR7297998.log
+│   ├── SRR7298003.log
+│   └── ...
+└── sample_id.txt
+```
+
+
+
+
 
 
 
@@ -170,3 +231,7 @@ samtools flagstat bowalign/Sample1.sorted.bam
 1.  **Analogy:** Alignment is placing puzzle pieces onto the reference picture.
 2.  **Action:** Use `bowtie2` to align and `samtools sort` to organize.
 3.  **Result:** A **Sorted BAM** file (the solved puzzle), ready for peak calling.
+
+
+
+
