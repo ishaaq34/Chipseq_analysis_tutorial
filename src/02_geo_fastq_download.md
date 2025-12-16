@@ -159,17 +159,14 @@ chipseq_tutorial/
 **Key Points:**
 - Original sequencing data is never modified
 - Each sample has paired-end reads (_R1 and _R2)
-- `sample_id.txt` contains clean sample names for automation
+- `srr_list.txt` (from now on `sample_id.txt`) contains clean sample names for automation
 
 ---
-
-
-
-
-
-
 
 ## Summary
 1.  **Understand:** GEO is for metadata; SRA/ENA is for data.
 2.  **Identify:** Find the **SRR** (Run) IDs for your samples.
 3.  **Download:** Use `fastq-dl` with a loop or parallel command to fetch the FASTQ files.
+
+>[!NOTE]
+> **The FASTQ files are now available. We proceed with read inspection, quality control, and trimming as required**.
