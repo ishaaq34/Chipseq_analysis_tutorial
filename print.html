@@ -37,7 +37,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-dbab5834.js";
+            window.path_to_searchindex_js = "searchindex-012d504f.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-19a046d9.js"></script>
@@ -740,151 +740,7 @@ This simple text file (<code>sample_id.txt</code>) acts as a “roll call” or 
 <p><strong>Next steps:</strong></p>
 <p>In the following tutorials, you’ll use this sample list to automate quality control, alignment, peak calling, and visualization for your ChIP-seq experiment.</p>
 <div style="break-before: page; page-break-before: always;"></div>
-<h1 id="02-getting-the-raw-data-fastq"><a class="header" href="#02-getting-the-raw-data-fastq">02: Getting the Raw Data (FASTQ)</a></h1>
-<blockquote class="blockquote-tag blockquote-tag-note">
-<p class="blockquote-tag-title"><svg viewbox="0 0 16 16" width="18" height="18"><path d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8Zm8-6.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13ZM6.5 7.75A.75.75 0 0 1 7.25 7h1a.75.75 0 0 1 .75.75v2.75h.25a.75.75 0 0 1 0 1.5h-2a.75.75 0 0 1 0-1.5h.25v-2h-.25a.75.75 0 0 1-.75-.75ZM8 6a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z"></path></svg>Note</p>
-<p><strong>Reminder:</strong> While this tutorial teaches you how to download data from SRA .Our focuss is on <a href="https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE115704#:~:text=GEO%20Accession%20viewer&amp;text=GEO%20help:%20Mouse%20over%20screen%20elements%20for%20information.&amp;text=Here%20we%20report%20that%20the,a%20sperm%2Dspecific%20chromatin%20signature">SRA data</a>. The <code>fastq-dl</code> tool is excellent for public SRA data.</p>
-</blockquote>
-<p>Complete information for all sequencing runs associated with this repository is available through the <a href="https://www.ncbi.nlm.nih.gov/Traces/study/?acc=PRJNA475794&amp;o=acc_s%3Aa">NCBI SRA Run Selector (PRJNA475794)</a>. The Run Selector provides an interactive interface to inspect sequencing metadata, including library layout, platform, read length, and experimental design.</p>
-<p>From this interface, you can download the full metadata table as well as a plain accession list containing the SRR identifiers. The accession list can be saved as <code>srr_list.txt</code> and used directly for automated data retrieval. Unwanted runs can be removed from this file before download, allowing precise control over which datasets are processed.</p>
-<h2 id="level-1-basic-concept"><a class="header" href="#level-1-basic-concept">Level 1: Basic Concept</a></h2>
-<h3 id="the-library-analogy"><a class="header" href="#the-library-analogy">The “Library” Analogy</a></h3>
-<p>Before we download anything, it helps to understand where the data lives. Think of the public databases like a University Library.</p>
-<ul>
-<li><strong>GEO (Gene Expression Omnibus):</strong> This is the <strong>Card Catalog</strong>. It has the descriptions (Metadata) of the experiments—like “H3K27ac in Breast Cancer”—but it usually doesn’t hold the actual heavy books (data files).</li>
-<li><strong>SRA (Sequence Read Archive) &amp; ENA (European Nucleotide Archive):</strong> These are the <strong>Stacks</strong>. This is where the actual raw data files are stored.</li>
-</ul>
-<p><strong>Your Goal:</strong> You find an interesting study in the Catalog (GEO), get its ID, and then send a runner (our software tool) to the Stacks (SRA/ENA) to fetch the files.</p>
-<h3 id="the-files-you-will-encounter"><a class="header" href="#the-files-you-will-encounter">The Files You Will Encounter</a></h3>
-<p>As we process data, we change formats. Think of it like this:</p>
-<ol>
-<li><strong>FASTQ (Raw Reads):</strong> The jumbled words. This is what comes off the sequencer. It’s just millions of short strings of letters (A, C, G, T) with no context.</li>
-<li><strong>BAM (Aligned Reads):</strong> The assembled sentences. We map the words to a reference genome so we know where they belong.</li>
-<li><strong>BED/BigWig (Signals):</strong> The highlighted passages. These are simplified files that show us where the interesting “peaks” (protein binding sites) are.</li>
-</ol>
-<hr>
-<h2 id="level-2-fetching-the-data"><a class="header" href="#level-2-fetching-the-data">Level 2: Fetching the data</a></h2>
-<p>To download data, we use a tool called <a href="https://github.com/rpetit3/fastq-dl">fastq-dl</a>. It acts like a smart librarian—you just give it the ID number, and it deals with the complicated databases for you.</p>
-<h3 id="21-download-a-single-sample"><a class="header" href="#21-download-a-single-sample">2.1 Download a Single Sample</a></h3>
-<p>If you have a Run ID (starts with <strong>SRR</strong> or <strong>ERR</strong>), use this command:</p>
-<pre><code class="language-bash"># Download one sample from SRA
-fastq-dl --accession SRR7297994 --provider SRA --cpus 4
-
-# Or from ENA (often faster/more reliable)
-fastq-dl --accession SRR7297994 --provider ena
-</code></pre>
-<h3 id="22-download-multiple-samples-the-loop"><a class="header" href="#22-download-multiple-samples-the-loop">2.2 Download Multiple Samples (The Loop)</a></h3>
-<p>Usually, you need to download many samples. Instead of typing the command 10 times, we put the IDs in a list.</p>
-<ol>
-<li>
-<p>Create a file named <code>srr_list.txt</code> with one ID per line:</p>
-<pre><code class="language-text">SRR7297994
-SRR7297995
-SRR7297998
-SRR7298003
-</code></pre>
-</li>
-<li>
-<p>Run this “Loop” to download them one by one:</p>
-</li>
-</ol>
-<pre><code>#!/bin/bash
-set -euo pipefail
-
-RAW_DIR="fastq_raw"
-mkdir -p "$RAW_DIR"
-
-while read -r acc; do
-  echo "Downloading accession: $acc"
-
-  fastq-dl \
-    --accession "$acc" \
-    --provider SRA \
-    --cpus 1 \
-    --outdir "$RAW_DIR"
-
-  echo "Finished downloading: $acc"
-done &lt; srr_list.txt
-
-</code></pre>
-<h3 id="23-parallel-download-the-fast-way"><a class="header" href="#23-parallel-download-the-fast-way">2.3 Parallel Download (The Fast Way)</a></h3>
-<p>If you have a powerful computer, you can download multiple files at the same time using <code>parallel</code>.</p>
-<pre><code>#!/bin/bash
-set -euo pipefail
-
-mkdir -p fastq_raw
-
-parallel -j 4 \
-  'fastq-dl --accession {} --provider SRA --cpus 1 --outdir fastq_raw' \
-  :::: srr_list.txt
-
-</code></pre>
-<p>Adding echos to remain updated about what is going on!!</p>
-<pre><code>#!/bin/bash
-set -euo pipefail
-
-mkdir -p fastq_raw
-
-parallel -j 4 \
-  'echo "Starting download: {}" &amp;&amp;
-   fastq-dl --accession {} --provider SRA --cpus 1 --outdir fastq_raw &amp;&amp;
-   echo "Finished download: {}"' \
-  :::: srr_list.txt
-</code></pre>
-<h3 id="24-download-an-entire-study"><a class="header" href="#24-download-an-entire-study">2.4 Download an Entire Study</a></h3>
-<p>You can also download everything associated with a study ID (starts with <strong>SRP</strong> or <strong>PRJNA</strong>):</p>
-<pre><code class="language-bash">fastq-dl --accession SRP115709
-</code></pre>
-<p><em>Note: Be careful! A whole study might have hundreds of files.</em></p>
-<hr>
-<h3 id="connecting-geo-to-sra"><a class="header" href="#connecting-geo-to-sra">Connecting GEO to SRA</a></h3>
-<p>How do we find the <strong>SRR</strong> numbers?
-In GEO, you will see a hierarchy. It’s important not to mix these up:</p>
-<div class="table-wrapper">
-<table>
-<thead>
-<tr><th style="text-align: left">Level</th><th style="text-align: left">Prefix (SRA / ENA)</th><th style="text-align: left">What It Is</th></tr>
-</thead>
-<tbody>
-<tr><td style="text-align: left"><strong>Project</strong></td><td style="text-align: left">PRJNA / PRJEB</td><td style="text-align: left">The umbrella project (e.g., “Breast Cancer Epigenomics 2024”).</td></tr>
-<tr><td style="text-align: left"><strong>Study</strong></td><td style="text-align: left">SRP / ERP</td><td style="text-align: left">A specific paper or dataset.</td></tr>
-<tr><td style="text-align: left"><strong>Sample</strong></td><td style="text-align: left">SRS / ERS</td><td style="text-align: left">The biological sample (e.g., “Patient 5 Tumor”).</td></tr>
-<tr><td style="text-align: left"><strong>Experiment</strong></td><td style="text-align: left">SRX / ERX</td><td style="text-align: left">The library prep info.</td></tr>
-<tr><td style="text-align: left"><strong>Run</strong></td><td style="text-align: left"><strong>SRR / ERR</strong></td><td style="text-align: left"><strong>The actual data.</strong> This is what you download.</td></tr>
-</tbody>
-</table>
-</div>
-<h3 id="technical-replicates-multi-lane"><a class="header" href="#technical-replicates-multi-lane">Technical Replicates (Multi-lane)</a></h3>
-<p>Sometimes, one biological sample is sequenced across multiple “lanes” of a machine to get more reads.</p>
-<ul>
-<li><strong>Result:</strong> You might see <code>SRR900100</code> and <code>SRR900101</code> for the <em>same</em> sample.</li>
-<li><strong>Action:</strong> <code>fastq-dl</code> will download them. Later, we will merge these FASTQ files together so we have one big file for that sample.</li>
-</ul>
-<hr>
-<h3 id="after-downloading-fastq-files"><a class="header" href="#after-downloading-fastq-files">After Downloading FASTQ Files</a></h3>
-<pre><code class="language-text">chipseq_tutorial/
-├── raw/                    ← Raw FASTQ files from sequencing : You can rename them like using condition, IP , replicate : Ctrl_H3k9ac_Rep1
-│   ├── SRR7297994.fastq.gz
-│   ├── SRR7297995.fastq.gz
-│   ├── SRR7297998.fastq.gz
-│   ├── SRR7298003.fastq.gz
-│   └── ...
-└── srr_list.txt          ← Sample list for automation
-
-</code></pre>
-<p><strong>Key Points:</strong></p>
-<ul>
-<li>Original sequencing data is never modified</li>
-<li>Each sample has paired-end reads (_R1 and _R2)</li>
-<li><code>sample_id.txt</code> contains clean sample names for automation</li>
-</ul>
-<hr>
-<h2 id="summary-2"><a class="header" href="#summary-2">Summary</a></h2>
-<ol>
-<li><strong>Understand:</strong> GEO is for metadata; SRA/ENA is for data.</li>
-<li><strong>Identify:</strong> Find the <strong>SRR</strong> (Run) IDs for your samples.</li>
-<li><strong>Download:</strong> Use <code>fastq-dl</code> with a loop or parallel command to fetch the FASTQ files.</li>
-</ol>
+<h1 id="geo-fastq-download"><a class="header" href="#geo-fastq-download">GEO Fastq Download</a></h1>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="tutorial-02-creating-a-sample-list-the-attendance-sheet"><a class="header" href="#tutorial-02-creating-a-sample-list-the-attendance-sheet">Tutorial 02: Creating a Sample List (The “Attendance Sheet”)</a></h1>
 <blockquote class="blockquote-tag blockquote-tag-note">
@@ -972,7 +828,7 @@ paired end:  Control_A_H3K9ac_R1.fastq.gz  :  Control_A_H3K9ac_R2.fastq.gz
 sample_id: Control_B_H3K9ac
 paired end:    Control_B_H3K9ac_R1.fastq.gz  :  Control_B_H3K9ac_R2.fastq.gz
 </code></pre>
-<h2 id="summary-3"><a class="header" href="#summary-3">Summary</a></h2>
+<h2 id="summary-2"><a class="header" href="#summary-2">Summary</a></h2>
 <ol>
 <li><strong>Goal:</strong> Create a clean list of sample names (<code>sample_id.txt</code>).</li>
 <li><strong>Tool:</strong> Use <code>ls</code> to find files and <code>sed</code> to remove extensions.</li>
@@ -1048,7 +904,7 @@ This sets the batch size. The script will process 3 files at a time.</p>
 This sets the number of threads used for each task. Here each file is processed with 2 threads.</p>
 <p>This automatically finds pairs and generates HTML reports for every sample.</p>
 <hr>
-<h2 id="summary-4"><a class="header" href="#summary-4">Summary</a></h2>
+<h2 id="summary-3"><a class="header" href="#summary-3">Summary</a></h2>
 <ol>
 <li><strong>Understand:</strong> FASTQ files have 4 lines per read; line 4 is the quality score.</li>
 <li><strong>Action:</strong> Always run <code>fastp</code> to trim adapters, low-quality bases, and too-short reads.</li>
@@ -1180,7 +1036,7 @@ done
 <li><strong>Properly Paired:</strong> Ideally <strong>high</strong>. This means R1 and R2 pointed towards each other at the correct distance.</li>
 </ul>
 <hr>
-<h2 id="summary-5"><a class="header" href="#summary-5">Summary</a></h2>
+<h2 id="summary-4"><a class="header" href="#summary-4">Summary</a></h2>
 <ol>
 <li><strong>Analogy:</strong> Alignment is placing puzzle pieces onto the reference picture.</li>
 <li><strong>Action:</strong> Use <code>bowtie2</code> to align and <code>samtools sort</code> to organize.</li>
@@ -1383,7 +1239,7 @@ uniq -c QC_results/Sample1.read5.bed \
 </div>
 <p><strong>Lesson:</strong> Don’t panic if your raw NRF is low. Remove duplicates first, then check again.</p>
 <hr>
-<h2 id="summary-6"><a class="header" href="#summary-6">Summary</a></h2>
+<h2 id="summary-5"><a class="header" href="#summary-5">Summary</a></h2>
 <ol>
 <li><strong>Goal:</strong> Ensure we have many unique DNA fragments (High Complexity).</li>
 <li><strong>Action:</strong> Run the NRF/PBC calculation script.</li>
@@ -1523,7 +1379,7 @@ The aligner doesn’t know which spot is correct, so it gives it a <strong>Low M
 </code></pre>
 <p><em>Verdict: This BAM file contains only uniquely mapped, high-quality reads.</em></p>
 <hr>
-<h2 id="summary-7"><a class="header" href="#summary-7">Summary</a></h2>
+<h2 id="summary-6"><a class="header" href="#summary-6">Summary</a></h2>
 <ol>
 <li><strong>Context:</strong> We are analyzing active/repressed marks in BLaER1 cells.</li>
 <li><strong>Files:</strong> BAMs are compressed alignment maps.</li>
@@ -1649,7 +1505,7 @@ Rscript /opt/anaconda3/envs/chip/bin/run_spp.R \
 </li>
 </ul>
 <hr>
-<h2 id="summary-8"><a class="header" href="#summary-8">Summary</a></h2>
+<h2 id="summary-7"><a class="header" href="#summary-7">Summary</a></h2>
 <ol>
 <li><strong>Cross-Correlation</strong> shifts reads to find the fragment length (The Echo).</li>
 <li><strong>Phantom Peak</strong> is a background artifact at read length (Microphone Feedback).</li>
@@ -1772,7 +1628,7 @@ Zooming in reveals the difference. Input covers more of the genome at 1x depth, 
 </ul>
 <hr><img width="983" height="488" alt="Screenshot 2025-12-10 at 12 05 56 PM" src="https://github.com/user-attachments/assets/d2d785d1-4da3-4cc4-a3e0-1ee612ad3d38" />
 <hr>
-<h2 id="summary-9"><a class="header" href="#summary-9">Summary</a></h2>
+<h2 id="summary-8"><a class="header" href="#summary-8">Summary</a></h2>
 <ol>
 <li><strong>Fingerprint:</strong> Confirms your IP worked (Sharp elbow).</li>
 <li><strong>Coverage:</strong> Confirms sequencing depth (Inputs = broad, ChIP = peaky).</li>
@@ -2023,7 +1879,7 @@ You can choose different ways to normalize your data, depending on what you want
 </ol>
 <p>If you pick “None,” you see the raw, uncorrected coverage.</p>
 <hr>
-<h2 id="summary-10"><a class="header" href="#summary-10">Summary</a></h2>
+<h2 id="summary-9"><a class="header" href="#summary-9">Summary</a></h2>
 <ol>
 <li><strong>Format:</strong> Convert BAM (Raw Lists) to BigWig (Signal Tracks).</li>
 <li><strong>Calculation:</strong> Use <strong>Effective Genome Size</strong> to handle repeats correctly.</li>
