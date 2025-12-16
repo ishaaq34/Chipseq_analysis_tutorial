@@ -19,9 +19,13 @@ Before Bowtie2 can work, it needs to process the reference genome into a format 
 
 ```bash
 # Example syntax: bowtie2-build [genome.fa] [prefix_name]
-bowtie2-build hg38.fa hg38_index
+bowtie2-build index/ce.fa index/ce_index            # ce.fa = C. elegans reference genome
 ```
+
 *You only do this once!*
+
+You can download the C. elegans reference genome from Ensembl using the following link:  [C. elegans genome](https://ftp.ensembl.org/pub/release-115/fasta/caenorhabditis_elegans/dna/Caenorhabditis_elegans.WBcel235.dna.toplevel.fa.gz).  Place it in the index directory, decompress it, and rename the file to `ce.fa`
+ 
 
 ### Step 2: Single Sample Alignment
 
@@ -33,9 +37,9 @@ We use a "Pipe" (`|`) to connect two tools: `bowtie2` aligns the data, and `samt
 ```bash
 mkdir -p bowalign
 
-bowtie2 -x hg38_index \                  # 1. The Reference Map
-  -1 trim/Sample1_R1.clean.fq.gz \       # 2. Input Read 1
-  -2 trim/Sample1_R2.clean.fq.gz \       # 3. Input Read 2
+bowtie2 -x  index/ce_index  \                  # 1. The Reference Map
+  -1 fastq_cleaned/Sample1_R1.clean.fastq.gz \       # 2. Input Read 1
+  -2 fastq_cleaned/Sample1_R2.clean.fastq.gz \       # 3. Input Read 2
   -p 6 --no-unal \                       # 4. Use 6 threads,  `--no-unal` — suppresses unaligned reads in the output.
   2> bowalign/Sample1.log |              # 5. Save the log file...
   samtools sort -@ 6 -o bowalign/Sample1.sorted.bam  # 6. ...and sort the result!
@@ -45,7 +49,7 @@ bowtie2 -x hg38_index \                  # 1. The Reference Map
 
 ```
 # Run Bowtie2 alignment for a single sample
-bowtie2 -x hg38_index \
+bowtie2 -x index/ce_index \
   -u trim/Sample1.clean.fq.gz \
   -p 6 --no-unal \
   2> bowalign/Sample1.log | samtools sort -@ 6 -o bowalign/Sample1.sorted.bam
@@ -77,22 +81,28 @@ Once this single run completes successfully, you can confidently automate for al
 
 Through [Sample list section](https://github.com/ishaaq34/Chipseq_analysis_tutorial/blob/main/src/03_sample_list_creation.md#ready-for-use) ,  Here is the script to run this for all your samples:
 
-```bash
+```
 #!/bin/bash
-mkdir -p bowalign
+set -euo pipefail
 
-# Loop through every ID in our "Attendance Sheet"
-for sample in $(cat sample_id.txt); do
-  echo "Aligning $sample..."
-  
-  bowtie2 -x hg38_index \
-    -1 trim/${sample}_R1.clean.fq.gz \
-    -2 trim/${sample}_R2.clean.fq.gz \
-    -p 6 --no-unal \
-    2> bowalign/${sample}.log | samtools sort -@ 6 -o bowalign/${sample}.sorted.bam
+OUTDIR="bowalign"
+THREADS=6
 
-  samtools index bowalign/${sample}.sorted.bam
-done
+mkdir -p "$OUTDIR"
+
+while read -r sample; do
+  echo "Aligning $sample"
+
+  bowtie2 -x index/ce_index \
+    -1 fastq_cleaned/${sample}_R1.clean.fq.gz" \
+    -2 fastq_cleaned/${sample}_R2.clean.fq.gz" \
+    -p "$THREADS" --no-unal \
+  | samtools sort -@ "$THREADS" -o "${OUTDIR}/${sample}.sorted.bam"
+
+  samtools index "${OUTDIR}/${sample}.sorted.bam"
+
+done < sample_id.txt
+
 ```
 
 ---
@@ -121,9 +131,9 @@ You have a limited number of CPU cores (computers brains). You can use them in t
 ```
 cat sample_id.txt | parallel -j 3 '                     # -j 3 → runs 3 samples (jobs) in parallel
 
-  bowtie2 -x hg38_index \
-    -1 trim/${sample}_R1.clean.fq.gz  \
-    -2 trim/${sample}_R2.clean.fq.gz  \
+  bowtie2 -x index/ce_index \
+    -1 fastq_cleaned/${sample}_R1.clean.fq.gz  \
+    -2 fastq_cleaned/${sample}_R2.clean.fq.gz  \
     -p 4 --no-unal \                                   # -p 4 → bowtie2 uses 4 CPU threads per sample
     2> bowalign/{}.log | samtools sort -@ 2 \           # -@ 2 → samtools sort uses 2 CPU threads per sample
     -o bowalign/{}.sorted.bam
