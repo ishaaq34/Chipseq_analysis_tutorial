@@ -1,0 +1,621 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Bash Automation - ChIP-seq Analysis Tutorial </title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon-de23e50b.svg">
+        <link rel="shortcut icon" href="favicon-8114d1fc.png">
+        <link rel="stylesheet" href="css/variables-8adf115d.css">
+        <link rel="stylesheet" href="css/general-2459343d.css">
+        <link rel="stylesheet" href="css/chrome-ae938929.css">
+        <link rel="stylesheet" href="css/print-9e4910d8.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="fonts/fonts-9644e21d.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="mdbook-highlight-css" href="highlight-493f70e1.css">
+        <link rel="stylesheet" id="mdbook-tomorrow-night-css" href="tomorrow-night-4c0ae647.css">
+        <link rel="stylesheet" id="mdbook-ayu-highlight-css" href="ayu-highlight-3fdfc3ac.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="custom-7f17e3e7.css">
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+            window.path_to_searchindex_js = "searchindex-fabba4f9.js";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc-19a046d9.js"></script>
+    </head>
+    <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>S</kbd> or <kbd>/</kbd> to search in the book</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
+    <div id="mdbook-body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="mdbook-sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("mdbook-sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+                sidebar_toggle.checked = false;
+            }
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
+        </script>
+
+        <nav id="mdbook-sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="mdbook-sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="mdbook-page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="mdbook-menu-bar-hover-placeholder"></div>
+                <div id="mdbook-menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="mdbook-sidebar-toggle" class="icon-button" for="mdbook-sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="mdbook-sidebar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M0 96C0 78.3 14.3 64 32 64H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H416c17.7 0 32 14.3 32 32z"/></svg></span>
+                        </label>
+                        <button id="mdbook-theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="mdbook-theme-list">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M371.3 367.1c27.3-3.9 51.9-19.4 67.2-42.9L600.2 74.1c12.6-19.5 9.4-45.3-7.6-61.2S549.7-4.4 531.1 9.6L294.4 187.2c-24 18-38.2 46.1-38.4 76.1L371.3 367.1zm-19.6 25.4l-116-104.4C175.9 290.3 128 339.6 128 400c0 3.9 .2 7.8 .6 11.6c1.8 17.5-10.2 36.4-27.8 36.4H96c-17.7 0-32 14.3-32 32s14.3 32 32 32H240c61.9 0 112-50.1 112-112c0-2.5-.1-5-.2-7.5z"/></svg></span>
+                        </button>
+                        <ul id="mdbook-theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-ayu">Ayu</button></li>
+                        </ul>
+                        <button id="mdbook-search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="mdbook-searchbar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352c79.5 0 144-64.5 144-144s-64.5-144-144-144S64 128.5 64 208s64.5 144 144 144z"/></svg></span>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">ChIP-seq Analysis Tutorial </h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <span class=fa-svg id="print-button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M128 0C92.7 0 64 28.7 64 64v96h64V64H354.7L384 93.3V160h64V93.3c0-17-6.7-33.3-18.7-45.3L400 18.7C388 6.7 371.7 0 354.7 0H128zM384 352v32 64H128V384 368 352H384zm64 32h32c17.7 0 32-14.3 32-32V256c0-35.3-28.7-64-64-64H64c-35.3 0-64 28.7-64 64v96c0 17.7 14.3 32 32 32H64v64c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V384zm-16-88c-13.3 0-24-10.7-24-24s10.7-24 24-24s24 10.7 24 24s-10.7 24-24 24z"/></svg></span>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="mdbook-search-wrapper" class="hidden">
+                    <form id="mdbook-searchbar-outer" class="searchbar-outer">
+                        <div class="search-wrapper">
+                            <input type="search" id="mdbook-searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="mdbook-searchresults-outer" aria-describedby="searchresults-header">
+                            <div class="spinner-wrapper">
+                                <span class=fa-svg id="fa-spin"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M304 48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zm0 416c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM48 304c26.5 0 48-21.5 48-48s-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48zm464-48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM142.9 437c18.7-18.7 18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zm0-294.2c18.7-18.7 18.7-49.1 0-67.9S93.7 56.2 75 75s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zM369.1 437c18.7 18.7 49.1 18.7 67.9 0s18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9z"/></svg></span>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="mdbook-searchresults-outer" class="searchresults-outer hidden">
+                        <div id="mdbook-searchresults-header" class="searchresults-header"></div>
+                        <ul id="mdbook-searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('mdbook-sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('mdbook-sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#mdbook-sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="mdbook-content" class="content">
+                    <main>
+                        <h1 id="02-bash-automation-your-digital-robot"><a class="header" href="#02-bash-automation-your-digital-robot">02: Bash Automation (Your Digital Robot)</a></h1>
+<h2 id="introduction-why-learn-bash-for-bioinformatics"><a class="header" href="#introduction-why-learn-bash-for-bioinformatics">Introduction: Why Learn Bash for Bioinformatics?</a></h2>
+<p><strong>What is Bash?</strong></p>
+<p>Bash is a way to control a computer using text commands instead of clicking through menus. It lets you run programs, manage files, and automate tasks by writing simple commands or scripts.</p>
+<p><strong>Why is this essential for bioinformatics?</strong></p>
+<p>In bioinformatics, you work with large datasets and many specialized tools that must run in a specific sequence. Bash makes these workflows:</p>
+<ul>
+<li><strong>Repeatable:</strong> Run the same analysis on new data with one command</li>
+<li><strong>Transparent:</strong> See exactly what was done in plain text</li>
+<li><strong>Reliable:</strong> Less prone to manual errors from repetitive clicking</li>
+</ul>
+<p>Without Bash automation, analyses become harder to track, reproduce, and trust.</p>
+<hr>
+<h2 id="the-foundation-setting-up-safe-scripts"><a class="header" href="#the-foundation-setting-up-safe-scripts">The Foundation: Setting Up Safe Scripts</a></h2>
+<p>Every reliable Bash script should start with these two critical lines:</p>
+<pre><code class="language-bash">#!/bin/bash
+set -euo pipefail
+</code></pre>
+<p><strong>What do these lines do?</strong></p>
+<ol>
+<li>
+<p><strong><code>#!/bin/bash</code></strong> – This “shebang” line tells your computer to use the Bash shell. It ensures your script behaves the same way on any system.</p>
+</li>
+<li>
+<p><strong><code>set -euo pipefail</code></strong> – This changes Bash’s default behavior from “keep going even if something breaks” to “stop immediately when an error occurs.”</p>
+</li>
+</ol>
+<p>This single choice separates casual scripting from <strong>defensible scientific analysis</strong>. You want your script to fail loudly if something goes wrong, not silently produce incorrect results.</p>
+<p><strong>Adding practical elements:</strong></p>
+<pre><code class="language-bash">#!/bin/bash
+set -euo pipefail
+
+mkdir -p output
+echo "Script started"
+</code></pre>
+<ul>
+<li>
+<p><strong><code>mkdir -p output</code></strong> – Creates a directory called <code>output</code> if it doesn’t exist. The <code>-p</code> flag prevents errors if the directory is already there. This establishes a predictable place for your results.</p>
+</li>
+<li>
+<p><strong><code>echo "Script started"</code></strong> – Prints a message to confirm the script is running. This is helpful for logging and debugging, especially when scripts run unattended.</p>
+</li>
+</ul>
+<hr>
+<h2 id="the-big-picture-manual-vs-automated-analysis"><a class="header" href="#the-big-picture-manual-vs-automated-analysis">The Big Picture: Manual vs. Automated Analysis</a></h2>
+<p>Imagine you have a classroom with 100 students and need to process each student’s assignment.</p>
+<p><strong>Two approaches:</strong></p>
+<ol>
+<li>
+<p><strong>Manual Approach:</strong></p>
+<ul>
+<li>Type the command for Student 1</li>
+<li>Wait for it to finish</li>
+<li>Type for Student 2</li>
+<li>Wait again…</li>
+<li>Repeat 98 more times (takes days, prone to typos)</li>
+</ul>
+</li>
+<li>
+<p><strong>Automated Approach:</strong></p>
+<ul>
+<li>Write a small instruction sheet (a script)</li>
+<li>Give it to a “robot” (your computer)</li>
+<li>The robot processes all 100 students while you drink coffee</li>
+</ul>
+</li>
+</ol>
+<p>This tutorial teaches you the automated approach for ChIP-seq data.</p>
+<hr>
+<h2 id="part-1-understanding-sample-lists"><a class="header" href="#part-1-understanding-sample-lists">Part 1: Understanding Sample Lists</a></h2>
+<h3 id="the-roll-call-analogy"><a class="header" href="#the-roll-call-analogy">The “Roll Call” Analogy</a></h3>
+<p>Imagine grading 100 students. You don’t want to type <code>"Student_John_Doe_Homework_Final_v2.docx"</code> every single time. You just want a simple list:</p>
+<ul>
+<li>John</li>
+<li>Sarah</li>
+<li>Mike</li>
+</ul>
+<p>In bioinformatics, we feel the same way about our sequencing files.</p>
+<p><strong>The Problem:</strong></p>
+<p>Our sequencing files have long, complex names like:</p>
+<pre><code class="language-text">Control_A_H3K9ac_R1.fastq.gz
+Control_B_H3K9ac_R1.fastq.gz
+</code></pre>
+<p><strong>The Goal:</strong></p>
+<p>Create a clean list of sample IDs (like a “roll call”) that we can feed into automated scripts:</p>
+<pre><code class="language-text">Control_A_H3K9ac
+Control_B_H3K9ac
+
+</code></pre>
+<p><strong>Why do we need this?</strong></p>
+<p>This simple text file will allow our computer to automatically loop through every sample and process them one by one. Instead of typing commands 100 times, we type it once and let the loop do the work.</p>
+<hr>
+<h2 id="part-2-creating-your-sample-list"><a class="header" href="#part-2-creating-your-sample-list">Part 2: Creating Your Sample List</a></h2>
+<h3 id="step-1-verify-your-files"><a class="header" href="#step-1-verify-your-files">Step 1: Verify Your Files</a></h3>
+<p>Before creating any list, always check what files you actually have.</p>
+<pre><code class="language-bash">ls *.fastq.gz 
+</code></pre>
+<p><strong>What this does:</strong></p>
+<ul>
+<li><code>ls</code> = “list” command</li>
+<li><code>*.fastq.gz</code> = show only files ending in <code>.fastq.gz</code></li>
+</ul>
+<p>This explicitly targets FASTQ files and is useful at the very start of any sequencing workflow (RNA-seq, ChIP-seq, ATAC-seq, CUT&amp;RUN) to quickly verify that your input files are named correctly and consistently.</p>
+<hr>
+<h3 id="step-2-extract-clean-sample-names"><a class="header" href="#step-2-extract-clean-sample-names">Step 2: Extract Clean Sample Names</a></h3>
+<p>Now we need to remove the messy file extensions to get clean sample IDs. We’ll use a tool called <code>sed</code> (Stream Editor) for this.</p>
+<hr>
+<h4 id="scenario-a-single-end-reads"><a class="header" href="#scenario-a-single-end-reads">Scenario A: Single-End Reads</a></h4>
+<p>If you have <strong>single-end sequencing data</strong> , use this approach:</p>
+<h4 id="method-1-step-by-step"><a class="header" href="#method-1-step-by-step">Method 1: Step-by-step</a></h4>
+<p>This method breaks down the process into individual steps so you can see what’s happening at each stage.</p>
+<blockquote>
+<p><strong>Note:</strong> In real workflows, your FASTQ files are typically stored in a subdirectory like <code>raw/</code> or <code>fastq_raw/</code>. It is better to craete the sample list in the <code>raw/</code> folder and copy that list to working directory</p>
+</blockquote>
+<p><strong>Step 1: List all FASTQ files from the raw folder and save to a text file</strong></p>
+<pre><code class="language-bash">cd raw/
+ls *.fastq.gz &gt; samples.txt
+</code></pre>
+<p>This command finds all files ending in <code>.fastq.gz</code> inside the <code>raw/</code> folder and saves their names to <code>samples.txt</code>.</p>
+<p><strong>Step 2: Check what got saved</strong></p>
+<pre><code class="language-bash">cat samples.txt
+</code></pre>
+<p>This displays the contents of <code>samples.txt</code> so you can verify the filenames. You should see:</p>
+<pre><code class="language-text">Control_A_H3K9ac.fastq.gz
+Control_B_H3K9ac.fastq.gz
+</code></pre>
+<p><strong>Step 3: Remove the path and <code>.fastq.gz</code> extension from each line</strong></p>
+<pre><code class="language-bash">sed 's/.fastq.gz//' &gt; sample_id.txt
+</code></pre>
+<p><strong>What this does:</strong></p>
+<ul>
+<li>Second <code>sed 's/.fastq.gz//'</code> = Remove the <code>.fastq.gz</code> extension</li>
+<li><code>&gt;</code> = Redirect the final output to a new file</li>
+<li><code>sample_id.txt</code> = Save the cleaned names here</li>
+</ul>
+<p><strong>Step 4: Verify the final result</strong></p>
+<pre><code class="language-bash">cat sample_id.txt
+</code></pre>
+<p>Now you should see clean sample IDs without paths or extensions:</p>
+<pre><code class="language-text">Control_A_H3K9ac
+Control_B_H3K9ac
+</code></pre>
+<hr>
+<h4 id="method-2-one-line-command-recommended"><a class="header" href="#method-2-one-line-command-recommended">Method 2: One-line command (recommended)</a></h4>
+<p>Once you understand the steps above, you can combine them into one efficient command:</p>
+<pre><code class="language-bash">ls *.fastq.gz |  sed 's/.fastq.gz//' &gt; sample_id.txt
+</code></pre>
+<p><strong>What the pipe (<code>|</code>) does:</strong></p>
+<p>Instead of saving to intermediate files, the pipe passes output directly from one command to the next:</p>
+<ol>
+<li><code>ls *.fastq.gz</code> lists the files</li>
+<li><code>sed</code> removes the <code>.fastq.gz</code> extension</li>
+<li>Final result is saved to <code>sample_id.txt</code></li>
+</ol>
+<p>This is faster and cleaner than the step-by-step method.  Then moving the sample_id.txt to working directory.</p>
+<pre><code>cd ..
+mv raw/sample_id.txt .
+
+</code></pre>
+<p><strong>Check your result:</strong></p>
+<pre><code class="language-bash">cat sample_id.txt
+</code></pre>
+<p>You should see clean sample names:</p>
+<pre><code class="language-text">Control_A_H3K9ac
+Control_B_H3K9ac
+</code></pre>
+<hr>
+<h4 id="scenario-b-paired-end-reads-most-common"><a class="header" href="#scenario-b-paired-end-reads-most-common">Scenario B: Paired-End Reads (Most Common)</a></h4>
+<p>Most ChIP-seq experiments use <strong>paired-end sequencing</strong>, which produces <em>two</em> files per sample:</p>
+<pre><code class="language-text">Control_A_H3K9ac_R1.fastq.gz
+Control_A_H3K9ac_R2.fastq.gz
+Control_B_H3K9ac_R1.fastq.gz
+Control_B_H3K9ac_R2.fastq.gz
+</code></pre>
+<p><strong>The challenge:</strong> We don’t want <code>Control_A_H3K9ac</code> to appear twice in our list. We only want each sample name <em>once</em>.</p>
+<p><strong>The solution:</strong> Target only the <code>_R1</code> files.</p>
+<pre><code class="language-bash">ls *_R1.fastq.gz | sed 's/_R1.fastq.gz//' &gt; sample_id.txt
+</code></pre>
+<p><strong>Why look for R1?</strong></p>
+<p>By listing only the <code>_R1</code> files, we get exactly one entry per sample. We then strip off the <code>_R1.fastq.gz</code> suffix to get the clean sample name.</p>
+<p>The script will automatically know to look for both <code>_R1</code> and <code>_R2</code> files later when we use this list.</p>
+<hr>
+<h3 id="why-not-create-the-list-manually"><a class="header" href="#why-not-create-the-list-manually">Why Not Create the List Manually?</a></h3>
+<p>You <em>could</em> just type sample names into a text file yourself. However:</p>
+<ul>
+<li><strong>Prone to typos:</strong> One wrong character breaks your analysis</li>
+<li><strong>Not verifiable:</strong> Using <code>ls</code> ensures you only list files that actually exist</li>
+</ul>
+<p>Automation prevents these errors.</p>
+<hr>
+<h2 id="part-3-using-your-sample-list-in-automation"><a class="header" href="#part-3-using-your-sample-list-in-automation">Part 3: Using Your Sample List in Automation</a></h2>
+<p>Now that we have <code>sample_id.txt</code>, we can use it to automate processing of all samples.</p>
+<h3 id="understanding-the-concept"><a class="header" href="#understanding-the-concept">Understanding the Concept</a></h3>
+<p>Since we know the sample ID (e.g., <code>Control_A_H3K9ac</code>), we can tell our script:</p>
+<blockquote>
+<p>“For each sample ID, look for two files: the sample name plus <code>_R1.fastq.gz</code> and the sample name plus <code>_R2.fastq.gz</code>”</p>
+</blockquote>
+<p>The computer can construct these filenames automatically.</p>
+<hr>
+<h3 id="example-1-basic-loop-to-verify-file-pairs"><a class="header" href="#example-1-basic-loop-to-verify-file-pairs">Example 1: Basic Loop to Verify File Pairs</a></h3>
+<p>This script reads your sample list and prints out the paired filenames:</p>
+<pre><code class="language-bash">#!/bin/bash
+set -euo pipefail
+
+while read -r sample; do
+  echo "sample_id: $sample"
+
+  fq1="${sample}_R1.fastq.gz"
+  fq2="${sample}_R2.fastq.gz"
+
+  echo "paired end: $fq1 : $fq2"
+done &lt; sample_id.txt
+</code></pre>
+<p><strong>Output:</strong></p>
+<pre><code class="language-text">sample_id: Control_A_H3K9ac
+paired end:  Control_A_H3K9ac_R1.fastq.gz  :  Control_A_H3K9ac_R2.fastq.gz
+
+sample_id: Control_B_H3K9ac
+paired end:    Control_B_H3K9ac_R1.fastq.gz  :  Control_B_H3K9ac_R2.fastq.gz
+</code></pre>
+<p><strong>What this script does:</strong></p>
+<ul>
+<li><code>while read -r sample</code> – Reads one line (sample ID) at a time from <code>sample_id.txt</code></li>
+<li><code>fq1="${sample}_R1.fastq.gz"</code> – Constructs the forward read filename</li>
+<li><code>fq2="${sample}_R2.fastq.gz"</code> – Constructs the reverse read filename</li>
+<li><code>echo</code> – Prints the results so you can verify</li>
+</ul>
+<hr>
+<h3 id="example-2-adding-directory-paths"><a class="header" href="#example-2-adding-directory-paths">Example 2: Adding Directory Paths</a></h3>
+<p>In real workflows, your raw FASTQ files are usually in a specific folder. Let’s account for that:</p>
+<pre><code class="language-bash">#!/bin/bash
+set -euo pipefail
+
+RAW_DIR="fastq_raw"
+
+while read -r sample; do
+  echo "sample_id: $sample"
+
+  fq1="${RAW_DIR}/${sample}_R1.fastq.gz"
+  fq2="${RAW_DIR}/${sample}_R2.fastq.gz"
+
+  echo "inputs:"
+  echo "  $fq1"
+  echo "  $fq2"
+
+done &lt; sample_id.txt
+</code></pre>
+<p><strong>Output:</strong></p>
+<pre><code class="language-text">sample_id: Control_A_H3K9ac
+inputs:
+  fastq_raw/Control_A_H3K9ac_R1.fastq.gz
+  fastq_raw/Control_A_H3K9ac_R2.fastq.gz
+
+sample_id: Control_B_H3K9ac
+inputs:
+  fastq_raw/Control_B_H3K9ac_R1.fastq.gz
+  fastq_raw/Control_B_H3K9ac_R2.fastq.gz
+</code></pre>
+<p><strong>Key change:</strong></p>
+<ul>
+<li><code>RAW_DIR="fastq_raw"</code> – Defines where your input files are located</li>
+<li><code>${RAW_DIR}/${sample}_R1.fastq.gz</code> – Constructs the full path to each file</li>
+</ul>
+<hr>
+<h3 id="example-3-complete-workflow-with-input-and-output-directories"><a class="header" href="#example-3-complete-workflow-with-input-and-output-directories">Example 3: Complete Workflow with Input and Output Directories</a></h3>
+<p>This example shows a real bioinformatics workflow pattern: reading files from an <strong>input directory</strong> and writing results to an <strong>output directory</strong>.</p>
+<pre><code class="language-bash">#!/bin/bash
+set -euo pipefail
+
+RAW_DIR="fastq_raw"
+OUT_DIR="bowtie_align"
+
+mkdir -p "$OUT_DIR"
+
+while read -r sample; do
+  echo "sample_id: $sample"
+
+  fq1="${RAW_DIR}/${sample}_R1.fastq.gz"
+  fq2="${RAW_DIR}/${sample}_R2.fastq.gz"
+  bam="${OUT_DIR}/${sample}.sorted.bam"
+
+  echo "inputs:"
+  echo "  $fq1"
+  echo "  $fq2"
+
+  echo "output:"
+  echo "  $bam"
+
+  echo "bowtie2 command: bowtie2 -x hg38_index -1 $fq1 -2 $fq2 | samtools sort -o $bam"
+  echo
+done &lt; sample_id.txt
+</code></pre>
+<p><strong>Understanding the directory structure:</strong></p>
+<p>This script follows a crucial bioinformatics principle: <strong>separate input data from output results</strong>.</p>
+<ul>
+<li><strong>Input directory</strong> (<code>RAW_DIR="fastq_raw"</code>): Where your raw sequencing files are stored. This should be read-only to preserve original data.</li>
+<li><strong>Output directory</strong> (<code>OUT_DIR="bowtie_align"</code>): Where processed results will be saved. Created automatically if it doesn’t exist.</li>
+</ul>
+<p><strong>Breaking down the script:</strong></p>
+<ol>
+<li>
+<p><strong><code>mkdir -p "$OUT_DIR"</code></strong> – Creates the output directory before processing starts. The <code>-p</code> flag means “don’t error if it already exists.”</p>
+</li>
+<li>
+<p><strong>Input file construction:</strong></p>
+<ul>
+<li><code>fq1="${RAW_DIR}/${sample}_R1.fastq.gz"</code> – Forward reads from the raw data folder</li>
+<li><code>fq2="${RAW_DIR}/${sample}_R2.fastq.gz"</code> – Reverse reads from the raw data folder</li>
+</ul>
+</li>
+<li>
+<p><strong>Output file construction:</strong></p>
+<ul>
+<li><code>bam="${OUT_DIR}/${sample}.sorted.bam"</code> – Aligned, sorted BAM file will go in the output folder</li>
+</ul>
+</li>
+<li>
+<p><strong>The command preview:</strong></p>
+<ul>
+<li>Shows what the actual bowtie2 alignment command would be</li>
+<li><code>bowtie2 -x hg38_index</code> – Uses the human genome reference</li>
+<li><code>-1 $fq1 -2 $fq2</code> – Paired-end input files</li>
+<li><code>| samtools sort -o $bam</code> – Pipes output to samtools to create sorted BAM</li>
+</ul>
+</li>
+</ol>
+<p><strong>Output:</strong></p>
+<pre><code class="language-text">sample_id: Control_A_H3K9ac
+inputs:
+  fastq_raw/Control_A_H3K9ac_R1.fastq.gz
+  fastq_raw/Control_A_H3K9ac_R2.fastq.gz
+output:
+  bowtie_align/Control_A_H3K9ac.sorted.bam
+bowtie2 command: bowtie2 -x hg38_index -1 fastq_raw/Control_A_H3K9ac_R1.fastq.gz -2 fastq_raw/Control_A_H3K9ac_R2.fastq.gz | samtools sort -o bowtie_align/Control_A_H3K9ac.sorted.bam
+
+sample_id: Control_B_H3K9ac
+inputs:
+  fastq_raw/Control_B_H3K9ac_R1.fastq.gz
+  fastq_raw/Control_B_H3K9ac_R2.fastq.gz
+output:
+  bowtie_align/Control_B_H3K9ac.sorted.bam
+bowtie2 command: bowtie2 -x hg38_index -1 fastq_raw/Control_B_H3K9ac_R1.fastq.gz -2 fastq_raw/Control_B_H3K9ac_R2.fastq.gz | samtools sort -o bowtie_align/Control_B_H3K9ac.sorted.bam
+</code></pre>
+<p><strong>Why organize this way?</strong></p>
+<p>This directory structure keeps your project clean and organized:</p>
+<pre><code class="language-text">your_project/
+├── fastq_raw/              ← Original data (never modified)
+│   ├── Control_A_H3K9ac_R1.fastq.gz
+│   ├── Control_A_H3K9ac_R2.fastq.gz
+│   └── ...
+├── bowtie_align/           ← Alignment results (can regenerate)
+│   ├── Control_A_H3K9ac.sorted.bam
+│   └── ...
+├── sample_id.txt           ← Sample list
+└── analysis_script.sh      ← This script
+</code></pre>
+<p>If something goes wrong with alignment, you can safely delete the <code>bowtie_align/</code> folder and rerun the script without touching your original raw data.</p>
+<hr>
+<p><strong>Best Practice: Separate Folders for Each Process</strong></p>
+<p>In real ChIP-seq analysis, you should create a <strong>separate output folder for each processing step and file type</strong>. This keeps your project organized and makes troubleshooting easier. A typical ChIP-seq project might have folders like:</p>
+<ul>
+<li><code>fastq_raw/</code> - Original FASTQ files from sequencing</li>
+<li><code>fastqc_reports/</code> - Quality control reports</li>
+<li><code>trimmed_fastq/</code> - Adapter-trimmed reads (if needed)</li>
+<li><code>bowtie_align/</code> - Aligned BAM files</li>
+<li><code>dedup_bam/</code> - Deduplicated BAM files</li>
+<li><code>peaks/</code> - Peak calling results from MACS2</li>
+<li><code>bigwig/</code> - Coverage tracks for genome browsers</li>
+<li><code>qc_metrics/</code> - deepTools quality metrics</li>
+</ul>
+<p>This folder structure makes it easy to: (1) track which processing stage created which files, (2) quickly find the data you need, (3) delete and regenerate intermediate files without affecting earlier steps, and (4) share your work with collaborators who can immediately understand your project organization.</p>
+<hr>
+<h2 id="summary"><a class="header" href="#summary">Summary</a></h2>
+<p><strong>What you learned:</strong></p>
+<ol>
+<li><strong>Safe scripting:</strong> Start every script with <code>#!/bin/bash</code> and <code>set -euo pipefail</code></li>
+<li><strong>Sample list creation:</strong> Use <code>ls</code> and <code>sed</code> to extract clean sample IDs from messy filenames</li>
+<li><strong>Single-end:</strong> <code>ls *.fastq.gz | sed 's/.fastq.gz//' &gt; sample_id.txt</code></li>
+<li><strong>Paired-end:</strong> <code>ls *_R1.fastq.gz | sed 's/_R1.fastq.gz//' &gt; sample_id.txt</code></li>
+<li><strong>Automation:</strong> Use <code>while read</code> loops to process all samples automatically</li>
+</ol>
+<p><strong>The key insight:</strong>
+This simple text file (<code>sample_id.txt</code>) acts as a “roll call” or “attendance sheet” for your entire analysis pipeline. It’s the foundation that makes large-scale automation possible.</p>
+<p><strong>Next steps:</strong></p>
+<p>In the following tutorials, you’ll use this sample list to automate quality control, alignment, peak calling, and visualization for your ChIP-seq experiment.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="00_setup_environment.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
+                            </a>
+
+                            <a rel="next prefetch" href="01_geo_fastq_download.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="00_setup_environment.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
+                    </a>
+
+                    <a rel="next prefetch" href="01_geo_fastq_download.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
+                    </a>
+            </nav>
+
+        </div>
+
+        <template id=fa-eye><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M288 32c-80.8 0-145.5 36.8-192.6 80.6C48.6 156 17.3 208 2.5 243.7c-3.3 7.9-3.3 16.7 0 24.6C17.3 304 48.6 356 95.4 399.4C142.5 443.2 207.2 480 288 480s145.5-36.8 192.6-80.6c46.8-43.5 78.1-95.4 93-131.1c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C433.5 68.8 368.8 32 288 32zM432 256c0 79.5-64.5 144-144 144s-144-64.5-144-144s64.5-144 144-144s144 64.5 144 144zM288 192c0 35.3-28.7 64-64 64c-11.5 0-22.3-3-31.6-8.4c-.2 2.8-.4 5.5-.4 8.4c0 53 43 96 96 96s96-43 96-96s-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6z"/></svg></span></template>
+        <template id=fa-eye-slash><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M38.8 5.1C28.4-3.1 13.3-1.2 5.1 9.2S-1.2 34.7 9.2 42.9l592 464c10.4 8.2 25.5 6.3 33.7-4.1s6.3-25.5-4.1-33.7L525.6 386.7c39.6-40.6 66.4-86.1 79.9-118.4c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C465.5 68.8 400.8 32 320 32c-68.2 0-125 26.3-169.3 60.8L38.8 5.1zM223.1 149.5C248.6 126.2 282.7 112 320 112c79.5 0 144 64.5 144 144c0 24.9-6.3 48.3-17.4 68.7L408 294.5c5.2-11.8 8-24.8 8-38.5c0-53-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6c0 10.2-2.4 19.8-6.6 28.3l-90.3-70.8zm223.1 298L373 389.9c-16.4 6.5-34.3 10.1-53 10.1c-79.5 0-144-64.5-144-144c0-6.9 .5-13.6 1.4-20.2L83.1 161.5C60.3 191.2 44 220.8 34.5 243.7c-3.3 7.9-3.3 16.7 0 24.6c14.9 35.7 46.2 87.7 93 131.1C174.5 443.2 239.2 480 320 480c47.8 0 89.9-12.9 126.2-32.5z"/></svg></span></template>
+        <template id=fa-copy><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M502.6 70.63l-61.25-61.25C435.4 3.371 427.2 0 418.7 0H255.1c-35.35 0-64 28.66-64 64l.0195 256C192 355.4 220.7 384 256 384h192c35.2 0 64-28.8 64-64V93.25C512 84.77 508.6 76.63 502.6 70.63zM464 320c0 8.836-7.164 16-16 16H255.1c-8.838 0-16-7.164-16-16L239.1 64.13c0-8.836 7.164-16 16-16h128L384 96c0 17.67 14.33 32 32 32h47.1V320zM272 448c0 8.836-7.164 16-16 16H63.1c-8.838 0-16-7.164-16-16L47.98 192.1c0-8.836 7.164-16 16-16H160V128H63.99c-35.35 0-64 28.65-64 64l.0098 256C.002 483.3 28.66 512 64 512h192c35.2 0 64-28.8 64-64v-32h-47.1L272 448z"/></svg></span></template>
+        <template id=fa-play><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M73 39c-14.8-9.1-33.4-9.4-48.5-.9S0 62.6 0 80V432c0 17.4 9.4 33.4 24.5 41.9s33.7 8.1 48.5-.9L361 297c14.3-8.7 23-24.2 23-41s-8.7-32.2-23-41L73 39z"/></svg></span></template>
+        <template id=fa-clock-rotate-left><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M75 75L41 41C25.9 25.9 0 36.6 0 57.9V168c0 13.3 10.7 24 24 24H134.1c21.4 0 32.1-25.9 17-41l-30.8-30.8C155 85.5 203 64 256 64c106 0 192 86 192 192s-86 192-192 192c-40.8 0-78.6-12.7-109.7-34.4c-14.5-10.1-34.4-6.6-44.6 7.9s-6.6 34.4 7.9 44.6C151.2 495 201.7 512 256 512c141.4 0 256-114.6 256-256S397.4 0 256 0C185.3 0 121.3 28.7 75 75zm181 53c-13.3 0-24 10.7-24 24V256c0 6.4 2.5 12.5 7 17l72 72c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-65-65V152c0-13.3-10.7-24-24-24z"/></svg></span></template>
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr-ef4e11c1.min.js"></script>
+        <script src="mark-09e88c2c.min.js"></script>
+        <script src="searcher-c2a407aa.js"></script>
+
+        <script src="clipboard-1626706a.min.js"></script>
+        <script src="highlight-abc7f01d.js"></script>
+        <script src="book-a0b12cfe.js"></script>
+
+        <!-- Custom JS scripts -->
+        <script src="custom-42beaf49.js"></script>
+
+
+
+    </div>
+    </body>
+</html>
