@@ -121,6 +121,33 @@ Sometimes, one biological sample is sequenced across multiple "lanes" of a machi
 
 ---
 
+
+## 1. After Downloading FASTQ Files
+
+```text
+chipseq_tutorial/
+├── raw/                    ← Raw FASTQ files from sequencing
+│   ├── Control_A_H3K9ac_R1.fastq.gz
+│   ├── Control_A_H3K9ac_R2.fastq.gz
+│   ├── Control_B_H3K9ac_R1.fastq.gz
+│   ├── Control_B_H3K9ac_R2.fastq.gz
+│   └── ...
+└── sample_id.txt           ← Sample list for automation
+```
+
+**Key Points:**
+- Original sequencing data is never modified
+- Each sample has paired-end reads (_R1 and _R2)
+- `sample_id.txt` contains clean sample names for automation
+
+---
+
+
+
+
+
+
+
 ## Summary
 1.  **Understand:** GEO is for metadata; SRA/ENA is for data.
 2.  **Identify:** Find the **SRR** (Run) IDs for your samples.
