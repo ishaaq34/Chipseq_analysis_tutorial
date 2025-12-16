@@ -28,7 +28,7 @@ Imagine you shout **"HELLO"** (Forward Reads). A split second later, you hear th
 
 
 
-We use a tool called `run_spp.R` (part of [PhantomPeakQualTools]( https://github.com/kundajelab/phantompeakqualtools) to calculate this. It finds the "Best Match" distance.
+We use a tool called `run_spp.R` (part of [PhantomPeakQualTools]( https://github.com/kundajelab/phantompeakqualtools) ) to calculate this. It finds the "Best Match" distance.
 
 ### The Command
 ```bash
