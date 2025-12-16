@@ -37,7 +37,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-0532388d.js";
+            window.path_to_searchindex_js = "searchindex-ccb3544f.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-df4cee15.js"></script>
@@ -1162,7 +1162,6 @@ However, the sequencer only reads the <strong>Ends</strong> of these fragments (
 Rscript /opt/anaconda3/envs/chip/bin/run_spp.R \
       -c=sample.bam \
       -savp=Sample1_spp.qc.pdf \
-      -s=0:5:400 \
       -out=Sample1_spp.qc.txt
 </code></pre>
 <p><strong>Explanation:</strong></p>
@@ -1170,7 +1169,6 @@ Rscript /opt/anaconda3/envs/chip/bin/run_spp.R \
 <li><code>-c</code>: Input BAM file.</li>
 <li><code>-savp</code>: Saves the diagnostic PDF plot (The “Echo” graph).</li>
 <li><code>-out</code>: Output file containing the score numbers (NSC and RSC).</li>
-<li><code>-s=0:5:400</code>: Scan shift distances from 0 to 400 bp in steps of 5.</li>
 </ul>
 <hr>
 <h2 id="level-3-analysis-signal-vs-noise"><a class="header" href="#level-3-analysis-signal-vs-noise">Level 3: Analysis (Signal vs Noise)</a></h2>
