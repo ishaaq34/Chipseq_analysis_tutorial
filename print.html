@@ -37,7 +37,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-b7817a5a.js";
+            window.path_to_searchindex_js = "searchindex-55838b36.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-5578a832.js"></script>
@@ -1007,25 +1007,26 @@ Your Reads (FASTAS) are the millions of tiny <strong>Puzzle Pieces</strong> scat
 <h3 id="step-1-the-index-building-the-map"><a class="header" href="#step-1-the-index-building-the-map">Step 1: The Index (Building the Map)</a></h3>
 <p>Before Bowtie2 can work, it needs to process the reference genome into a format it can search quickly. This is called an <strong>Index</strong>.</p>
 <pre><code class="language-bash"># Example syntax: bowtie2-build [genome.fa] [prefix_name]
-bowtie2-build hg38.fa hg38_index
+bowtie2-build index/ce.fa index/ce_index            # ce.fa = C. elegans reference genome
 </code></pre>
 <p><em>You only do this once!</em></p>
+<p>You can download the C. elegans reference genome from Ensembl using the following link:  <a href="https://ftp.ensembl.org/pub/release-115/fasta/caenorhabditis_elegans/dna/Caenorhabditis_elegans.WBcel235.dna.toplevel.fa.gz">C. elegans genome</a>.  Place it in the index directory, decompress it, and rename the file to <code>ce.fa</code></p>
 <h3 id="step-2-single-sample-alignment"><a class="header" href="#step-2-single-sample-alignment">Step 2: Single Sample Alignment</a></h3>
 <p>We use a “Pipe” (<code>|</code>) to connect two tools: <code>bowtie2</code> aligns the data, and <code>samtools</code> sorts it immediately.</p>
 <p><strong>Why Sort?</strong> A puzzle is useless if the pieces are in random order. We sort them by chromosome location (Left to Right) so we can look at them later.</p>
 <p><strong>Run Bowtie2 alignment for paired end (R1 and R2) sample</strong></p>
 <pre><code class="language-bash">mkdir -p bowalign
 
-bowtie2 -x hg38_index \                  # 1. The Reference Map
-  -1 trim/Sample1_R1.clean.fq.gz \       # 2. Input Read 1
-  -2 trim/Sample1_R2.clean.fq.gz \       # 3. Input Read 2
+bowtie2 -x  index/ce_index  \                  # 1. The Reference Map
+  -1 fastq_cleaned/Sample1_R1.clean.fastq.gz \       # 2. Input Read 1
+  -2 fastq_cleaned/Sample1_R2.clean.fastq.gz \       # 3. Input Read 2
   -p 6 --no-unal \                       # 4. Use 6 threads,  `--no-unal` — suppresses unaligned reads in the output.
   2&gt; bowalign/Sample1.log |              # 5. Save the log file...
   samtools sort -@ 6 -o bowalign/Sample1.sorted.bam  # 6. ...and sort the result!
 </code></pre>
 <p><strong>Run Bowtie2 alignment for a single-end sample</strong></p>
 <pre><code># Run Bowtie2 alignment for a single sample
-bowtie2 -x hg38_index \
+bowtie2 -x index/ce_index \
   -u trim/Sample1.clean.fq.gz \
   -p 6 --no-unal \
   2&gt; bowalign/Sample1.log | samtools sort -@ 6 -o bowalign/Sample1.sorted.bam
@@ -1046,21 +1047,27 @@ bowalign/
 <p>Once this single run completes successfully, you can confidently automate for all samples.</p>
 <h3 id="step-3-automation-loop"><a class="header" href="#step-3-automation-loop">Step 3: Automation Loop</a></h3>
 <p>Through <a href="https://github.com/ishaaq34/Chipseq_analysis_tutorial/blob/main/src/03_sample_list_creation.md#ready-for-use">Sample list section</a> ,  Here is the script to run this for all your samples:</p>
-<pre><code class="language-bash">#!/bin/bash
-mkdir -p bowalign
+<pre><code>#!/bin/bash
+set -euo pipefail
 
-# Loop through every ID in our "Attendance Sheet"
-for sample in $(cat sample_id.txt); do
-  echo "Aligning $sample..."
-  
-  bowtie2 -x hg38_index \
-    -1 trim/${sample}_R1.clean.fq.gz \
-    -2 trim/${sample}_R2.clean.fq.gz \
-    -p 6 --no-unal \
-    2&gt; bowalign/${sample}.log | samtools sort -@ 6 -o bowalign/${sample}.sorted.bam
+OUTDIR="bowalign"
+THREADS=6
 
-  samtools index bowalign/${sample}.sorted.bam
-done
+mkdir -p "$OUTDIR"
+
+while read -r sample; do
+  echo "Aligning $sample"
+
+  bowtie2 -x index/ce_index \
+    -1 fastq_cleaned/${sample}_R1.clean.fq.gz" \
+    -2 fastq_cleaned/${sample}_R2.clean.fq.gz" \
+    -p "$THREADS" --no-unal \
+  | samtools sort -@ "$THREADS" -o "${OUTDIR}/${sample}.sorted.bam"
+
+  samtools index "${OUTDIR}/${sample}.sorted.bam"
+
+done &lt; sample_id.txt
+
 </code></pre>
 <hr>
 <h2 id="optimization"><a class="header" href="#optimization">Optimization</a></h2>
@@ -1085,9 +1092,9 @@ done
 <p><strong>Example with GNU Parallel</strong>:</p>
 <pre><code>cat sample_id.txt | parallel -j 3 '                     # -j 3 → runs 3 samples (jobs) in parallel
 
-  bowtie2 -x hg38_index \
-    -1 trim/${sample}_R1.clean.fq.gz  \
-    -2 trim/${sample}_R2.clean.fq.gz  \
+  bowtie2 -x index/ce_index \
+    -1 fastq_cleaned/${sample}_R1.clean.fq.gz  \
+    -2 fastq_cleaned/${sample}_R2.clean.fq.gz  \
     -p 4 --no-unal \                                   # -p 4 → bowtie2 uses 4 CPU threads per sample
     2&gt; bowalign/{}.log | samtools sort -@ 2 \           # -@ 2 → samtools sort uses 2 CPU threads per sample
     -o bowalign/{}.sorted.bam
