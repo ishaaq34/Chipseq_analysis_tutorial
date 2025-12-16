@@ -1,7 +1,15 @@
 #  02: Getting the Raw Data (FASTQ)
 
 > [!NOTE]
-> **Project Context:** While this tutorial teaches you how to download data from SRA, our specific project utilizes **ENCODE** data (CEBPA, H3K27me3, H3K9ac). The `fastq-dl` tool is excellent for public SRA data, but ENCODE data is often downloaded directly from the ENCODE portal. I have worked on [SRA data](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE115704#:~:text=GEO%20Accession%20viewer&text=GEO%20help:%20Mouse%20over%20screen%20elements%20for%20information.&text=Here%20we%20report%20that%20the,a%20sperm%2Dspecific%20chromatin%20signature ) to demonstrate steps from data download to the alignemnt step. 
+> **Project Context:** While this tutorial teaches you how to download data from SRA, our specific project utilizes **ENCODE** data (CEBPA, H3K27me3, H3K9ac). The `fastq-dl` tool is excellent for public SRA data, but ENCODE data is often downloaded directly from the ENCODE portal. I have worked on [SRA data](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE115704#:~:text=GEO%20Accession%20viewer&text=GEO%20help:%20Mouse%20over%20screen%20elements%20for%20information.&text=Here%20we%20report%20that%20the,a%20sperm%2Dspecific%20chromatin%20signature ) to demonstrate steps from data download to the alignemnt step.
+
+
+
+Complete information for all sequencing runs associated with this repository is available through the [NCBI SRA Run Selector (PRJNA475794)] (https://www.ncbi.nlm.nih.gov/Traces/study/?acc=PRJNA475794&o=acc_s%3Aa). The Run Selector provides an interactive interface to inspect sequencing metadata, including library layout, platform, read length, and experimental design.
+
+From this interface, you can download the full metadata table as well as a plain accession list containing the SRR identifiers. The accession list can be saved as `srr_list.txt` and used directly for automated data retrieval. Unwanted runs can be removed from this file before download, allowing precise control over which datasets are processed.
+
+
 
 ## Level 1: Basic Concept 
 
@@ -45,6 +53,10 @@ Usually, you need to download many samples. Instead of typing the command 10 tim
     SRR7297998
     SRR7298003
     ```
+
+
+
+
 
 2.  Run this "Loop" to download them one by one:
 
