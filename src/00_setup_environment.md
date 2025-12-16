@@ -111,3 +111,8 @@ Here are some useful "Housekeeping" commands:
 2.  **Action:** We used `conda env create` with a YAML recipe to install tools like Bowtie2 and MACS2.
 3.  **Result:** We now have a `(chip)` environment ready for the actual ChIP-seq analysis.
 
+
+---
+> **The tools are installed and waiting. The next step is to feed them some data**
+---
+
