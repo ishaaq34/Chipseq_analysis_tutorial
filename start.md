@@ -2,6 +2,28 @@
 
 ---
 
+##  Basic Concept (The Anatomy of a Fastq file)
+
+A FASTQ file is just a text file full of DNA sequences. But unlike a simple list of letters, every single read carries extra baggage (its quality score).
+
+Think of every read like a **Luggage Tag** with 4 lines of information:
+1.  **Line 1 (The Header):** Starts with `@`. This is the **ID Card**. It tells you the machine name, flowcell lane, and coordinates.
+2.  **Line 2 (The Sequence):** The DNA letters (`ACTG...`). This is the **Content** inside the bag.
+3.  **Line 3 (The Spacer):** Starts with `+`. Just a divider.
+4.  **Line 4 (The Quality):** A string of weird characters (`F:F#,,...`). This is the **Trust Score**. Each character represents the probability that the corresponding base in Line 2 is wrong.
+
+**Example Read:**
+```text
+@SN227:495:CA0TUACXX:1:1106:1159:2114 1:N:0:ATCACG  <-- ID: Read #1
+GTAAAAAGATTACATATATATTTAAAGTACACTGTAATTCTTANCA    <-- DNA: "N" means the machine failed to call that base
++                                                  <-- Spacer
+FDFFFHHHHHJIJGIJIJJHJJJJJJIIJIJGIHFIIJJIIIIJG        <-- Quality: Each character encodes a Phred quality score (Illumina 1.8+, ASCII offset 33).
+
+```
+
+---
+
+
 ## Introduction: Why Learn Bash for Bioinformatics?
 
 **What is Bash?**
