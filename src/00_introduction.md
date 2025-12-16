@@ -2,11 +2,11 @@
 
 
 
-## Overview
+## 1. Overview
 
 Chromatin Immunoprecipitation followed by sequencing (ChIP-seq) represents a transformative genome-wide methodology that enables researchers to map the locations where DNA-binding proteins, histone modifications, and other chromatin-associated factors interact with DNA across the entire genome. By revealing these precise binding locations, ChIP-seq provides direct insights into gene regulatory mechanisms at the molecular level, fundamentally advancing our understanding of how genes are controlled in both normal physiology and disease states.
 
-## Historical Context and Technical Evolution
+## 2. Historical Context and Technical Evolution
 
 Prior to the development of ChIP-seq, researchers investigating protein-DNA interactions relied predominantly on low-throughput approaches or array-based technologies, each with significant limitations. Traditional ChIP-PCR methods could only examine a handful of pre-selected genomic regions at a time, requiring prior knowledge of potential binding sites and leaving vast portions of the genome unexplored. While microarray-based ChIP-chip technology represented an advancement, it remained constrained to predefined genomic regions represented on the array platform, offered limited resolution for pinpointing exact binding locations, and exhibited a restricted dynamic range that reduced sensitivity to weaker binding events.
 
@@ -14,7 +14,7 @@ The convergence of whole-genome sequencing and next-generation sequencing techno
 
     courtsey [ChIP–seq: advantages and challenges of a maturing technology](https://www.nature.com/articles/nrg2641)
 
-## Landmark Contributions to Biomedical Science
+## 3. Landmark Contributions to Biomedical Science
 
 ChIP-seq has enabled numerous groundbreaking discoveries that have fundamentally transformed our understanding of human biology and disease mechanisms. The technology has elucidated the molecular underpinnings of circadian rhythms, explaining how our 24-hour body clock functions at the chromatin level and providing mechanistic insights into why circadian disruption through shift work increases disease susceptibility ([Koike et al., 2012](https://www.science.org/doi/10.1126/science.1226339)).
 
@@ -23,7 +23,7 @@ The landmark ENCODE Project leveraged ChIP-seq extensively to demonstrate that a
 
 These discoveries collectively demonstrate ChIP-seq's direct impact on personalized medicine, cancer therapeutics, and our fundamental comprehension of gene regulatory networks.
 
-## Experimental Methodology
+## 4. Experimental Methodology
 
 A standard ChIP-seq experiment proceeds through a well-established experimental workflow. 
 
@@ -37,7 +37,7 @@ Finally, the enriched DNA population is converted into a sequencing library comp
 
 The inclusion of appropriate controls represents a critical aspect of robust ChIP-seq experimental design. Matched input DNA, representing whole-cell extract collected prior to immunoprecipitation, serves as the primary control for modeling background signal and DNA accessibility biases.  
 
-## Computational Analysis Pipeline
+## 5. Computational Analysis Pipeline
 
 Raw sequencing data emerges from the sequencer in **FASTQ format**, containing both the nucleotide sequence of each read and associated per-base quality scores that quantify the confidence of each base call. Critically, FASTQ files provide no information regarding the genomic origin of these sequences; this positional information must be established through computational alignment.
 
@@ -52,14 +52,10 @@ The information encoded in **BAM** files can be extracted and reformatted into *
 
 Complementing these discrete interval representations, **BigWig** files are created from **BAM files**. They store the signal across the genome, meaning how many reads are in each region or how strong the ChIP-seq signal is, in a compact format that loads quickly in genome browsers.
 
-
-
-**From Raw Reads to Biological Insight: A "Zero-to-Hero" Guide.**
-
-This tutorial is a comprehensive, hands-on course designed to teach you **Chromatin Immunoprecipitation sequencing (ChIP-seq)** analysis. 
 ---
 
-## Why This Tutorial?
+
+## 6. Why This Tutorial?
 
 We built this course to solve the common frustrations of bioinformatics learning. Here is what makes it different:
 
@@ -80,7 +76,7 @@ We don't skip steps. You will go from:
 
 ---
 
-### Data used for this tutorial - Experimental Context
+## 7.  Data used for this tutorial - Experimental Context
 
 
 I performed the analysis in two distinct parts, each serving a different methodological purpose.
@@ -89,7 +85,6 @@ In the first part, I demonstrated the complete ChIP-seq preprocessing workflow, 
 
 
 In the second part of the analysis, I used pre-aligned ChIP-seq BAM files from [ENCODE](https://www.encodeproject.org/carts/ca521f95-7835-4369-88a9-b89f98fb39ad/) to demonstrate downstream analyses. These data were generated in the human BLaER1 cell line under defined stimulation conditions (17β-estradiol, interleukin-3, and CSF1 for 18 hours) and represent isogenic biological replicates. The dataset includes ChIP-seq for the transcription factor CEBPA and the histone modifications H3K27me3 and H3K9ac, along with matched input controls. This resource was selected to illustrate peak calling, normalization, and comparative analysis using standardized, high-quality ENCODE data.
-
 
 
 
