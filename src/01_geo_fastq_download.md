@@ -85,7 +85,7 @@ mkdir -p fastq_raw
 
 parallel -j 4 \
   'fastq-dl --accession {} --provider SRA --cpus 1 --outdir fastq_raw' \
-  :::: sample_id.txt
+  :::: srr_list.txt
 
 ```
 
