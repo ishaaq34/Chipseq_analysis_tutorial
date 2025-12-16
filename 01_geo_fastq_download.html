@@ -36,7 +36,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-a6545dd8.js";
+            window.path_to_searchindex_js = "searchindex-857e92fa.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-df4cee15.js"></script>
@@ -221,22 +221,23 @@ SRR7298003
 <p>Run this “Loop” to download them one by one:</p>
 </li>
 </ol>
-<pre><code>   #!/bin/bash
+<pre><code>#!/bin/bash
 set -euo pipefail
 
-mkdir -p fastq_raw
+RAW_DIR="fastq_raw"
+mkdir -p "$RAW_DIR"
 
-for acc in $(cat sample_id.txt); do
-  echo "Downloading ${acc}..."
+while read -r acc; do
+  echo "Downloading accession: $acc"
 
   fastq-dl \
-    --accession "${acc}" \
+    --accession "$acc" \
     --provider SRA \
     --cpus 1 \
-    --outdir fastq_raw
+    --outdir "$RAW_DIR"
 
-  echo "Downloaded ${acc}"
-done
+  echo "Finished downloading: $acc"
+done &lt; srr_list.txt
 
 </code></pre>
 <h3 id="23-parallel-download-the-fast-way"><a class="header" href="#23-parallel-download-the-fast-way">2.3 Parallel Download (The Fast Way)</a></h3>
