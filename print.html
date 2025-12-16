@@ -37,7 +37,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-77da1227.js";
+            window.path_to_searchindex_js = "searchindex-a6545dd8.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-df4cee15.js"></script>
@@ -392,18 +392,44 @@ SRR7298003
 </li>
 <li>
 <p>Run this “Loop” to download them one by one:</p>
-<pre><code class="language-bash">while read acc; do                       # Reads each line as variable $acc
-  fastq-dl --accession $acc \            # Tells fastq-dl to download that ID
-           --provider SRA \
-           --cpus 4
-done &lt; srr_list.txt                      # The file to read from
-</code></pre>
 </li>
 </ol>
+<pre><code>   #!/bin/bash
+set -euo pipefail
+
+mkdir -p fastq_raw
+
+for acc in $(cat sample_id.txt); do
+  echo "Downloading ${acc}..."
+
+  fastq-dl \
+    --accession "${acc}" \
+    --provider SRA \
+    --cpus 1 \
+    --outdir fastq_raw
+
+  echo "Downloaded ${acc}"
+done
+
+</code></pre>
 <h3 id="23-parallel-download-the-fast-way"><a class="header" href="#23-parallel-download-the-fast-way">2.3 Parallel Download (The Fast Way)</a></h3>
 <p>If you have a powerful computer, you can download multiple files at the same time using <code>parallel</code>.</p>
 <pre><code class="language-bash"># Download 4 files at once
-cat srr_list.txt | parallel -j 4 'fastq-dl --accession {} --provider ena'
+
+#!/bin/bash
+# Run the script using the Bash shell
+
+set -euo pipefail
+# Exit on error, undefined variables, or failed pipelines
+
+mkdir -p fastq_raw
+# Create output directory for downloaded FASTQ files
+
+cat sample_id.txt | parallel -j 4 'fastq-dl --accession {} --provider SRA --cpus 1 --outdir fastq_raw'
+# Run up to 4 downloads in parallel, one accession per job,
+# each job using a single CPU and writing to fastq/
+
+
 </code></pre>
 <h3 id="24-download-an-entire-study"><a class="header" href="#24-download-an-entire-study">2.4 Download an Entire Study</a></h3>
 <p>You can also download everything associated with a study ID (starts with <strong>SRP</strong> or <strong>PRJNA</strong>):</p>
