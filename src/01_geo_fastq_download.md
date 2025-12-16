@@ -76,24 +76,20 @@ done < srr_list.txt
 ### 2.3 Parallel Download (The Fast Way)
 If you have a powerful computer, you can download multiple files at the same time using `parallel`.
 
-```bash
-# Download 4 files at once
-
-#!/bin/bash
-# Run the script using the Bash shell
-
-set -euo pipefail
-# Exit on error, undefined variables, or failed pipelines
-
-mkdir -p fastq_raw
-# Create output directory for downloaded FASTQ files
-
-cat sample_id.txt | parallel -j 4 'fastq-dl --accession {} --provider SRA --cpus 1 --outdir fastq_raw'
-# Run up to 4 downloads in parallel, one accession per job,
-# each job using a single CPU and writing to fastq/
-
 
 ```
+#!/bin/bash
+set -euo pipefail
+
+mkdir -p fastq_raw
+
+parallel -j 4 \
+  'fastq-dl --accession {} --provider SRA --cpus 1 --outdir fastq_raw' \
+  :::: sample_id.txt
+
+```
+
+
 
 ### 2.4 Download an Entire Study
 You can also download everything associated with a study ID (starts with **SRP** or **PRJNA**):
