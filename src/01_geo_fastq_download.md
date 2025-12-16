@@ -47,20 +47,51 @@ Usually, you need to download many samples. Instead of typing the command 10 tim
     ```
 
 2.  Run this "Loop" to download them one by one:
-    ```bash
-    while read acc; do                       # Reads each line as variable $acc
-      fastq-dl --accession $acc \            # Tells fastq-dl to download that ID
-               --provider SRA \
-               --cpus 4
-    done < srr_list.txt                      # The file to read from
-    ```
+   
+```
+   #!/bin/bash
+set -euo pipefail
+
+mkdir -p fastq_raw
+
+for acc in $(cat sample_id.txt); do
+  echo "Downloading ${acc}..."
+
+  fastq-dl \
+    --accession "${acc}" \
+    --provider SRA \
+    --cpus 1 \
+    --outdir fastq_raw
+
+  echo "Downloaded ${acc}"
+done
+
+```
+
+
+
+ 
 
 ### 2.3 Parallel Download (The Fast Way)
 If you have a powerful computer, you can download multiple files at the same time using `parallel`.
 
 ```bash
 # Download 4 files at once
-cat srr_list.txt | parallel -j 4 'fastq-dl --accession {} --provider ena'
+
+#!/bin/bash
+# Run the script using the Bash shell
+
+set -euo pipefail
+# Exit on error, undefined variables, or failed pipelines
+
+mkdir -p fastq_raw
+# Create output directory for downloaded FASTQ files
+
+cat sample_id.txt | parallel -j 4 'fastq-dl --accession {} --provider SRA --cpus 1 --outdir fastq_raw'
+# Run up to 4 downloads in parallel, one accession per job,
+# each job using a single CPU and writing to fastq/
+
+
 ```
 
 ### 2.4 Download an Entire Study
