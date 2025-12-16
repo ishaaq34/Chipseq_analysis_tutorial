@@ -47,24 +47,25 @@ Usually, you need to download many samples. Instead of typing the command 10 tim
     ```
 
 2.  Run this "Loop" to download them one by one:
-   
+
 ```
-   #!/bin/bash
+#!/bin/bash
 set -euo pipefail
 
-mkdir -p fastq_raw
+RAW_DIR="fastq_raw"
+mkdir -p "$RAW_DIR"
 
-for acc in $(cat sample_id.txt); do
-  echo "Downloading ${acc}..."
+while read -r acc; do
+  echo "Downloading accession: $acc"
 
   fastq-dl \
-    --accession "${acc}" \
+    --accession "$acc" \
     --provider SRA \
     --cpus 1 \
-    --outdir fastq_raw
+    --outdir "$RAW_DIR"
 
-  echo "Downloaded ${acc}"
-done
+  echo "Finished downloading: $acc"
+done < srr_list.txt
 
 ```
 
