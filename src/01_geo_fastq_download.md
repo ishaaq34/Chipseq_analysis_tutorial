@@ -1,7 +1,7 @@
 #  02: Getting the Raw Data (FASTQ)
 
 > [!NOTE]
-> **Project Context:** While this tutorial teaches you how to download data from SRA, our specific project utilizes **ENCODE** data (CEBPA, H3K27me3, H3K9ac). See the `README.md` for the specific file list. The `fastq-dl` tool is excellent for public SRA data, but ENCODE data is often downloaded directly from the ENCODE portal.
+> **Project Context:** While this tutorial teaches you how to download data from SRA, our specific project utilizes **ENCODE** data (CEBPA, H3K27me3, H3K9ac). The `fastq-dl` tool is excellent for public SRA data, but ENCODE data is often downloaded directly from the ENCODE portal. I have used 
 
 ## Level 1: Basic Concept 
 
@@ -88,8 +88,19 @@ parallel -j 4 \
   :::: srr_list.txt
 
 ```
+ Adding echos to remain updated about what is going on!!
+```
+#!/bin/bash
+set -euo pipefail
 
+mkdir -p fastq_raw
 
+parallel -j 4 \
+  'echo "Starting download: {}" &&
+   fastq-dl --accession {} --provider SRA --cpus 1 --outdir fastq_raw &&
+   echo "Finished download: {}"' \
+  :::: srr_list.txt
+```
 
 ### 2.4 Download an Entire Study
 You can also download everything associated with a study ID (starts with **SRP** or **PRJNA**):
