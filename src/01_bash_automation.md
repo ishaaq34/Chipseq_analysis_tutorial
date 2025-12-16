@@ -503,6 +503,9 @@ This folder structure makes it easy to: (1) track which processing stage created
 **The key insight:**
 This simple text file (`sample_id.txt`) acts as a "roll call" or "attendance sheet" for your entire analysis pipeline. It's the foundation that makes large-scale automation possible.
 
-**Next steps:**
 
-In the following tutorials, you'll use this sample list to automate quality control, alignment, peak calling, and visualization for your ChIP-seq experiment.
+> [!NOTE]
+> **Next steps:we need to fetch the Fastq files**
+
+
+
