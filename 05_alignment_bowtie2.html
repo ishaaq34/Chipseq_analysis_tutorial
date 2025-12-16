@@ -36,7 +36,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-dc9a3e65.js";
+            window.path_to_searchindex_js = "searchindex-34234fff.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-5578a832.js"></script>
@@ -213,8 +213,8 @@ bowtie2-build genome_index/ce.fa genome_index/ce_index            # ce.fa = C. e
 </code></pre>
 <h3 id="step-2-single-sample-alignment"><a class="header" href="#step-2-single-sample-alignment">Step 2: Single Sample Alignment</a></h3>
 <p>We use a “Pipe” (<code>|</code>) to connect two tools: <code>bowtie2</code> aligns the data, and <code>samtools</code> sorts it immediately.</p>
-<p><strong>Why Sort?</strong> A puzzle is useless if the pieces are in random order. We sort them by chromosome location (Left to Right) so we can look at them later. And we are working on clean pieces <strong>(fastq files in the fastq_cleaned folder)</strong> for alignment</p>
-<p><strong>Run Bowtie2 alignment for paired end (R1 and R2) sample</strong></p>
+<p><strong>Why Sort?</strong> A puzzle is useless if the pieces are in random order. We sort them by chromosome location (Left to Right) so we can look at them later.</p>
+<p><strong>Run Bowtie2 alignment for paired end (R1 and R2) sample in the fastq_cleaned directory</strong></p>
 <pre><code class="language-bash">mkdir -p bowalign
 
 bowtie2 -x  genome_index/ce_index  \                  # 1. The Reference Map
