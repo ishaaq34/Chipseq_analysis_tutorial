@@ -31,7 +31,7 @@ Before we start analyzing, we need to clean our data.
 ```bash
 # -i: Input (dirty)
 # -o: Output (clean)
-fastp -i raw/SRR7297994.fastq.gz -o cleaned/SRR7297994.clean.fastq.gz
+fastp -i fastq_raw/SRR7297994.fastq.gz -o fastq_cleaned/SRR7297994.clean.fastq.gz
 ```
 
 ### 2.2 Basic Cleaning (Paired-End)
@@ -60,13 +60,13 @@ You can use `awk` (a math tool for text) to count directly from the compressed f
 **Count Total Reads:**
 ```bash
 # A FASTQ record is 4 lines. We count total lines and divide by 4.
-gzcat raw/SRR7297994.fastq.gz | wc -l | awk '{print $1/4 " reads"}'
+gzcat fastq_raw/SRR7297994.fastq.gz | wc -l | awk '{print $1/4 " reads"}'
 ```
 
 **Count Total Bases (Coverage):**
 ```bash
 # Sums the length of line 2 (sequence) for every record
-gzcat raw/SRR7297994.fastq.gz | awk 'NR%4==2 {b+=length($0)} END{print b " bases"}'
+gzcat fastq_raw/SRR7297994.fastq.gz | awk 'NR%4==2 {b+=length($0)} END{print b " bases"}'
 ```
 *   *Approximation:* If you have 100 Million bases and your genome is 3 Billion bases (Human), your coverage is roughly 0.03x.
 
@@ -76,7 +76,7 @@ The `fastp` developers provide a handy script called  [parallel.py](https://gith
 
 ```bash
 # Process 3 files at a time (-f 3), using 2 threads per file (-t 2)
-python parallel.py -i /raw -o /cleaned -r /fastp_reports -f 3 -t 2
+python parallel.py -i /fastq_raw -o /fastq_cleaned -r /fastp_reports -f 3 -t 2
 ```
 -f 3
 This sets the batch size. The script will process 3 files at a time.
@@ -87,16 +87,19 @@ This sets the number of threads used for each task. Here each file is processed 
 This automatically finds pairs and generates HTML reports for every sample.
 
 ---
+> [!IMPORTANT]
+> [parallel.py](https://github.com/OpenGene/fastp/blob/master/parallel.py) avoids the need to explicitly loop over `sample_id.txt` in a Bash script.
+
 
 
 ```text
 
 chipseq_tutorial/
-├── raw/                    ← Raw FASTQ files
+├── fastq_raw/                    ← Raw FASTQ files
 │   ├── SRR7297994.fastq.gz
 │   ├── SRR7297995.fastq.gz
 │   └── ...
-├── cleaned/                ← Fastp cleaned and trimmed reads
+├── fastq_cleaned/                ← Fastp cleaned and trimmed reads
 │   ├── SRR7297994.clean.fastq.gz
 │   ├── SRR7297995.clean.fastq.gz
 │   ├── SRR7297998.clean.fastq.gz
