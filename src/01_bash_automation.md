@@ -505,7 +505,7 @@ This simple text file (`sample_id.txt`) acts as a "roll call" or "attendance she
 
 
 > [!NOTE]
-> **Next steps:we need to fetch the Fastq files**
+> **Next step: We need to fetch the Fastq files**
 
 
 
