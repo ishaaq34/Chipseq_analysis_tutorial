@@ -146,7 +146,7 @@ Sometimes, one biological sample is sequenced across multiple "lanes" of a machi
 
 ```text
 chipseq_tutorial/
-├── raw/                    ← Raw FASTQ files from sequencing : You can rename them like using condition, IP , replicate : Ctrl_H3k9ac_Rep1
+├── fastq_raw/                    ← Raw FASTQ files from sequencing : You can rename them like using condition, IP , replicate : Ctrl_H3k9ac_Rep1
 │   ├── SRR7297994.fastq.gz
 │   ├── SRR7297995.fastq.gz
 │   ├── SRR7297998.fastq.gz
