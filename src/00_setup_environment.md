@@ -47,7 +47,7 @@ dependencies: # The tools we want to install
 prefix: /opt/anaconda3/envs/chip 
 ```
 
-> **Note:** If you downloaded the file [00_chip_updated.yml](https://github.com/ishaaq34/Chipseq_analysis_tutorial/blob/main/Chip.yml) . You can use that to install all the tools required for the Chip-seq analysis!
+> **Note:** If you downloaded the file [chip.yml](https://github.com/ishaaq34/Chipseq_analysis_tutorial/blob/main/Chip.yml) . You can use that to install all the tools required for the Chip-seq analysis!
 
 ### Step 3: Build the Environment
 Now, let's look at the instructions to build the bench.
