@@ -112,7 +112,6 @@ Here are some useful "Housekeeping" commands:
 3.  **Result:** We now have a `(chip)` environment ready for the actual ChIP-seq analysis.
 
 
----
+
 > The tools are installed and waiting. Now, we focus on using Bash scripting to organize and automate bioinformatics analyses
----
 
