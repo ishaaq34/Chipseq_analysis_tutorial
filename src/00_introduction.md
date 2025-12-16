@@ -78,7 +78,7 @@ We don't skip steps. You will go from:
 
 I performed the analysis in two distinct parts, each serving a different methodological purpose.
 
-In the first part, I demonstrated the complete ChIP-seq preprocessing workflow, from raw data retrieval to read alignment. For this, I used publicly available SRA data from a [study examining three histone modifications in C. elegans sperm, oocytes, and early embryos](10.1038/s41467-018-06236-8) [SRA data](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE115704#:~:text=GEO%20Accession%20viewer&text=GEO%20help:%20Mouse%20over%20screen%20elements%20for%20information.&text=Here%20we%20report%20that%20the,a%20sperm%2Dspecific%20chromatin%20signature ) . This dataset was selected specifically to illustrate the practical steps involved in downloading raw sequencing data , organizing metadata, and performing alignment in a reproducible manner.
+In the first part, I demonstrated the complete ChIP-seq preprocessing workflow, from raw data retrieval to read alignment. For this, I used publicly available [SRA data](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE115704#:~:text=GEO%20Accession%20viewer&text=GEO%20help:%20Mouse%20over%20screen%20elements%20for%20information.&text=Here%20we%20report%20that%20the,a%20sperm%2Dspecific%20chromatin%20signature) from a [study examining three histone modifications in C. elegans sperm, oocytes, and early embryos](10.1038/s41467-018-06236-8) data . This dataset was selected specifically to illustrate the practical steps involved in downloading raw sequencing data , organizing metadata, and performing alignment in a reproducible manner.
 
 
 In the second part of the analysis, I used pre-aligned ChIP-seq BAM files from [ENCODE](https://www.encodeproject.org/carts/ca521f95-7835-4369-88a9-b89f98fb39ad/) to demonstrate downstream analyses. These data were generated in the human BLaER1 cell line under defined stimulation conditions (17β-estradiol, interleukin-3, and CSF1 for 18 hours) and represent isogenic biological replicates. The dataset includes ChIP-seq for the transcription factor CEBPA and the histone modifications H3K27me3 and H3K9ac, along with matched input controls. This resource was selected to illustrate peak calling, normalization, and comparative analysis using standardized, high-quality ENCODE data.
@@ -87,4 +87,7 @@ In the second part of the analysis, I used pre-aligned ChIP-seq BAM files from [
 
 By the end of this tutorial, you will have the skills—and the code—to answer these questions for your own research.
 
-**Let's get started**
+ **Let's get started**
+
+> **We need to keep all the reagents(= bioinforamtic tools) ready before starting the analysis**. Let`s us do that first
+
