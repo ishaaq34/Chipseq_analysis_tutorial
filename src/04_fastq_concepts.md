@@ -1,6 +1,6 @@
-# Tutorial 03: Understanding and Cleaning Your Data (FASTQ & fastp)
+# 03: Understanding and Cleaning Your Data (FASTQ & fastp)
 
-## Level 1: Basic Concept (The Anatomy of a Read)
+## 1: Basic Concept (The Anatomy of a Read)
 
 A FASTQ file is just a text file full of DNA sequences. But unlike a simple list of letters, every single read carries extra baggage (its quality score).
 
@@ -31,7 +31,7 @@ Before we start analyzing, we need to clean our data.
 ```bash
 # -i: Input (dirty)
 # -o: Output (clean)
-fastp -i raw_sample.fastq.gz -o clean_sample.fastq.gz
+fastp -i raw/SRR7297994.fastq.gz -o cleaned/SRR7297994.clean.fastq.gz
 ```
 
 ### 2.2 Basic Cleaning (Paired-End)
@@ -87,6 +87,34 @@ This sets the number of threads used for each task. Here each file is processed 
 This automatically finds pairs and generates HTML reports for every sample.
 
 ---
+
+
+```text
+
+chipseq_tutorial/
+├── raw/                    ← Raw FASTQ files
+│   ├── SRR7297994.fastq.gz
+│   ├── SRR7297995.fastq.gz
+│   └── ...
+├── cleaned/                ← Fastp cleaned and trimmed reads
+│   ├── SRR7297994.clean.fastq.gz
+│   ├── SRR7297995.clean.fastq.gz
+│   ├── SRR7297998.clean.fastq.gz
+│   ├── SRR7298003.clean.fastq.gz
+│   └── ...
+├── fastp_reports/          ← Fastp QC and trimming reports
+│   ├── SRR7297994.html
+│   ├── SRR7297995.json
+│   ├── SRR7297998.html
+│   ├── SRR7298003.json
+│   └── ...
+└── sample_id.txt
+```
+
+
+
+
+
 
 ## Summary
 1.  **Understand:** FASTQ files have 4 lines per read; line 4 is the quality score.
