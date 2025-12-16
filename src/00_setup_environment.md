@@ -113,6 +113,6 @@ Here are some useful "Housekeeping" commands:
 
 
 ---
-> **The tools are installed and waiting. The next step is to feed them some data**
+> **The tools are installed and waiting. Now, we focus on using Bash scripting to organize and automate bioinformatics analyses**
 ---
 
