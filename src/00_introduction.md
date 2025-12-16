@@ -10,9 +10,7 @@ Chromatin Immunoprecipitation followed by sequencing (ChIP-seq) represents a tra
 
 Prior to the development of ChIP-seq, researchers investigating protein-DNA interactions relied predominantly on low-throughput approaches or array-based technologies, each with significant limitations. Traditional ChIP-PCR methods could only examine a handful of pre-selected genomic regions at a time, requiring prior knowledge of potential binding sites and leaving vast portions of the genome unexplored. While microarray-based ChIP-chip technology represented an advancement, it remained constrained to predefined genomic regions represented on the array platform, offered limited resolution for pinpointing exact binding locations, and exhibited a restricted dynamic range that reduced sensitivity to weaker binding events.
 
-The convergence of whole-genome sequencing and next-generation sequencing technologies created both the opportunity and the imperative for a fundamentally different approach. 
-
-    courtsey [ChIP–seq: advantages and challenges of a maturing technology](https://www.nature.com/articles/nrg2641)
+The convergence of whole-genome sequencing and next-generation sequencing technologies created both the opportunity and the imperative for a fundamentally different approach. Courtsey: [ChIP–seq: advantages and challenges of a maturing technology](https://www.nature.com/articles/nrg2641)
 
 ## 3. Landmark Contributions to Biomedical Science
 
@@ -43,10 +41,9 @@ Raw sequencing data emerges from the sequencer in **FASTQ format**, containing b
 
 Specialized alignment algorithms such as **Bowtie2** map these reads to a reference genome, generating **Sequence Alignment/Map (SAM)** files that record each read's genomic coordinate, alignment quality metrics, and other relevant mapping information. 
 
-Given that **SAM files** exist as plain text and consequently occupy substantial storage space while processing inefficiently, they are routinely converted into **Binary Alignment/Map (BAM)** format. **BAM** files has the same information but in a compressed format that is much faster for computers to process and index.
+Given that **SAM files** exist as plain text and consequently occupy substantial storage space while processing inefficiently, they are routinely converted into **Binary Alignment/Map (BAM)** format. **BAM** files has the same information but in a compressed format that is much faster for computers to process and index. In practice, **SAM files** are often never written to disk, as aligners stream their output directly into BAM files during alignment.
 
 Following alignment and BAM file generation, peak calling algorithms, exemplified by **MACS3**, identify genomic regions exhibiting significant enrichment of **ChIP signal relative to input controls**, outputting coordinates of putative binding sites along with statistical confidence metrics (saved as peak files and bedgraph).
-
 
 The information encoded in **BAM** files can be extracted and reformatted into **Browser Extensible Data (BED)** files,  which is a simple list of genomic intervals written as start and end positions on the genome. These intervals can show where reads pile up or where peaks occur. This format facilitates downstream analyses including **motif discovery** and **gene annotation**. 
 
