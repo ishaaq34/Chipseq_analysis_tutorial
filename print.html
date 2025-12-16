@@ -37,7 +37,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-8b9d8331.js";
+            window.path_to_searchindex_js = "searchindex-92f91180.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-0b558521.js"></script>
@@ -888,98 +888,7 @@ In GEO, you will see a hierarchy. It’s important not to mix these up:</p>
 <li><strong>Download:</strong> Use <code>fastq-dl</code> with a loop or parallel command to fetch the FASTQ files.</li>
 </ol>
 <div style="break-before: page; page-break-before: always;"></div>
-<h1 id="tutorial-02-creating-a-sample-list-the-attendance-sheet"><a class="header" href="#tutorial-02-creating-a-sample-list-the-attendance-sheet">Tutorial 02: Creating a Sample List (The “Attendance Sheet”)</a></h1>
-<blockquote class="blockquote-tag blockquote-tag-note">
-<p class="blockquote-tag-title"><svg viewbox="0 0 16 16" width="18" height="18"><path d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8Zm8-6.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13ZM6.5 7.75A.75.75 0 0 1 7.25 7h1a.75.75 0 0 1 .75.75v2.75h.25a.75.75 0 0 1 0 1.5h-2a.75.75 0 0 1 0-1.5h.25v-2h-.25a.75.75 0 0 1-.75-.75ZM8 6a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z"></path></svg>Note</p>
-<p><strong>Project Context:</strong> In our specific analysis (see <code>README.md</code>), our files are named with ENCODE IDs (e.g., <code>ENCFF327JFG</code>). When you run the commands below on our dataset, your <code>sample_id.txt</code> will contain these IDs instead of “Sample1” or “Experiment1”.</p>
-</blockquote>
-<h2 id="level-1-basic-concept-the-roll-call"><a class="header" href="#level-1-basic-concept-the-roll-call">Level 1: Basic Concept (The “Roll Call”)</a></h2>
-<p>Imagine you have a classroom with 100 students. If you want to give everyone a grade, you don’t want to type out <code>"Student_John_Doe_Homework_Final_v2.docx"</code> every single time. You just want a simple list of names like <code>"John"</code>, <code>"Sarah" </code>, <code>"Mike"</code>.</p>
-<p>In bioinformatics, we feel the same way about our files.</p>
-<ul>
-<li><strong>The Problem:</strong> Our files have long, messy names like <code>Sample1_Rep1_R1.fastq.gz</code>.</li>
-<li><strong>The Goal:</strong> We want a clean list of “Sample IDs” (e.g., <code>Sample1_Rep1</code>) saved in a text file.</li>
-<li><strong>The Why:</strong> We will feed this list to our computer later so it can automatically loop through every sample and process them one by one.</li>
-</ul>
-<hr>
-<h2 id="level-2-execution-cleaning-the-names"><a class="header" href="#level-2-execution-cleaning-the-names">Level 2: Execution (Cleaning the Names)</a></h2>
-<p>We will use a command-line tool called <code>sed</code> (Stream Editor) to “search and replace” the messy file extensions with nothing, leaving only the clean name.</p>
-<h3 id="scenario-a-single-end-reads-1"><a class="header" href="#scenario-a-single-end-reads-1">Scenario A: Single-End Reads</a></h3>
-<p>If your files look like <code>SampleA.fastq.gz</code> , we just want to remove <code>.fastq.gz</code>.</p>
-<pre><code>Control_A_H3K9ac.fastq.gz
-Control_B_H3K9ac.fastq.gz
-</code></pre>
-<p>Run this command:</p>
-<pre><code class="language-bash">ls *.fastq.gz | sed 's/.fastq.gz//' &gt; sample_id.txt
-</code></pre>
-<pre><code>cat sample_id.txt
-</code></pre>
-<p>will give</p>
-<pre><code>Control_A_H3K9ac
-Control_B_H3K9ac
-</code></pre>
-<p><strong>What did this do?</strong></p>
-<ol>
-<li><code>ls *.fastq.gz</code>: Listed all the files.</li>
-<li><code>|</code>: Passed that list to the next tool.</li>
-<li><code>sed 's/.fastq.gz//'</code>: Replaced the text “.fastq.gz” with nothing (effectively deleting it).</li>
-<li><code>&gt; sample_id.txt</code>: Saved the result to a new file.</li>
-</ol>
-<h3 id="scenario-b-paired-end-reads-most-common-1"><a class="header" href="#scenario-b-paired-end-reads-most-common-1">Scenario B: Paired-End Reads (Most Common)</a></h3>
-<p>Paired-end data usually comes in pairs of files for <em>one</em> sample:</p>
-<pre><code>Control_A_H3K9ac_R1.fastq.gz
-Control_A_H3K9ac_R2.fastq.gz
-Control_B_H3K9ac_R1.fastq.gz
-Control_B_H3K9ac_R2.fastq.gz
-
-</code></pre>
-<p>We don’t want <code>"Experiment1" </code> to appear twice in our list. We only want to grab the name <em>once</em>.</p>
-<p>Run this command:</p>
-<pre><code class="language-bash">ls *_R1.fastq.gz | sed 's/_R1.fastq.gz//' &gt; sample_id.txt
-</code></pre>
-<p><strong>Why look for R1?</strong>
-By listing only the <code>_R1</code> files, we get exactly one entry per sample. We then strip off the <code>_R1.fastq.gz</code> part to get the clean sample name.</p>
-<hr>
-<h3 id="creating-the-list-manually"><a class="header" href="#creating-the-list-manually">Creating the List Manually?</a></h3>
-<p>You <em>could</em> just type the names into a text file yourself. However, that is prone to typos. Using <code>ls</code> ensures you only list files that actually exist.</p>
-<h2 id="ready-for-use"><a class="header" href="#ready-for-use">Ready for Use</a></h2>
-<p>Your <code>sample_id.txt</code> file can now be used in downstream pipeline loops for:</p>
-<ul>
-<li>
-<p>Quality Control (FastQC, MultiQC)</p>
-</li>
-<li>
-<p>Adapter Trimming (Trim Galore)</p>
-</li>
-<li>
-<p>Alignment (Bowtie2, HISAT2)</p>
-</li>
-</ul>
-<p>Since we know the <code>Sample ID (e.g., Control_A_H3K9ac)</code>, we can just tell the robot: <code>"Look for Control_A_H3K9ac plus _R1 </code> and <code>Control_A_H3K9ac plus _R2 </code></p>
-<pre><code class="language-bash">
-for sample in $(cat sample_id.txt); do
-
-  echo "sample_id: $sample"
-
-  fq1="${sample}_R1.fastq.gz"
-  fq2="${sample}_R2.fastq.gz"
-
-  echo "paired end:  $fq1  :  $fq2"
-
-done 
-</code></pre>
-<pre><code>sample_id: Control_A_H3K9ac
-paired end:  Control_A_H3K9ac_R1.fastq.gz  :  Control_A_H3K9ac_R2.fastq.gz
-
-sample_id: Control_B_H3K9ac
-paired end:    Control_B_H3K9ac_R1.fastq.gz  :  Control_B_H3K9ac_R2.fastq.gz
-</code></pre>
-<h2 id="summary-3"><a class="header" href="#summary-3">Summary</a></h2>
-<ol>
-<li><strong>Goal:</strong> Create a clean list of sample names (<code>sample_id.txt</code>).</li>
-<li><strong>Tool:</strong> Use <code>ls</code> to find files and <code>sed</code> to remove extensions.</li>
-<li><strong>Result:</strong> A simple text file that acts as an “Attendance Sheet” for your future automation loops.</li>
-</ol>
+<h1 id="sample-list-creation"><a class="header" href="#sample-list-creation">Sample List Creation</a></h1>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="tutorial-03-understanding-and-cleaning-your-data-fastq--fastp"><a class="header" href="#tutorial-03-understanding-and-cleaning-your-data-fastq--fastp">Tutorial 03: Understanding and Cleaning Your Data (FASTQ &amp; fastp)</a></h1>
 <h2 id="level-1-basic-concept-the-anatomy-of-a-read"><a class="header" href="#level-1-basic-concept-the-anatomy-of-a-read">Level 1: Basic Concept (The Anatomy of a Read)</a></h2>
@@ -1050,7 +959,7 @@ This sets the batch size. The script will process 3 files at a time.</p>
 This sets the number of threads used for each task. Here each file is processed with 2 threads.</p>
 <p>This automatically finds pairs and generates HTML reports for every sample.</p>
 <hr>
-<h2 id="summary-4"><a class="header" href="#summary-4">Summary</a></h2>
+<h2 id="summary-3"><a class="header" href="#summary-3">Summary</a></h2>
 <ol>
 <li><strong>Understand:</strong> FASTQ files have 4 lines per read; line 4 is the quality score.</li>
 <li><strong>Action:</strong> Always run <code>fastp</code> to trim adapters, low-quality bases, and too-short reads.</li>
@@ -1182,7 +1091,7 @@ done
 <li><strong>Properly Paired:</strong> Ideally <strong>high</strong>. This means R1 and R2 pointed towards each other at the correct distance.</li>
 </ul>
 <hr>
-<h2 id="summary-5"><a class="header" href="#summary-5">Summary</a></h2>
+<h2 id="summary-4"><a class="header" href="#summary-4">Summary</a></h2>
 <ol>
 <li><strong>Analogy:</strong> Alignment is placing puzzle pieces onto the reference picture.</li>
 <li><strong>Action:</strong> Use <code>bowtie2</code> to align and <code>samtools sort</code> to organize.</li>
@@ -1385,7 +1294,7 @@ uniq -c QC_results/Sample1.read5.bed \
 </div>
 <p><strong>Lesson:</strong> Don’t panic if your raw NRF is low. Remove duplicates first, then check again.</p>
 <hr>
-<h2 id="summary-6"><a class="header" href="#summary-6">Summary</a></h2>
+<h2 id="summary-5"><a class="header" href="#summary-5">Summary</a></h2>
 <ol>
 <li><strong>Goal:</strong> Ensure we have many unique DNA fragments (High Complexity).</li>
 <li><strong>Action:</strong> Run the NRF/PBC calculation script.</li>
@@ -1525,7 +1434,7 @@ The aligner doesn’t know which spot is correct, so it gives it a <strong>Low M
 </code></pre>
 <p><em>Verdict: This BAM file contains only uniquely mapped, high-quality reads.</em></p>
 <hr>
-<h2 id="summary-7"><a class="header" href="#summary-7">Summary</a></h2>
+<h2 id="summary-6"><a class="header" href="#summary-6">Summary</a></h2>
 <ol>
 <li><strong>Context:</strong> We are analyzing active/repressed marks in BLaER1 cells.</li>
 <li><strong>Files:</strong> BAMs are compressed alignment maps.</li>
@@ -1651,7 +1560,7 @@ Rscript /opt/anaconda3/envs/chip/bin/run_spp.R \
 </li>
 </ul>
 <hr>
-<h2 id="summary-8"><a class="header" href="#summary-8">Summary</a></h2>
+<h2 id="summary-7"><a class="header" href="#summary-7">Summary</a></h2>
 <ol>
 <li><strong>Cross-Correlation</strong> shifts reads to find the fragment length (The Echo).</li>
 <li><strong>Phantom Peak</strong> is a background artifact at read length (Microphone Feedback).</li>
@@ -1774,7 +1683,7 @@ Zooming in reveals the difference. Input covers more of the genome at 1x depth, 
 </ul>
 <hr><img width="983" height="488" alt="Screenshot 2025-12-10 at 12 05 56 PM" src="https://github.com/user-attachments/assets/d2d785d1-4da3-4cc4-a3e0-1ee612ad3d38" />
 <hr>
-<h2 id="summary-9"><a class="header" href="#summary-9">Summary</a></h2>
+<h2 id="summary-8"><a class="header" href="#summary-8">Summary</a></h2>
 <ol>
 <li><strong>Fingerprint:</strong> Confirms your IP worked (Sharp elbow).</li>
 <li><strong>Coverage:</strong> Confirms sequencing depth (Inputs = broad, ChIP = peaky).</li>
@@ -2025,7 +1934,7 @@ You can choose different ways to normalize your data, depending on what you want
 </ol>
 <p>If you pick “None,” you see the raw, uncorrected coverage.</p>
 <hr>
-<h2 id="summary-10"><a class="header" href="#summary-10">Summary</a></h2>
+<h2 id="summary-9"><a class="header" href="#summary-9">Summary</a></h2>
 <ol>
 <li><strong>Format:</strong> Convert BAM (Raw Lists) to BigWig (Signal Tracks).</li>
 <li><strong>Calculation:</strong> Use <strong>Effective Genome Size</strong> to handle repeats correctly.</li>
