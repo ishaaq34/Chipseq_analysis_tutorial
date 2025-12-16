@@ -36,7 +36,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-857e92fa.js";
+            window.path_to_searchindex_js = "searchindex-964fc92e.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-df4cee15.js"></script>
@@ -242,21 +242,14 @@ done &lt; srr_list.txt
 </code></pre>
 <h3 id="23-parallel-download-the-fast-way"><a class="header" href="#23-parallel-download-the-fast-way">2.3 Parallel Download (The Fast Way)</a></h3>
 <p>If you have a powerful computer, you can download multiple files at the same time using <code>parallel</code>.</p>
-<pre><code class="language-bash"># Download 4 files at once
-
-#!/bin/bash
-# Run the script using the Bash shell
-
+<pre><code>#!/bin/bash
 set -euo pipefail
-# Exit on error, undefined variables, or failed pipelines
 
 mkdir -p fastq_raw
-# Create output directory for downloaded FASTQ files
 
-cat sample_id.txt | parallel -j 4 'fastq-dl --accession {} --provider SRA --cpus 1 --outdir fastq_raw'
-# Run up to 4 downloads in parallel, one accession per job,
-# each job using a single CPU and writing to fastq/
-
+parallel -j 4 \
+  'fastq-dl --accession {} --provider SRA --cpus 1 --outdir fastq_raw' \
+  :::: sample_id.txt
 
 </code></pre>
 <h3 id="24-download-an-entire-study"><a class="header" href="#24-download-an-entire-study">2.4 Download an Entire Study</a></h3>
