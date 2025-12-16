@@ -36,7 +36,6 @@ We use a tool called `run_spp.R` (part of [PhantomPeakQualTools]( https://github
 Rscript /opt/anaconda3/envs/chip/bin/run_spp.R \
       -c=sample.bam \
       -savp=Sample1_spp.qc.pdf \
-      -s=0:5:400 \
       -out=Sample1_spp.qc.txt
 ```
 
@@ -44,7 +43,6 @@ Rscript /opt/anaconda3/envs/chip/bin/run_spp.R \
 *   `-c`: Input BAM file.
 *   `-savp`: Saves the diagnostic PDF plot (The "Echo" graph).
 *   `-out`: Output file containing the score numbers (NSC and RSC).
-*   `-s=0:5:400`: Scan shift distances from 0 to 400 bp in steps of 5.
 
 ---
 
