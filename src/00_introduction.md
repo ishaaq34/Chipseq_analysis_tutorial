@@ -89,5 +89,5 @@ By the end of this tutorial, you will have the skills—and the code—to answer
 
  **Let's get started**
 
-> **We need to keep all the reagents(= bioinforamtic tools) ready before starting the analysis**. Let`s us do that first
+> **We need to keep all the reagents(= bioinforamtic tools) ready before starting the analysis**. **Let`s us do that first**
 
