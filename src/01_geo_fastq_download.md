@@ -122,7 +122,7 @@ Sometimes, one biological sample is sequenced across multiple "lanes" of a machi
 ---
 
 
-## 1. After Downloading FASTQ Files
+## After Downloading FASTQ Files
 
 ```text
 chipseq_tutorial/
