@@ -37,7 +37,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-7e8de990.js";
+            window.path_to_searchindex_js = "searchindex-b7817a5a.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-5578a832.js"></script>
@@ -919,7 +919,7 @@ FDFFFHHHHHJIJGIJIJJHJJJJJJIIJIJGIHFIIJJIIIIJG        &lt;-- Quality: Each charac
 <h3 id="21-basic-cleaning-single-end"><a class="header" href="#21-basic-cleaning-single-end">2.1 Basic Cleaning (Single-End)</a></h3>
 <pre><code class="language-bash"># -i: Input (dirty)
 # -o: Output (clean)
-fastp -i raw/SRR7297994.fastq.gz -o cleaned/SRR7297994.clean.fastq.gz
+fastp -i fastq_raw/SRR7297994.fastq.gz -o fastq_cleaned/SRR7297994.clean.fastq.gz
 </code></pre>
 <h3 id="22-basic-cleaning-paired-end"><a class="header" href="#22-basic-cleaning-paired-end">2.2 Basic Cleaning (Paired-End)</a></h3>
 <p>For paired-end data, we must process R1 and R2 together so they stay synchronized.</p>
@@ -940,11 +940,11 @@ fastp -i raw/SRR7297994.fastq.gz -o cleaned/SRR7297994.clean.fastq.gz
 You can use <code>awk</code> (a math tool for text) to count directly from the compressed file.</p>
 <p><strong>Count Total Reads:</strong></p>
 <pre><code class="language-bash"># A FASTQ record is 4 lines. We count total lines and divide by 4.
-gzcat raw/SRR7297994.fastq.gz | wc -l | awk '{print $1/4 " reads"}'
+gzcat fastq_raw/SRR7297994.fastq.gz | wc -l | awk '{print $1/4 " reads"}'
 </code></pre>
 <p><strong>Count Total Bases (Coverage):</strong></p>
 <pre><code class="language-bash"># Sums the length of line 2 (sequence) for every record
-gzcat raw/SRR7297994.fastq.gz | awk 'NR%4==2 {b+=length($0)} END{print b " bases"}'
+gzcat fastq_raw/SRR7297994.fastq.gz | awk 'NR%4==2 {b+=length($0)} END{print b " bases"}'
 </code></pre>
 <ul>
 <li><em>Approximation:</em> If you have 100 Million bases and your genome is 3 Billion bases (Human), your coverage is roughly 0.03x.</li>
@@ -953,7 +953,7 @@ gzcat raw/SRR7297994.fastq.gz | awk 'NR%4==2 {b+=length($0)} END{print b " bases
 <p>If you have 50 files, you can use a script to run <code>fastp</code> on all of them in parallel.
 The <code>fastp</code> developers provide a handy script called  <a href="https://github.com/OpenGene/fastp/blob/master/parallel.py">parallel.py</a>:</p>
 <pre><code class="language-bash"># Process 3 files at a time (-f 3), using 2 threads per file (-t 2)
-python parallel.py -i /raw -o /cleaned -r /fastp_reports -f 3 -t 2
+python parallel.py -i /fastq_raw -o /fastq_cleaned -r /fastp_reports -f 3 -t 2
 </code></pre>
 <p>-f 3
 This sets the batch size. The script will process 3 files at a time.</p>
@@ -961,13 +961,17 @@ This sets the batch size. The script will process 3 files at a time.</p>
 This sets the number of threads used for each task. Here each file is processed with 2 threads.</p>
 <p>This automatically finds pairs and generates HTML reports for every sample.</p>
 <hr>
+<blockquote class="blockquote-tag blockquote-tag-important">
+<p class="blockquote-tag-title"><svg viewbox="0 0 16 16" width="18" height="18"><path d="M0 1.75C0 .784.784 0 1.75 0h12.5C15.216 0 16 .784 16 1.75v9.5A1.75 1.75 0 0 1 14.25 13H8.06l-2.573 2.573A1.458 1.458 0 0 1 3 14.543V13H1.75A1.75 1.75 0 0 1 0 11.25Zm1.75-.25a.25.25 0 0 0-.25.25v9.5c0 .138.112.25.25.25h2a.75.75 0 0 1 .75.75v2.19l2.72-2.72a.749.749 0 0 1 .53-.22h6.5a.25.25 0 0 0 .25-.25v-9.5a.25.25 0 0 0-.25-.25Zm7 2.25v2.5a.75.75 0 0 1-1.5 0v-2.5a.75.75 0 0 1 1.5 0ZM9 9a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z"></path></svg>Important</p>
+<p><a href="https://github.com/OpenGene/fastp/blob/master/parallel.py">parallel.py</a> avoids the need to explicitly loop over <code>sample_id.txt</code> in a Bash script.</p>
+</blockquote>
 <pre><code class="language-text">
 chipseq_tutorial/
-├── raw/                    ← Raw FASTQ files
+├── fastq_raw/                    ← Raw FASTQ files
 │   ├── SRR7297994.fastq.gz
 │   ├── SRR7297995.fastq.gz
 │   └── ...
-├── cleaned/                ← Fastp cleaned and trimmed reads
+├── fastq_cleaned/                ← Fastp cleaned and trimmed reads
 │   ├── SRR7297994.clean.fastq.gz
 │   ├── SRR7297995.clean.fastq.gz
 │   ├── SRR7297998.clean.fastq.gz
