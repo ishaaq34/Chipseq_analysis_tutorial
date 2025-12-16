@@ -2,6 +2,7 @@
 
 - [Welcome](./00_introduction.md)
 - [Setup Environment](./00_setup_environment.md)
+- [Bash Automation](./02_bash_automation.md)
 - [GEO Fastq Download](./01_geo_fastq_download.md)
 - [Sample List Creation](./03_sample_list_creation.md)
 - [Fastq Concepts](./04_fastq_concepts.md)
