@@ -19,7 +19,7 @@ In bioinformatics, we feel the same way about our files.
 We will use a command-line tool called `sed` (Stream Editor) to "search and replace" the messy file extensions with nothing, leaving only the clean name.
 
 ### Scenario A: Single-End Reads
-If your files look like `SampleA.fastq.gz`, we just want to remove `.fastq.gz`.
+If your files look like `SampleA.fastq.gz` , we just want to remove `.fastq.gz`.
 
 ```
 Control_A_H3K9ac.fastq.gz
