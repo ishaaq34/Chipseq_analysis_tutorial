@@ -37,7 +37,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-e9ead066.js";
+            window.path_to_searchindex_js = "searchindex-4e36f90d.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-5578a832.js"></script>
@@ -878,7 +878,7 @@ In GEO, you will see a hierarchy. It’s important not to mix these up:</p>
 <ul>
 <li>Original sequencing data is never modified</li>
 <li>Each sample has paired-end reads (_R1 and _R2)</li>
-<li><code>sample_id.txt</code> contains clean sample names for automation</li>
+<li><code>srr_list.txt</code> (from now on <code>sample_id.txt</code>) contains clean sample names for automation</li>
 </ul>
 <hr>
 <h2 id="summary-2"><a class="header" href="#summary-2">Summary</a></h2>
@@ -887,6 +887,10 @@ In GEO, you will see a hierarchy. It’s important not to mix these up:</p>
 <li><strong>Identify:</strong> Find the <strong>SRR</strong> (Run) IDs for your samples.</li>
 <li><strong>Download:</strong> Use <code>fastq-dl</code> with a loop or parallel command to fetch the FASTQ files.</li>
 </ol>
+<blockquote class="blockquote-tag blockquote-tag-note">
+<p class="blockquote-tag-title"><svg viewbox="0 0 16 16" width="18" height="18"><path d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8Zm8-6.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13ZM6.5 7.75A.75.75 0 0 1 7.25 7h1a.75.75 0 0 1 .75.75v2.75h.25a.75.75 0 0 1 0 1.5h-2a.75.75 0 0 1 0-1.5h.25v-2h-.25a.75.75 0 0 1-.75-.75ZM8 6a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z"></path></svg>Note</p>
+<p><strong>The FASTQ files are now available. We proceed with read inspection, quality control, and trimming as required</strong>.</p>
+</blockquote>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="03-understanding-and-cleaning-your-data-fastq--fastp"><a class="header" href="#03-understanding-and-cleaning-your-data-fastq--fastp">03: Understanding and Cleaning Your Data (FASTQ &amp; fastp)</a></h1>
 <h2 id="1-basic-concept-the-anatomy-of-a-read"><a class="header" href="#1-basic-concept-the-anatomy-of-a-read">1: Basic Concept (The Anatomy of a Read)</a></h2>
