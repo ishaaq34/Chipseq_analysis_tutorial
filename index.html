@@ -36,7 +36,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-51ef8c3b.js";
+            window.path_to_searchindex_js = "searchindex-b8f1d98b.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-df4cee15.js"></script>
@@ -176,34 +176,33 @@
                 <div id="mdbook-content" class="content">
                     <main>
                         <h1 id="welcome-to-the-practical-chip-seq-tutorial"><a class="header" href="#welcome-to-the-practical-chip-seq-tutorial">Welcome to the Practical ChIP-seq Tutorial</a></h1>
-<h2 id="overview"><a class="header" href="#overview">Overview</a></h2>
+<h2 id="1-overview"><a class="header" href="#1-overview">1. Overview</a></h2>
 <p>Chromatin Immunoprecipitation followed by sequencing (ChIP-seq) represents a transformative genome-wide methodology that enables researchers to map the locations where DNA-binding proteins, histone modifications, and other chromatin-associated factors interact with DNA across the entire genome. By revealing these precise binding locations, ChIP-seq provides direct insights into gene regulatory mechanisms at the molecular level, fundamentally advancing our understanding of how genes are controlled in both normal physiology and disease states.</p>
-<h2 id="historical-context-and-technical-evolution"><a class="header" href="#historical-context-and-technical-evolution">Historical Context and Technical Evolution</a></h2>
+<h2 id="2-historical-context-and-technical-evolution"><a class="header" href="#2-historical-context-and-technical-evolution">2. Historical Context and Technical Evolution</a></h2>
 <p>Prior to the development of ChIP-seq, researchers investigating protein-DNA interactions relied predominantly on low-throughput approaches or array-based technologies, each with significant limitations. Traditional ChIP-PCR methods could only examine a handful of pre-selected genomic regions at a time, requiring prior knowledge of potential binding sites and leaving vast portions of the genome unexplored. While microarray-based ChIP-chip technology represented an advancement, it remained constrained to predefined genomic regions represented on the array platform, offered limited resolution for pinpointing exact binding locations, and exhibited a restricted dynamic range that reduced sensitivity to weaker binding events.</p>
 <p>The convergence of whole-genome sequencing and next-generation sequencing technologies created both the opportunity and the imperative for a fundamentally different approach.</p>
 <pre><code>courtsey [ChIP–seq: advantages and challenges of a maturing technology](https://www.nature.com/articles/nrg2641)
 </code></pre>
-<h2 id="landmark-contributions-to-biomedical-science"><a class="header" href="#landmark-contributions-to-biomedical-science">Landmark Contributions to Biomedical Science</a></h2>
+<h2 id="3-landmark-contributions-to-biomedical-science"><a class="header" href="#3-landmark-contributions-to-biomedical-science">3. Landmark Contributions to Biomedical Science</a></h2>
 <p>ChIP-seq has enabled numerous groundbreaking discoveries that have fundamentally transformed our understanding of human biology and disease mechanisms. The technology has elucidated the molecular underpinnings of circadian rhythms, explaining how our 24-hour body clock functions at the chromatin level and providing mechanistic insights into why circadian disruption through shift work increases disease susceptibility (<a href="https://www.science.org/doi/10.1126/science.1226339">Koike et al., 2012</a>).</p>
 <p>The landmark ENCODE Project leveraged ChIP-seq extensively to demonstrate that approximately 80% of the human genome exhibits biochemical function, fundamentally revising the perception that much of our genome represents “junk DNA” by revealing millions of gene regulatory elements throughout previously unannotated regions (<a href="https://www.nature.com/articles/nature11247">ENCODE Project, 2012</a>).</p>
 <p>These discoveries collectively demonstrate ChIP-seq’s direct impact on personalized medicine, cancer therapeutics, and our fundamental comprehension of gene regulatory networks.</p>
-<h2 id="experimental-methodology"><a class="header" href="#experimental-methodology">Experimental Methodology</a></h2>
+<h2 id="4-experimental-methodology"><a class="header" href="#4-experimental-methodology">4. Experimental Methodology</a></h2>
 <p>A standard ChIP-seq experiment proceeds through a well-established experimental workflow.</p>
 <p>Initially, formaldehyde cross-linking stabilizes protein-DNA complexes in vivo, effectively capturing a snapshot of cellular chromatin architecture at the moment of fixation. Subsequently, chromatin is mechanically or enzymatically sheared into fragments, creating a population of DNA fragments suitable for immunoprecipitation and subsequent sequencing.</p>
 <p>The immunoprecipitation step employs an antibody with specificity for the protein or histone modification of interest, enriching for DNA fragments that were bound by the target factor.</p>
 <p>Following antibody-based enrichment, cross-links are reversed to release the DNA from associated proteins, and the DNA is purified to remove proteins and other cellular contaminants.</p>
 <p>Finally, the enriched DNA population is converted into a sequencing library compatible with high-throughput sequencing platforms, most commonly those manufactured by Illumina.</p>
 <p>The inclusion of appropriate controls represents a critical aspect of robust ChIP-seq experimental design. Matched input DNA, representing whole-cell extract collected prior to immunoprecipitation, serves as the primary control for modeling background signal and DNA accessibility biases.</p>
-<h2 id="computational-analysis-pipeline"><a class="header" href="#computational-analysis-pipeline">Computational Analysis Pipeline</a></h2>
+<h2 id="5-computational-analysis-pipeline"><a class="header" href="#5-computational-analysis-pipeline">5. Computational Analysis Pipeline</a></h2>
 <p>Raw sequencing data emerges from the sequencer in <strong>FASTQ format</strong>, containing both the nucleotide sequence of each read and associated per-base quality scores that quantify the confidence of each base call. Critically, FASTQ files provide no information regarding the genomic origin of these sequences; this positional information must be established through computational alignment.</p>
 <p>Specialized alignment algorithms such as <strong>Bowtie2</strong> map these reads to a reference genome, generating <strong>Sequence Alignment/Map (SAM)</strong> files that record each read’s genomic coordinate, alignment quality metrics, and other relevant mapping information.</p>
 <p>Given that <strong>SAM files</strong> exist as plain text and consequently occupy substantial storage space while processing inefficiently, they are routinely converted into <strong>Binary Alignment/Map (BAM)</strong> format. <strong>BAM</strong> files has the same information but in a compressed format that is much faster for computers to process and index.</p>
 <p>Following alignment and BAM file generation, peak calling algorithms, exemplified by <strong>MACS3</strong>, identify genomic regions exhibiting significant enrichment of <strong>ChIP signal relative to input controls</strong>, outputting coordinates of putative binding sites along with statistical confidence metrics (saved as peak files and bedgraph).</p>
 <p>The information encoded in <strong>BAM</strong> files can be extracted and reformatted into <strong>Browser Extensible Data (BED)</strong> files,  which is a simple list of genomic intervals written as start and end positions on the genome. These intervals can show where reads pile up or where peaks occur. This format facilitates downstream analyses including <strong>motif discovery</strong> and <strong>gene annotation</strong>.</p>
 <p>Complementing these discrete interval representations, <strong>BigWig</strong> files are created from <strong>BAM files</strong>. They store the signal across the genome, meaning how many reads are in each region or how strong the ChIP-seq signal is, in a compact format that loads quickly in genome browsers.</p>
-<p><strong>From Raw Reads to Biological Insight: A “Zero-to-Hero” Guide.</strong></p>
-<h2 id="this-tutorial-is-a-comprehensive-hands-on-course-designed-to-teach-you-chromatin-immunoprecipitation-sequencing-chip-seq-analysis"><a class="header" href="#this-tutorial-is-a-comprehensive-hands-on-course-designed-to-teach-you-chromatin-immunoprecipitation-sequencing-chip-seq-analysis">This tutorial is a comprehensive, hands-on course designed to teach you <strong>Chromatin Immunoprecipitation sequencing (ChIP-seq)</strong> analysis.</a></h2>
-<h2 id="why-this-tutorial"><a class="header" href="#why-this-tutorial">Why This Tutorial?</a></h2>
+<hr>
+<h2 id="6-why-this-tutorial"><a class="header" href="#6-why-this-tutorial">6. Why This Tutorial?</a></h2>
 <p>We built this course to solve the common frustrations of bioinformatics learning. Here is what makes it different:</p>
 <h3 id="1-the-tiered-learning-method"><a class="header" href="#1-the-tiered-learning-method">1. The “Tiered” Learning Method</a></h3>
 <p>We believe you shouldn’t just run code—you should understand it. Every chapter is broken into three distinct levels:</p>
@@ -222,7 +221,7 @@
 <li><strong>Annotating</strong> genomic features with ChIPseeker.</li>
 </ol>
 <hr>
-<h3 id="data-used-for-this-tutorial---experimental-context"><a class="header" href="#data-used-for-this-tutorial---experimental-context">Data used for this tutorial - Experimental Context</a></h3>
+<h2 id="7--data-used-for-this-tutorial---experimental-context"><a class="header" href="#7--data-used-for-this-tutorial---experimental-context">7.  Data used for this tutorial - Experimental Context</a></h2>
 <p>I performed the analysis in two distinct parts, each serving a different methodological purpose.</p>
 <p>In the first part, I demonstrated the complete ChIP-seq preprocessing workflow, from raw data retrieval to read alignment. For this, I used publicly available SRA data from a <a href="10.1038/s41467-018-06236-8">study examining three histone modifications in C. elegans sperm, oocytes, and early embryos</a> <a href="https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE115704#:~:text=GEO%20Accession%20viewer&amp;text=GEO%20help:%20Mouse%20over%20screen%20elements%20for%20information.&amp;text=Here%20we%20report%20that%20the,a%20sperm%2Dspecific%20chromatin%20signature">SRA data</a> . This dataset was selected specifically to illustrate the practical steps involved in downloading raw sequencing data , organizing metadata, and performing alignment in a reproducible manner.</p>
 <p>In the second part of the analysis, I used pre-aligned ChIP-seq BAM files from <a href="https://www.encodeproject.org/carts/ca521f95-7835-4369-88a9-b89f98fb39ad/">ENCODE</a> to demonstrate downstream analyses. These data were generated in the human BLaER1 cell line under defined stimulation conditions (17β-estradiol, interleukin-3, and CSF1 for 18 hours) and represent isogenic biological replicates. The dataset includes ChIP-seq for the transcription factor CEBPA and the histone modifications H3K27me3 and H3K9ac, along with matched input controls. This resource was selected to illustrate peak calling, normalization, and comparative analysis using standardized, high-quality ENCODE data.</p>
