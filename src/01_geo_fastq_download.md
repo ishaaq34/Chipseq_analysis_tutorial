@@ -155,9 +155,6 @@ chipseq_tutorial/
 │   └── ...
 └── srr_list.txt          ← Sample list for automation
 
-
-
-
 ```
 
 **Key Points:**
