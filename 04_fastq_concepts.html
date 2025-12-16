@@ -36,7 +36,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-51407e75.js";
+            window.path_to_searchindex_js = "searchindex-e9ead066.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-5578a832.js"></script>
@@ -223,11 +223,11 @@ fastp -i raw/SRR7297994.fastq.gz -o cleaned/SRR7297994.clean.fastq.gz
 You can use <code>awk</code> (a math tool for text) to count directly from the compressed file.</p>
 <p><strong>Count Total Reads:</strong></p>
 <pre><code class="language-bash"># A FASTQ record is 4 lines. We count total lines and divide by 4.
-gzcat sample.fastq.gz | wc -l | awk '{print $1/4 " reads"}'
+gzcat raw/SRR7297994.fastq.gz | wc -l | awk '{print $1/4 " reads"}'
 </code></pre>
 <p><strong>Count Total Bases (Coverage):</strong></p>
 <pre><code class="language-bash"># Sums the length of line 2 (sequence) for every record
-gzcat sample.fastq.gz | awk 'NR%4==2 {b+=length($0)} END{print b " bases"}'
+gzcat raw/SRR7297994.fastq.gz | awk 'NR%4==2 {b+=length($0)} END{print b " bases"}'
 </code></pre>
 <ul>
 <li><em>Approximation:</em> If you have 100 Million bases and your genome is 3 Billion bases (Human), your coverage is roughly 0.03x.</li>
@@ -236,7 +236,7 @@ gzcat sample.fastq.gz | awk 'NR%4==2 {b+=length($0)} END{print b " bases"}'
 <p>If you have 50 files, you can use a script to run <code>fastp</code> on all of them in parallel.
 The <code>fastp</code> developers provide a handy script called  <a href="https://github.com/OpenGene/fastp/blob/master/parallel.py">parallel.py</a>:</p>
 <pre><code class="language-bash"># Process 3 files at a time (-f 3), using 2 threads per file (-t 2)
-python parallel.py -i /raw_data_folder -o /clean_data_folder -r /report_folder -f 3 -t 2
+python parallel.py -i /raw -o /cleaned -r /fastp_reports -f 3 -t 2
 </code></pre>
 <p>-f 3
 This sets the batch size. The script will process 3 files at a time.</p>
