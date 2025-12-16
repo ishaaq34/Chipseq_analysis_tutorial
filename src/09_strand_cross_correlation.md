@@ -106,9 +106,12 @@ We compare the Height of the Real Peak (Signal) to the Phantom Peak (Noise).
 
 
  ---
+*  As shown in the plot, expectedly, the two input samples show the typical profile of unenriched DNA, with very low signal-to-noise. Their NSC values sit almost exactly at background (1.003 and 1.005), and their RSC values are only 0.62 and 0.64, which is far below what any real ChIP signal produces (NSC  > 1.05 & RSC > 0.8)
+
+Also , `corelation values ` are worth to look at : 
+ 
 *   **Inputs (Control):**
-    *   NSC values sit almost exactly at background **(1.003 and 1.005)**. RSC values are only **0.62 and 0.64** (Low).
-    *   **Interpretation:** Just noise. This is normal for inputs! The numerically high correlation values (0.5509 and 0.5474) are driven by the dominant phantom peak, not real enrichment.
+    *    The numerically high correlation values (0.5509 and 0.5474) are driven by the dominant phantom peak, not real enrichment.
 *   **H3K9ac (Active Mark):**
     *   Correlation is **High (0.5454 and 0.4112)**.
     *   **Interpretation:** Strong signal. Acetylation marks usually give huge peaks, reflecting the broad and high-coverage nature of these marks.
