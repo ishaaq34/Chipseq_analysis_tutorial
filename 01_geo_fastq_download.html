@@ -36,7 +36,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-b3eb70b4.js";
+            window.path_to_searchindex_js = "searchindex-f13be133.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-df4cee15.js"></script>
@@ -178,8 +178,9 @@
                         <h1 id="02-getting-the-raw-data-fastq"><a class="header" href="#02-getting-the-raw-data-fastq">02: Getting the Raw Data (FASTQ)</a></h1>
 <blockquote class="blockquote-tag blockquote-tag-note">
 <p class="blockquote-tag-title"><svg viewbox="0 0 16 16" width="18" height="18"><path d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8Zm8-6.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13ZM6.5 7.75A.75.75 0 0 1 7.25 7h1a.75.75 0 0 1 .75.75v2.75h.25a.75.75 0 0 1 0 1.5h-2a.75.75 0 0 1 0-1.5h.25v-2h-.25a.75.75 0 0 1-.75-.75ZM8 6a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z"></path></svg>Note</p>
-<p><strong>Project Context:</strong> While this tutorial teaches you how to download data from SRA, our specific project utilizes <strong>ENCODE</strong> data (CEBPA, H3K27me3, H3K9ac). The <code>fastq-dl</code> tool is excellent for public SRA data, but ENCODE data is often downloaded directly from the ENCODE portal. I have worked on <a href="https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE115704#:~:text=GEO%20Accession%20viewer&amp;text=GEO%20help:%20Mouse%20over%20screen%20elements%20for%20information.&amp;text=Here%20we%20report%20that%20the,a%20sperm%2Dspecific%20chromatin%20signature">SRA data</a> to demonstrate steps from data download to the alignemnt step.</p>
+<p><strong>Project Context:</strong> While this tutorial teaches you how to download data from SRA, our specific project utilizes <strong>ENCODE</strong> data (CEBPA, H3K27me3, H3K9ac). The <code>fastq-dl</code> tool is excellent for public SRA data, but ENCODE data is often downloaded directly from the ENCODE portal.</p>
 </blockquote>
+<p>I have worked on <a href="https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE115704#:~:text=GEO%20Accession%20viewer&amp;text=GEO%20help:%20Mouse%20over%20screen%20elements%20for%20information.&amp;text=Here%20we%20report%20that%20the,a%20sperm%2Dspecific%20chromatin%20signature">SRA data</a> to demonstrate steps from data download to the alignemnt step.</p>
 <p>Complete information for all sequencing runs associated with this repository is available through the <a href="https://www.ncbi.nlm.nih.gov/Traces/study/?acc=PRJNA475794&amp;o=acc_s%3Aa">NCBI SRA Run Selector (PRJNA475794)</a>. The Run Selector provides an interactive interface to inspect sequencing metadata, including library layout, platform, read length, and experimental design.</p>
 <p>From this interface, you can download the full metadata table as well as a plain accession list containing the SRR identifiers. The accession list can be saved as <code>srr_list.txt</code> and used directly for automated data retrieval. Unwanted runs can be removed from this file before download, allowing precise control over which datasets are processed.</p>
 <h2 id="level-1-basic-concept"><a class="header" href="#level-1-basic-concept">Level 1: Basic Concept</a></h2>
@@ -298,13 +299,17 @@ In GEO, you will see a hierarchy. It’s important not to mix these up:</p>
 <hr>
 <h2 id="after-downloading-fastq-files"><a class="header" href="#after-downloading-fastq-files">After Downloading FASTQ Files</a></h2>
 <pre><code class="language-text">chipseq_tutorial/
-├── raw/                    ← Raw FASTQ files from sequencing
-│   ├── Control_A_H3K9ac_R1.fastq.gz
-│   ├── Control_A_H3K9ac_R2.fastq.gz
-│   ├── Control_B_H3K9ac_R1.fastq.gz
-│   ├── Control_B_H3K9ac_R2.fastq.gz
+├── raw/                    ← Raw FASTQ files from sequencing : You can rename them like using condition, IP , replicate : Ctrl_H3k9ac_Rep1
+│   ├── SRR7297994.fastq.gz
+│   ├── SRR7297995.fastq.gz
+│   ├── SRR7297998.fastq.gz
+│   ├── SRR7298003.fastq.gz
 │   └── ...
-└── sample_id.txt           ← Sample list for automation
+└── srr_list.txt          ← Sample list for automation
+
+
+
+
 </code></pre>
 <p><strong>Key Points:</strong></p>
 <ul>
