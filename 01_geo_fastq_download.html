@@ -36,7 +36,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-964fc92e.js";
+            window.path_to_searchindex_js = "searchindex-2df580cb.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-df4cee15.js"></script>
@@ -280,6 +280,23 @@ In GEO, you will see a hierarchy. It’s important not to mix these up:</p>
 <ul>
 <li><strong>Result:</strong> You might see <code>SRR900100</code> and <code>SRR900101</code> for the <em>same</em> sample.</li>
 <li><strong>Action:</strong> <code>fastq-dl</code> will download them. Later, we will merge these FASTQ files together so we have one big file for that sample.</li>
+</ul>
+<hr>
+<h2 id="1-after-downloading-fastq-files"><a class="header" href="#1-after-downloading-fastq-files">1. After Downloading FASTQ Files</a></h2>
+<pre><code class="language-text">chipseq_tutorial/
+├── raw/                    ← Raw FASTQ files from sequencing
+│   ├── Control_A_H3K9ac_R1.fastq.gz
+│   ├── Control_A_H3K9ac_R2.fastq.gz
+│   ├── Control_B_H3K9ac_R1.fastq.gz
+│   ├── Control_B_H3K9ac_R2.fastq.gz
+│   └── ...
+└── sample_id.txt           ← Sample list for automation
+</code></pre>
+<p><strong>Key Points:</strong></p>
+<ul>
+<li>Original sequencing data is never modified</li>
+<li>Each sample has paired-end reads (_R1 and _R2)</li>
+<li><code>sample_id.txt</code> contains clean sample names for automation</li>
 </ul>
 <hr>
 <h2 id="summary"><a class="header" href="#summary">Summary</a></h2>
