@@ -37,7 +37,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-7fb8f181.js";
+            window.path_to_searchindex_js = "searchindex-51407e75.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-5578a832.js"></script>
@@ -888,8 +888,8 @@ In GEO, you will see a hierarchy. It’s important not to mix these up:</p>
 <li><strong>Download:</strong> Use <code>fastq-dl</code> with a loop or parallel command to fetch the FASTQ files.</li>
 </ol>
 <div style="break-before: page; page-break-before: always;"></div>
-<h1 id="tutorial-03-understanding-and-cleaning-your-data-fastq--fastp"><a class="header" href="#tutorial-03-understanding-and-cleaning-your-data-fastq--fastp">Tutorial 03: Understanding and Cleaning Your Data (FASTQ &amp; fastp)</a></h1>
-<h2 id="level-1-basic-concept-the-anatomy-of-a-read"><a class="header" href="#level-1-basic-concept-the-anatomy-of-a-read">Level 1: Basic Concept (The Anatomy of a Read)</a></h2>
+<h1 id="03-understanding-and-cleaning-your-data-fastq--fastp"><a class="header" href="#03-understanding-and-cleaning-your-data-fastq--fastp">03: Understanding and Cleaning Your Data (FASTQ &amp; fastp)</a></h1>
+<h2 id="1-basic-concept-the-anatomy-of-a-read"><a class="header" href="#1-basic-concept-the-anatomy-of-a-read">1: Basic Concept (The Anatomy of a Read)</a></h2>
 <p>A FASTQ file is just a text file full of DNA sequences. But unlike a simple list of letters, every single read carries extra baggage (its quality score).</p>
 <p>Think of every read like a <strong>Luggage Tag</strong> with 4 lines of information:</p>
 <ol>
@@ -915,7 +915,7 @@ FDFFFHHHHHJIJGIJIJJHJJJJJJIIJIJGIHFIIJJIIIIJG        &lt;-- Quality: Each charac
 <h3 id="21-basic-cleaning-single-end"><a class="header" href="#21-basic-cleaning-single-end">2.1 Basic Cleaning (Single-End)</a></h3>
 <pre><code class="language-bash"># -i: Input (dirty)
 # -o: Output (clean)
-fastp -i raw_sample.fastq.gz -o clean_sample.fastq.gz
+fastp -i raw/SRR7297994.fastq.gz -o cleaned/SRR7297994.clean.fastq.gz
 </code></pre>
 <h3 id="22-basic-cleaning-paired-end"><a class="header" href="#22-basic-cleaning-paired-end">2.2 Basic Cleaning (Paired-End)</a></h3>
 <p>For paired-end data, we must process R1 and R2 together so they stay synchronized.</p>
@@ -957,6 +957,26 @@ This sets the batch size. The script will process 3 files at a time.</p>
 This sets the number of threads used for each task. Here each file is processed with 2 threads.</p>
 <p>This automatically finds pairs and generates HTML reports for every sample.</p>
 <hr>
+<pre><code class="language-text">
+chipseq_tutorial/
+├── raw/                    ← Raw FASTQ files
+│   ├── SRR7297994.fastq.gz
+│   ├── SRR7297995.fastq.gz
+│   └── ...
+├── cleaned/                ← Fastp cleaned and trimmed reads
+│   ├── SRR7297994.clean.fastq.gz
+│   ├── SRR7297995.clean.fastq.gz
+│   ├── SRR7297998.clean.fastq.gz
+│   ├── SRR7298003.clean.fastq.gz
+│   └── ...
+├── fastp_reports/          ← Fastp QC and trimming reports
+│   ├── SRR7297994.html
+│   ├── SRR7297995.json
+│   ├── SRR7297998.html
+│   ├── SRR7298003.json
+│   └── ...
+└── sample_id.txt
+</code></pre>
 <h2 id="summary-3"><a class="header" href="#summary-3">Summary</a></h2>
 <ol>
 <li><strong>Understand:</strong> FASTQ files have 4 lines per read; line 4 is the quality score.</li>
