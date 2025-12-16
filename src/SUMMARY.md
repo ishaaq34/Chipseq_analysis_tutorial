@@ -4,7 +4,6 @@
 - [Setup Environment](./00_setup_environment.md)
 - [Bash Automation](./01_bash_automation.md)
 - [GEO Fastq Download](./02_geo_fastq_download.md)
-- [Sample List Creation](./03_sample_list_creation.md)
 - [Fastq Concepts](./04_fastq_concepts.md)
 - [Alignment with Bowtie2](./05_alignment_bowtie2.md)
 - [Duplicate Removal & QC](./06_duplicate_removal_qc.md)
