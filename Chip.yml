@@ -3,28 +3,39 @@ channels:
   - conda-forge
   - bioconda
   - defaults
+
 dependencies:
-  - bedtools=2.31.1=he85ad4a_3
-  - bowtie2=2.5.4=hdd4e3a4_6
-  - cutadapt=5.2=py310ha49c9ca_0
-  - fastqc=0.12.1=hdfd78af_0
-  - fastp=1.0.1=hee05c9d_0
-  - fastq-dl=3.0.0=pyhdfd78af_0
-  - macs3=3.0.3=py310ha095e21_0
-  - multiqc=1.31=pyhdfd78af_0
-  - phantompeakqualtools=1.2.2=hdfd78af_1
-  - picard=3.4.0=hdfd78af_0
-  - pip=25.2=pyh8b19718_0
-  - python=3.10.19=hcd7f573_2_cpython
-  - r-base=4.4.2=h9e409d2_1
-  - samtools=1.22.1=h267f7b9_0
-  - trim-galore=0.6.10=hdfd78af_1
-  - ucsc-bedgraphtobigwig=482=h1643cc5_0
-  - ucsc-bigwiginfo=482=h5f814e5_0
-  - ucsc-bigwigsummary=482=h5f814e5_0
-  - ucsc-facount=482=h5f814e5_0
-  - ucsc-fasize=482=h5f814e5_0
-  - khmer=3.0.0a3=py310h3ddde84_7
-  - pip:
-      - deeptools==3.5.6
-prefix: /opt/anaconda3/envs/chip
+  - python=3.10
+  - pip
+
+  # Core QC & preprocessing
+  - fastqc
+  - fastp
+  - cutadapt
+  - trim-galore
+  - fastq-dl
+  - multiqc
+
+  # Alignment & BAM handling
+  - bowtie2
+  - samtools
+  - picard
+  - bedtools
+
+  # Peak calling & ChIP-seq QC
+  - macs3
+  - phantompeakqualtools
+  - deeptools
+
+  # UCSC utilities
+  - ucsc-bedgraphtobigwig
+  - ucsc-bigwiginfo
+  - ucsc-bigwigsummary
+  - ucsc-facount
+  - ucsc-fasize
+
+  # R base (only if you actually need R in this env)
+  - r-base=4.4
+
+  # Optional / specialized
+  - khmer
