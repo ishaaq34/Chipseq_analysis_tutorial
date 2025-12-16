@@ -1,724 +1,508 @@
-# Tutorial 02: Bash Automation (Your Digital Robot)
+# 02: Bash Automation (Your Digital Robot)
 
-## Level 1: Basic Concept (The Robot Assistant)
+## Introduction: Why Learn Bash for Bioinformatics?
 
-### Manual vs. Automated
-Imagine you have 100 samples to analyze. You have two options:
-1.  **Manual:** Type the command for Sample 1. Wait. Type for Sample 2. Wait... (This takes days and is prone to typos).
-2.  **Automated:** Write a small instruction sheet (Script) and give it to a robot. The robot does all 100 samples while you drink coffee.
+**What is Bash?**
 
-In this tutorial, we will learn how to build that "Robot" using **Loops** and **Variables**.
+Bash is a way to control a computer using text commands instead of clicking through menus. It lets you run programs, manage files, and automate tasks by writing simple commands or scripts.
 
-### Reproducibility (Setting the Stage)
-Before we program our robot, we need data. We will create a `raw` folder and some dummy files. This ensures that everyone following this tutorial has the exact same setup.
+**Why is this essential for bioinformatics?**
 
+In bioinformatics, you work with large datasets and many specialized tools that must run in a specific sequence. Bash makes these workflows:
+
+- **Repeatable:** Run the same analysis on new data with one command
+- **Transparent:** See exactly what was done in plain text
+- **Reliable:** Less prone to manual errors from repetitive clicking
+
+Without Bash automation, analyses become harder to track, reproduce, and trust.
+
+---
+
+## The Foundation: Setting Up Safe Scripts
+
+Every reliable Bash script should start with these two critical lines:
 
 ```bash
-%%bash
+#!/bin/bash
+set -euo pipefail
+```
 
-# --- 1. Setup: Creating Dummy Data ---
-# We start by creating a directory and some dummy files to work with.
-ls 
+**What do these lines do?**
+
+1. **`#!/bin/bash`** – This "shebang" line tells your computer to use the Bash shell. It ensures your script behaves the same way on any system.
+
+2. **`set -euo pipefail`** – This changes Bash's default behavior from "keep going even if something breaks" to "stop immediately when an error occurs."
+
+This single choice separates casual scripting from **defensible scientific analysis**. You want your script to fail loudly if something goes wrong, not silently produce incorrect results.
+
+**Adding practical elements:**
+
+```bash
+#!/bin/bash
+set -euo pipefail
+
+mkdir -p output
+echo "Script started"
+```
+
+- **`mkdir -p output`** – Creates a directory called `output` if it doesn't exist. The `-p` flag prevents errors if the directory is already there. This establishes a predictable place for your results.
+
+- **`echo "Script started"`** – Prints a message to confirm the script is running. This is helpful for logging and debugging, especially when scripts run unattended.
+
+---
+
+## The Big Picture: Manual vs. Automated Analysis
+
+Imagine you have a classroom with 100 students and need to process each student's assignment.
+
+**Two approaches:**
+
+1. **Manual Approach:**
+   - Type the command for Student 1
+   - Wait for it to finish
+   - Type for Student 2
+   - Wait again...
+   - Repeat 98 more times (takes days, prone to typos)
+
+2. **Automated Approach:**
+   - Write a small instruction sheet (a script)
+   - Give it to a "robot" (your computer)
+   - The robot processes all 100 students while you drink coffee
+
+This tutorial teaches you the automated approach for ChIP-seq data.
+
+---
+
+## Part 1: Understanding Sample Lists
+
+### The "Roll Call" Analogy
+
+Imagine grading 100 students. You don't want to type `"Student_John_Doe_Homework_Final_v2.docx"` every single time. You just want a simple list:
+
+- John
+- Sarah
+- Mike
+
+
+In bioinformatics, we feel the same way about our sequencing files.
+
+**The Problem:**
+
+Our sequencing files have long, complex names like:
+
+```text
+Control_A_H3K9ac_R1.fastq.gz
+Control_B_H3K9ac_R1.fastq.gz
+```
+
+**The Goal:**
+
+Create a clean list of sample IDs (like a "roll call") that we can feed into automated scripts:
+
+```text
+Control_A_H3K9ac
+Control_B_H3K9ac
 
 ```
 
-    [34manaconda_projects[m[m
-    bash_tutorial.ipynb
+**Why do we need this?**
 
+This simple text file will allow our computer to automatically loop through every sample and process them one by one. Instead of typing commands 100 times, we type it once and let the loop do the work.
 
+---
+
+## Part 2: Creating Your Sample List
+
+### Step 1: Verify Your Files
+
+Before creating any list, always check what files you actually have.
 
 ```bash
-%%bash
-
-mkdir -p raw
-ls raw
+ls *.fastq.gz 
 ```
 
+**What this does:**
+- `ls` = "list" command
+- `*.fastq.gz` = show only files ending in `.fastq.gz`
+
+This explicitly targets FASTQ files and is useful at the very start of any sequencing workflow (RNA-seq, ChIP-seq, ATAC-seq, CUT&RUN) to quickly verify that your input files are named correctly and consistently.
+
+---
+
+### Step 2: Extract Clean Sample Names
+
+Now we need to remove the messy file extensions to get clean sample IDs. We'll use a tool called `sed` (Stream Editor) for this.
+
+---
+
+#### Scenario A: Single-End Reads
+
+If you have **single-end sequencing data** , use this approach:
+
+#### Method 1: Step-by-step
+
+This method breaks down the process into individual steps so you can see what's happening at each stage.
+
+> **Note:** In real workflows, your FASTQ files are typically stored in a subdirectory like `raw/` or `fastq_raw/`. It is better to craete the sample list in the `raw/` folder and copy that list to working directory
+
+**Step 1: List all FASTQ files from the raw folder and save to a text file**
 
 ```bash
-%%bash
-touch raw/Input1.fastq.gz
-touch raw/Input2.fastq.gz
-touch raw/SampleA.fastq.gz
- ls raw
+cd raw/
+ls *.fastq.gz > samples.txt
 ```
 
-    Input1.fastq.gz
-    Input2.fastq.gz
-    SampleA.fastq.gz
+This command finds all files ending in `.fastq.gz` inside the `raw/` folder and saves their names to `samples.txt`.
 
-
-**Explanation**: We now have a folder named `raw` containing three empty files. This mimics a real sequencing run.
-
-## Level 2: Execution (The Loop)
-
-### 2.1 The Basic Loop
-The `for` loop is the heart of automation. It says: **"For every file you see, do this action."**
-
-**The Syntax:**
-```bash
-for variable in pattern
-do
-    Action
-done
-```
-
-Here, we use the wildcard `*` (which means "anything") to find all files ending in `.fastq.gz`.
-
+**Step 2: Check what got saved**
 
 ```bash
-%%bash
-echo "--- Listing files ---"
-for fq in raw/*.fastq.gz
-do
-    echo "Found file: $fq"
-done
-
-```
-
-    --- Listing files ---
-    Found file: raw/Input1.fastq.gz
-    Found file: raw/Input2.fastq.gz
-    Found file: raw/SampleA.fastq.gz
-
-
-**Start Simple**: Notice we just `echo` (print) the filename first. **Always print your list before running real commands!** It prevents the robot from accidentally deleting your files.
-
-### 2.2 Cleaning Names (`basename`)
-The variable `$fq` contains the entire path: `raw/Input1.fastq.gz`.
-But we often just want the name: `Input1`.
-
-We use a tool called `basename` to strip away the folder (`raw/`) and the extension (`.fastq.gz`).
-
-This allows us to create nice output filenames like `Input1.bam` instead of `raw_Input1.fastq.gz.bam`.
-
-
-```bash
-%%bash
-echo -e "\n--- Extracting Sample Names ---"
-for fq in raw/*.fastq.gz
-do
-    # syntax: basename path suffix
-    sample=$(basename "$fq" .fastq.gz)
-    echo "Sample name is: $sample"
-done
-
-```
-
-    
-    --- Extracting Sample Names ---
-    Sample name is: Input1
-    Sample name is: Input2
-    Sample name is: SampleA
-
-
-**Logic Check**: See how `Input1.fastq.gz` became just `Input1`? This is perfect for naming our upcoming alignment files.
-
-### 2.3 The Full Command Generator
-Now we combine everything. Instead of running the alignment, we will `echo` the exact command the robot WOULD run.
-
-**Goal**: `bowtie2 -U raw/Input1.fastq.gz | samtools sort -o mapped/Input1.sorted.bam`
-
-We construct this string using our variables:
-*   Input: `$fq` (Full path)
-*   Output: `${sample}.sorted.bam` (Clean name)
-
-
-```bash
- %%bash
-
-for fq in raw/*.fastq.gz
-do
-    # syntax: basename path suffix
-    sample=$(basename "$fq" .fastq.gz)
-    
-    echo "  Input file: $fq"
-
-    echo "Sample name is: $sample"
-
-     echo "Processing sample: $sample"
-
-    echo "  Command: bowtie2 -U $fq | samtools sort -o mapped/${sample}.sorted.bam"
-done
-
-
-```
-
-      Input file: raw/Input1.fastq.gz
-    Sample name is: Input1
-    Processing sample: Input1
-      Command: bowtie2 -U raw/Input1.fastq.gz | samtools sort -o mapped/Input1.sorted.bam
-      Input file: raw/Input2.fastq.gz
-    Sample name is: Input2
-    Processing sample: Input2
-      Command: bowtie2 -U raw/Input2.fastq.gz | samtools sort -o mapped/Input2.sorted.bam
-      Input file: raw/SampleA.fastq.gz
-    Sample name is: SampleA
-    Processing sample: SampleA
-      Command: bowtie2 -U raw/SampleA.fastq.gz | samtools sort -o mapped/SampleA.sorted.bam
-
-
-**Success**: The loop generated three unique, correct alignment commands. If this were a real run, we would simply remove the word `echo` to execute them.
-
-## Level 3: Advanced Automation (The List)
-
-### 3.1 Arrays (The Shopping List)
-Using `*` (Globbing) grabs *everything*. But what if you only want to process specific samples (e.g., just the Controls)?
-
-We use an **Array** (a specific list of items).
-
-Instead of saying "Get everything in the fridge", we say "Get only Milk and Eggs".
-
-
-```bash
-%%bash
-echo -e "\n--- Looping over Array ---"
-SAMPLES=("Input1" "Input2" "TumorA")
-
-for s in "${SAMPLES[@]}"
-do
-    echo "Processing specific sample: $s"
-done
-
-
-echo " total sample files : ${SAMPLES[@]}"
-```
-
-    
-    --- Looping over Array ---
-    Processing specific sample: Input1
-    Processing specific sample: Input2
-    Processing specific sample: TumorA
-     total sample files : Input1 Input2 TumorA
-
-
-**Why use this?** It gives you total control. You don't accidentally process temporary files or old data.
-
-### 3.2 Collecting Outputs (`multiBamSummary`)
-Some tools (like `multiBamSummary` for correlation plots) need **ALL** the BAM files at once.
-We can't just process them one by one. We need to collect them into a "basket" (Array) as we go.
-
-
-```bash
-%%bash
-
-
-samp_files=() #“Create an empty list that we will fill with BAM file paths.”
-for fq in raw/*.fastq.gz    #Append BAM paths to the array
-do
-    samp_files+=("$fq")       #Append BAM paths to the array
-   echo "samples files Added: $fq" # optional print to see what is going 
-   
-  sample_name=$(basename "$fq" .fastq.gz)
-  echo "sample_name of the file used : $sample_name"
-
-done
-
-
-echo
-echo "--- Final FASTQ array --- "
-printf "%s\n" "${samp_files[@]}"
-```
-
-    samples files Added: raw/Input1.fastq.gz
-    sample_name of the file used : Input1
-    samples files Added: raw/Input2.fastq.gz
-    sample_name of the file used : Input2
-    samples files Added: raw/SampleA.fastq.gz
-    sample_name of the file used : SampleA
-    
-    --- Final FASTQ array --- : raw/Input1.fastq.gz raw/Input2.fastq.gz raw/SampleA.fastq.gz
-    raw/Input1.fastq.gz
-    raw/Input2.fastq.gz
-    raw/SampleA.fastq.gz
-
-
-**Logic**: `samp_files+=("$fq")` adds the file to our basket. At the end, we have the full basket to use.
-
-
-```bash
-%%bash
-
-
-samp_files=() #“Create an empty list that we will fill with fastq file paths.”
-for fq in raw/*.fastq.gz    
-do
-    samp_files+=("$fq")       #Append FG paths to the array
-   echo "samples files Added: $fq" # optional print to see what is going 
-   
-  sample_name=$(basename "$fq" .fastq.gz)
-  echo "sample_name of the file used : $sample_name"
-
-   echo "  Command: bowtie2 -U $fq | samtools sort -o mapped/${sample}.sorted.bam"
-
-
-done
-
-
- echo "total fastq files : ${samp_files[@]}" 
-```
-
-    samples files Added: raw/Input1.fastq.gz
-    sample_name of the file used : Input1
-      Command: bowtie2 -U raw/Input1.fastq.gz | samtools sort -o mapped/.sorted.bam
-    samples files Added: raw/Input2.fastq.gz
-    sample_name of the file used : Input2
-      Command: bowtie2 -U raw/Input2.fastq.gz | samtools sort -o mapped/.sorted.bam
-    samples files Added: raw/SampleA.fastq.gz
-    sample_name of the file used : SampleA
-      Command: bowtie2 -U raw/SampleA.fastq.gz | samtools sort -o mapped/.sorted.bam
-    
-    --- Final FASTQ array --- 
-    total fastq files : raw/Input1.fastq.gz raw/Input2.fastq.gz raw/SampleA.fastq.gz
-
-
-
-```bash
-%%bash
-
-
-samp_files=() #“Create an empty list that we will fill with fastq file paths.”
-bam_files=()    # BAM array
-
-for fq in raw/*.fastq.gz    
-do
-    samp_files+=("$fq")       #Append FG paths to the array
-   echo "samples files Added: $fq" # optional print to see what is going 
-   
-    sample_name=$(basename "$fq" .fastq.gz)
-   echo "sample_name of the file used : $sample_name"
-
-     echo "  Command: bowtie2 -U $fq | samtools sort -o mapped/${sample_name}.sorted.bam"
-
-
-    echo "  Command: bamCovergae -bam mapped/${sample_name}.sorted.bam -o mapped/${sample_name}.bw"
-
-  
-
-  
-
-
-done
-
-
- echo "total fastq files : ${samp_files[@]}" 
-  echo "total bamfiles : ${bam_files[@]}" 
-
-echo "Command : multibamSummary -bam ${bam_files[@]} -o out.npz"
-
-```
-
-    samples files Added: raw/Input1.fastq.gz
-    sample_name of the file used : Input1
-      Command: bowtie2 -U raw/Input1.fastq.gz | samtools sort -o mapped/Input1.sorted.bam
-      Command: bamCovergae -bam mapped/Input1.sorted.bam -o mapped/Input1.bw
-    samples files Added: raw/Input2.fastq.gz
-    sample_name of the file used : Input2
-      Command: bowtie2 -U raw/Input2.fastq.gz | samtools sort -o mapped/Input2.sorted.bam
-      Command: bamCovergae -bam mapped/Input2.sorted.bam -o mapped/Input2.bw
-    samples files Added: raw/SampleA.fastq.gz
-    sample_name of the file used : SampleA
-      Command: bowtie2 -U raw/SampleA.fastq.gz | samtools sort -o mapped/SampleA.sorted.bam
-      Command: bamCovergae -bam mapped/SampleA.sorted.bam -o mapped/SampleA.bw
-    total fastq files : raw/Input1.fastq.gz raw/Input2.fastq.gz raw/SampleA.fastq.gz
-    total bamfiles : mapped/Input1.sorted.bam mapped/Input2.sorted.bam mapped/SampleA.sorted.bam
-    Command : multibamSummary -bam mapped/Input1.sorted.bam mapped/Input2.sorted.bam mapped/SampleA.sorted.bam -o out.npz
-
-
-### 3.3 Adding Labels
-We can also collect a separate list of labels (e.g., "Treatment" vs "Control"). The concept is the same: one basket for files, another basket for labels.
-
-
-```bash
-%%bash
-
-
-samp_files=() #“Create an empty list that we will fill with fastq file paths.”
-bam_files=()    # BAM array
-
-for fq in raw/*.fastq.gz    
-do
-    samp_files+=("$fq")       #Append FG paths to the array
-   echo "samples files Added: $fq" # optional print to see what is going 
-   
-    sample_name=$(basename "$fq" .fastq.gz)
-   echo "sample_name of the file used : $sample_name"
-
-     echo "  Command: bowtie2 -U $fq | samtools sort -o mapped/${sample_name}.sorted.bam"
-
-
-    echo "  Command: bamCovergae -bam mapped/${sample_name}.sorted.bam -o mapped/${sample_name}.bw"
-
-  
-    bam="mapped/${sample_name}.sorted.bam"
-    bam_files+=("$bam")
-
-  
-
-
-done
-
-
- echo "total fastq files : ${samp_files[@]}" 
-  echo "total bamfiles : ${bam_files[@]}" 
-
-echo "Command : multibamSummary -bam ${bam_files[@]} -o out.npz"
-
-```
-
-    samples files Added: raw/Input1.fastq.gz
-    sample_name of the file used : Input1
-      Command: bowtie2 -U raw/Input1.fastq.gz | samtools sort -o mapped/Input1.sorted.bam
-      Command: bamCovergae -bam mapped/Input1.sorted.bam -o mapped/Input1.bw
-    samples files Added: raw/Input2.fastq.gz
-    sample_name of the file used : Input2
-      Command: bowtie2 -U raw/Input2.fastq.gz | samtools sort -o mapped/Input2.sorted.bam
-      Command: bamCovergae -bam mapped/Input2.sorted.bam -o mapped/Input2.bw
-    samples files Added: raw/SampleA.fastq.gz
-    sample_name of the file used : SampleA
-      Command: bowtie2 -U raw/SampleA.fastq.gz | samtools sort -o mapped/SampleA.sorted.bam
-      Command: bamCovergae -bam mapped/SampleA.sorted.bam -o mapped/SampleA.bw
-    total fastq files : raw/Input1.fastq.gz raw/Input2.fastq.gz raw/SampleA.fastq.gz
-    total bamfiles : mapped/Input1.sorted.bam mapped/Input2.sorted.bam mapped/SampleA.sorted.bam
-    Command : multibamSummary -bam mapped/Input1.sorted.bam mapped/Input2.sorted.bam mapped/SampleA.sorted.bam -o out.npz
-
-
-**Result**: We have a single command at the end that includes ALL our files. This is essential for summary plots.
-
-
-```bash
-%%bash
-
-
-samp_files=() #“Create an empty list that we will fill with fastq file paths.”
-bam_files=()    # BAM array
-
-for fq in raw/*.fastq.gz    
-do
-   
-    sample_name=$(basename "$fq" .fastq.gz)
-    echo "sample_name of the file used : $sample_name"
-
-     echo "  Command: bowtie2 -U $fq | samtools sort -o mapped/${sample_name}.sorted.bam"
-
-
-    echo "  Command: bamCovergae -bam mapped/${sample_name}.sorted.bam -o mapped/${sample_name}.bw"
-
-  
-    bam="mapped/${sample_name}.sorted.bam"
-    bam_files+=("$bam")
-
-    labels+=("$sample_name") # add label to array
-
-
-done
-
-echo "total bamfiles : ${bam_files[@]}" 
-
-
-
-echo "Command : multiBamSummary bins \
-    --bamfiles "${bam_files[@]}" \
-    --labels "${labels[@]}" \
-    -o multiBam.npz "
-
-```
-
-    sample_name of the file used : Input1
-      Command: bowtie2 -U raw/Input1.fastq.gz | samtools sort -o mapped/Input1.sorted.bam
-      Command: bamCovergae -bam mapped/Input1.sorted.bam -o mapped/Input1.bw
-    sample_name of the file used : Input2
-      Command: bowtie2 -U raw/Input2.fastq.gz | samtools sort -o mapped/Input2.sorted.bam
-      Command: bamCovergae -bam mapped/Input2.sorted.bam -o mapped/Input2.bw
-    sample_name of the file used : SampleA
-      Command: bowtie2 -U raw/SampleA.fastq.gz | samtools sort -o mapped/SampleA.sorted.bam
-      Command: bamCovergae -bam mapped/SampleA.sorted.bam -o mapped/SampleA.bw
-    total bamfiles : mapped/Input1.sorted.bam mapped/Input2.sorted.bam mapped/SampleA.sorted.bam
-    Command : multiBamSummary bins     --bamfiles mapped/Input1.sorted.bam mapped/Input2.sorted.bam mapped/SampleA.sorted.bam     --labels Input1 Input2 SampleA     -o multiBam.npz 
-
-
-### 3.4 Production Scale (Reading from Files)
-
-If you have 500 samples, writing them in a script is messy. It's better to keep a separate text file (e.g., `samples.txt`) and have your robot read that.
-
-
-```bash
-
-%%bash
-
-# Create a dummy samples.txt for demonstration
-ls raw/ > samples.txt
-
-echo "samples"
 cat samples.txt
+```
 
-sed 's/.fastq.gz//' samples.txt> sample_id.txt 
+This displays the contents of `samples.txt` so you can verify the filenames. You should see:
 
-echo "sample_id"
+```text
+Control_A_H3K9ac.fastq.gz
+Control_B_H3K9ac.fastq.gz
+```
+
+**Step 3: Remove the path and `.fastq.gz` extension from each line**
+
+```bash
+sed 's/.fastq.gz//' > sample_id.txt
+```
+
+**What this does:**
+
+
+- Second `sed 's/.fastq.gz//'` = Remove the `.fastq.gz` extension
+- `>` = Redirect the final output to a new file
+- `sample_id.txt` = Save the cleaned names here
+
+**Step 4: Verify the final result**
+
+```bash
 cat sample_id.txt
+```
+
+Now you should see clean sample IDs without paths or extensions:
+
+```text
+Control_A_H3K9ac
+Control_B_H3K9ac
+```
+
+---
+
+#### Method 2: One-line command (recommended)
+
+Once you understand the steps above, you can combine them into one efficient command:
+
+```bash
+ls *.fastq.gz |  sed 's/.fastq.gz//' > sample_id.txt
+```
+
+**What the pipe (`|`) does:**
+
+Instead of saving to intermediate files, the pipe passes output directly from one command to the next:
+1. `ls *.fastq.gz` lists the files
+3.  `sed` removes the `.fastq.gz` extension  
+4. Final result is saved to `sample_id.txt`
+
+This is faster and cleaner than the step-by-step method.  Then moving the sample_id.txt to working directory. 
+
+```
+cd ..
+mv raw/sample_id.txt .
 
 ```
 
-    samples
-    Input1.fastq.gz
-    Input2.fastq.gz
-    SampleA.fastq.gz
-    sample_id
-    Input1
-    Input2
-    SampleA
 
 
-Now we use a `while read` loop. This is safer than a `for` loop because it handles spaces and special characters correctly.
-
+**Check your result:**
 
 ```bash
-%%bash
-
-echo -e "\n--- Looping over File List ---"
-while read sample
-do
-    echo "Reading from file: $sample"
-done < sample_id.txt
-
+cat sample_id.txt
 ```
 
-    
-    --- Looping over File List ---
-    Reading from file: Input1
-    Reading from file: Input2
-    Reading from file: SampleA
+You should see clean sample names:
 
-
-**Logic**: The code `< sample_id.txt` feeds the file into the loop, one line at a time.
-
-### 3.5 Example: Running the List
-See how the loop reads `Input1`, then `Input2`, then `SampleA`? We can just plug our `bowtie2` command right inside this loop.
-
-
-```bash
-%%bash
-
-echo -e "\n--- Looping over File List ---"
-
-while read -r sample
-do
-    echo "sample_id: $sample"
-
-    fq="${sample}.fastq.gz"
-
-     echo "sample: $fq"
-
-    echo " Command: bowtie2 -U $fq | samtools sort -o mapped/${sample}.sorted.bam"
-     
-done < sample_id.txt
-
-
-
+```text
+Control_A_H3K9ac
+Control_B_H3K9ac
 ```
 
-    
-    --- Looping over File List ---
-    sample_id: Input1
-    sample: Input1.fastq.gz
-     Command: bowtie2 -U Input1.fastq.gz | samtools sort -o mapped/Input1.sorted.bam
-    sample_id: Input2
-    sample: Input2.fastq.gz
-     Command: bowtie2 -U Input2.fastq.gz | samtools sort -o mapped/Input2.sorted.bam
-    sample_id: SampleA
-    sample: SampleA.fastq.gz
-     Command: bowtie2 -U SampleA.fastq.gz | samtools sort -o mapped/SampleA.sorted.bam
+---
 
+#### Scenario B: Paired-End Reads (Most Common)
 
-### 3.6 Paired-End Data (R1 and R2)
-For paired-end sequencing, you don't just have one file. You have two (`_R1` and `_R2`).
+Most ChIP-seq experiments use **paired-end sequencing**, which produces *two* files per sample:
 
-Since we know the **Sample ID** (e.g., `Input1`), we can just tell the robot: "Look for `Input1` plus `_R1` and `Input1` plus `_R2`."
-
-
-```bash
-%%bash
-
-while read -r sample
-do
-    echo "sample_id: $sample"
-
-        fq1="${sample}_R1.fastq.gz"
-        fq2="${sample}_R2.fastq.gz"
-
-
- echo " paired end -  $fq1 : $fq2"
-
-
-
-    echo " Command: bowtie2 -1 $fq1 -2 $fq2 | samtools sort -o mapped/${sample}.sorted.bam"
-
-done < sample_id.txt
-
+```text
+Control_A_H3K9ac_R1.fastq.gz
+Control_A_H3K9ac_R2.fastq.gz
+Control_B_H3K9ac_R1.fastq.gz
+Control_B_H3K9ac_R2.fastq.gz
 ```
 
-    sample_id: Input1
-     paired end -  Input1_R1.fastq.gz : Input1_R2.fastq.gz
-     Command: bowtie2 -1 Input1_R1.fastq.gz -2 Input1_R2.fastq.gz | samtools sort -o mapped/Input1.sorted.bam
-    sample_id: Input2
-     paired end -  Input2_R1.fastq.gz : Input2_R2.fastq.gz
-     Command: bowtie2 -1 Input2_R1.fastq.gz -2 Input2_R2.fastq.gz | samtools sort -o mapped/Input2.sorted.bam
-    sample_id: SampleA
-     paired end -  SampleA_R1.fastq.gz : SampleA_R2.fastq.gz
-     Command: bowtie2 -1 SampleA_R1.fastq.gz -2 SampleA_R2.fastq.gz | samtools sort -o mapped/SampleA.sorted.bam
+**The challenge:** We don't want `Control_A_H3K9ac` to appear twice in our list. We only want each sample name *once*.
 
-
-**Scientific Note**: This logic works for almost all modern Illumina data. Just check the file suffix!
-
+**The solution:** Target only the `_R1` files.
 
 ```bash
-%%bash
+ls *_R1.fastq.gz | sed 's/_R1.fastq.gz//' > sample_id.txt
+```
 
-for sample in $(cat sample_id.txt); do
+**Why look for R1?**
 
+By listing only the `_R1` files, we get exactly one entry per sample. We then strip off the `_R1.fastq.gz` suffix to get the clean sample name.
+
+The script will automatically know to look for both `_R1` and `_R2` files later when we use this list.
+
+---
+
+### Why Not Create the List Manually?
+
+You *could* just type sample names into a text file yourself. However:
+
+- **Prone to typos:** One wrong character breaks your analysis
+- **Not verifiable:** Using `ls` ensures you only list files that actually exist
+
+Automation prevents these errors.
+
+---
+
+## Part 3: Using Your Sample List in Automation
+
+Now that we have `sample_id.txt`, we can use it to automate processing of all samples.
+
+### Understanding the Concept
+
+Since we know the sample ID (e.g., `Control_A_H3K9ac`), we can tell our script:
+
+> "For each sample ID, look for two files: the sample name plus `_R1.fastq.gz` and the sample name plus `_R2.fastq.gz`"
+
+The computer can construct these filenames automatically.
+
+---
+
+### Example 1: Basic Loop to Verify File Pairs
+
+This script reads your sample list and prints out the paired filenames:
+
+```bash
+#!/bin/bash
+set -euo pipefail
+
+while read -r sample; do
   echo "sample_id: $sample"
 
-  fq1="${sample}_R1_val_1.fastq.gz"
-  fq2="${sample}_R2_val_2.fastq.gz"
+  fq1="${sample}_R1.fastq.gz"
+  fq2="${sample}_R2.fastq.gz"
 
-  echo "paired end:  $fq1  :  $fq2"
-
-  echo "Command: bowtie2 -x index \
-    -1 $fq1 \
-    -2 $fq2 \
-    -p 6 --no-unal \
-    2> bowalign/${sample}.log | samtools sort -@ 6 -o bowalign/${sample}.sorted.bam"
-
-  echo ""   # blank line for readability
-
-done 
+  echo "paired end: $fq1 : $fq2"
+done < sample_id.txt
 ```
 
-    sample_id: Input1
-    paired end:  Input1_R1_val_1.fastq.gz  :  Input1_R2_val_2.fastq.gz
-    Command: bowtie2 -x index     -1 Input1_R1_val_1.fastq.gz     -2 Input1_R2_val_2.fastq.gz     -p 6 --no-unal     2> bowalign/Input1.log | samtools sort -@ 6 -o bowalign/Input1.sorted.bam
-    
-    sample_id: Input2
-    paired end:  Input2_R1_val_1.fastq.gz  :  Input2_R2_val_2.fastq.gz
-    Command: bowtie2 -x index     -1 Input2_R1_val_1.fastq.gz     -2 Input2_R2_val_2.fastq.gz     -p 6 --no-unal     2> bowalign/Input2.log | samtools sort -@ 6 -o bowalign/Input2.sorted.bam
-    
-    sample_id: SampleA
-    paired end:  SampleA_R1_val_1.fastq.gz  :  SampleA_R2_val_2.fastq.gz
-    Command: bowtie2 -x index     -1 SampleA_R1_val_1.fastq.gz     -2 SampleA_R2_val_2.fastq.gz     -p 6 --no-unal     2> bowalign/SampleA.log | samtools sort -@ 6 -o bowalign/SampleA.sorted.bam
-    
+**Output:**
 
+```text
+sample_id: Control_A_H3K9ac
+paired end:  Control_A_H3K9ac_R1.fastq.gz  :  Control_A_H3K9ac_R2.fastq.gz
 
-### 3.7 Pro Tip: `mapfile`
-If you want to be extra fancy (and efficient), you can use `mapfile` to load the entire list into memory instantly. It's faster for huge lists.
+sample_id: Control_B_H3K9ac
+paired end:    Control_B_H3K9ac_R1.fastq.gz  :  Control_B_H3K9ac_R2.fastq.gz
+```
 
+**What this script does:**
+
+- `while read -r sample` – Reads one line (sample ID) at a time from `sample_id.txt`
+- `fq1="${sample}_R1.fastq.gz"` – Constructs the forward read filename
+- `fq2="${sample}_R2.fastq.gz"` – Constructs the reverse read filename
+- `echo` – Prints the results so you can verify
+
+---
+
+### Example 2: Adding Directory Paths
+
+In real workflows, your raw FASTQ files are usually in a specific folder. Let's account for that:
 
 ```bash
-%%bash
+#!/bin/bash
+set -euo pipefail
 
-# create array from file
-mapfile -t samples < sample_id.txt
+RAW_DIR="fastq_raw"
 
-for sample in "${samples[@]}"; do
-
+while read -r sample; do
   echo "sample_id: $sample"
 
-  fq1="${sample}_R1_val_1.fastq.gz"
-  fq2="${sample}_R2_val_2.fastq.gz"
+  fq1="${RAW_DIR}/${sample}_R1.fastq.gz"
+  fq2="${RAW_DIR}/${sample}_R2.fastq.gz"
 
-  echo "paired end:  $fq1  :  $fq2"
+  echo "inputs:"
+  echo "  $fq1"
+  echo "  $fq2"
 
-  echo "Command: bowtie2 -x index \
-    -1 $fq1 \
-    -2 $fq2 \
-    -p 6 --no-unal \
-    2> bowalign/${sample}.log | samtools sort -@ 6 -o bowalign/${sample}.sorted.bam"
-
-  echo ""
-
-done
-
+done < sample_id.txt
 ```
 
-    sample_id: Input1
-    paired end:  Input1_R1_val_1.fastq.gz  :  Input1_R2_val_2.fastq.gz
-    Command: bowtie2 -x index     -1 Input1_R1_val_1.fastq.gz     -2 Input1_R2_val_2.fastq.gz     -p 6 --no-unal     2> bowalign/Input1.log | samtools sort -@ 6 -o bowalign/Input1.sorted.bam
-    
-    sample_id: Input2
-    paired end:  Input2_R1_val_1.fastq.gz  :  Input2_R2_val_2.fastq.gz
-    Command: bowtie2 -x index     -1 Input2_R1_val_1.fastq.gz     -2 Input2_R2_val_2.fastq.gz     -p 6 --no-unal     2> bowalign/Input2.log | samtools sort -@ 6 -o bowalign/Input2.sorted.bam
-    
-    sample_id: SampleA
-    paired end:  SampleA_R1_val_1.fastq.gz  :  SampleA_R2_val_2.fastq.gz
-    Command: bowtie2 -x index     -1 SampleA_R1_val_1.fastq.gz     -2 SampleA_R2_val_2.fastq.gz     -p 6 --no-unal     2> bowalign/SampleA.log | samtools sort -@ 6 -o bowalign/SampleA.sorted.bam
-    
+**Output:**
+
+```text
+sample_id: Control_A_H3K9ac
+inputs:
+  fastq_raw/Control_A_H3K9ac_R1.fastq.gz
+  fastq_raw/Control_A_H3K9ac_R2.fastq.gz
+
+sample_id: Control_B_H3K9ac
+inputs:
+  fastq_raw/Control_B_H3K9ac_R1.fastq.gz
+  fastq_raw/Control_B_H3K9ac_R2.fastq.gz
+```
+
+**Key change:**
+
+- `RAW_DIR="fastq_raw"` – Defines where your input files are located
+- `${RAW_DIR}/${sample}_R1.fastq.gz` – Constructs the full path to each file
+
+---
 
 
-**Efficiency**: This is how the pros do it for cleaner code.
+### Example 3: Complete Workflow with Input and Output Directories
 
+This example shows a real bioinformatics workflow pattern: reading files from an **input directory** and writing results to an **output directory**.
 
 ```bash
-%%bash
+#!/bin/bash
+set -euo pipefail
 
-# create array from file
-mapfile -t samples < sample_id.txt
+RAW_DIR="fastq_raw"
+OUT_DIR="bowtie_align"
 
-bams=()
+mkdir -p "$OUT_DIR"
 
-
-for sample in "${samples[@]}"; do
-
+while read -r sample; do
   echo "sample_id: $sample"
 
-  fq1="${sample}_R1_val_1.fastq.gz"
-  fq2="${sample}_R2_val_2.fastq.gz"
+  fq1="${RAW_DIR}/${sample}_R1.fastq.gz"
+  fq2="${RAW_DIR}/${sample}_R2.fastq.gz"
+  bam="${OUT_DIR}/${sample}.sorted.bam"
 
-  echo "paired end:  $fq1  :  $fq2"
+  echo "inputs:"
+  echo "  $fq1"
+  echo "  $fq2"
 
-  echo "Command: bowtie2 -x index \
-    -1 $fq1 \
-    -2 $fq2 \
-    -p 6 --no-unal \
-    2> bowalign/${sample}.log | samtools sort -@ 6 -o bowalign/${sample}.sorted.bam"
+  echo "output:"
+  echo "  $bam"
 
-
-  bam="bowalign/${sample}.sorted.bam"
-  bams+=( "$bam" )
-
-
-
-
-done
-
-
-echo "BAM array:"
-printf '%s\n' "${bams[@]}"
-
-
-
-echo "Command : multibamSummary -bam "${bams[@]}" -o out.npz"
+  echo "bowtie2 command: bowtie2 -x hg38_index -1 $fq1 -2 $fq2 | samtools sort -o $bam"
+  echo
+done < sample_id.txt
 ```
 
-    sample_id: Input1
-    paired end:  Input1_R1_val_1.fastq.gz  :  Input1_R2_val_2.fastq.gz
-    Command: bowtie2 -x index     -1 Input1_R1_val_1.fastq.gz     -2 Input1_R2_val_2.fastq.gz     -p 6 --no-unal     2> bowalign/Input1.log | samtools sort -@ 6 -o bowalign/Input1.sorted.bam
-    sample_id: Input2
-    paired end:  Input2_R1_val_1.fastq.gz  :  Input2_R2_val_2.fastq.gz
-    Command: bowtie2 -x index     -1 Input2_R1_val_1.fastq.gz     -2 Input2_R2_val_2.fastq.gz     -p 6 --no-unal     2> bowalign/Input2.log | samtools sort -@ 6 -o bowalign/Input2.sorted.bam
-    sample_id: SampleA
-    paired end:  SampleA_R1_val_1.fastq.gz  :  SampleA_R2_val_2.fastq.gz
-    Command: bowtie2 -x index     -1 SampleA_R1_val_1.fastq.gz     -2 SampleA_R2_val_2.fastq.gz     -p 6 --no-unal     2> bowalign/SampleA.log | samtools sort -@ 6 -o bowalign/SampleA.sorted.bam
-    BAM array:
-    bowalign/Input1.sorted.bam
-    bowalign/Input2.sorted.bam
-    bowalign/SampleA.sorted.bam
-    Command : multibamSummary -bam bowalign/Input1.sorted.bam bowalign/Input2.sorted.bam bowalign/SampleA.sorted.bam -o out.npz
+**Understanding the directory structure:**
+
+This script follows a crucial bioinformatics principle: **separate input data from output results**.
+
+- **Input directory** (`RAW_DIR="fastq_raw"`): Where your raw sequencing files are stored. This should be read-only to preserve original data.
+- **Output directory** (`OUT_DIR="bowtie_align"`): Where processed results will be saved. Created automatically if it doesn't exist.
+
+**Breaking down the script:**
+
+1. **`mkdir -p "$OUT_DIR"`** – Creates the output directory before processing starts. The `-p` flag means "don't error if it already exists."
+
+2. **Input file construction:**
+   - `fq1="${RAW_DIR}/${sample}_R1.fastq.gz"` – Forward reads from the raw data folder
+   - `fq2="${RAW_DIR}/${sample}_R2.fastq.gz"` – Reverse reads from the raw data folder
+
+3. **Output file construction:**
+   - `bam="${OUT_DIR}/${sample}.sorted.bam"` – Aligned, sorted BAM file will go in the output folder
+
+4. **The command preview:**
+   - Shows what the actual bowtie2 alignment command would be
+   - `bowtie2 -x hg38_index` – Uses the human genome reference
+   - `-1 $fq1 -2 $fq2` – Paired-end input files
+   - `| samtools sort -o $bam` – Pipes output to samtools to create sorted BAM
+
+**Output:**
+
+```text
+sample_id: Control_A_H3K9ac
+inputs:
+  fastq_raw/Control_A_H3K9ac_R1.fastq.gz
+  fastq_raw/Control_A_H3K9ac_R2.fastq.gz
+output:
+  bowtie_align/Control_A_H3K9ac.sorted.bam
+bowtie2 command: bowtie2 -x hg38_index -1 fastq_raw/Control_A_H3K9ac_R1.fastq.gz -2 fastq_raw/Control_A_H3K9ac_R2.fastq.gz | samtools sort -o bowtie_align/Control_A_H3K9ac.sorted.bam
+
+sample_id: Control_B_H3K9ac
+inputs:
+  fastq_raw/Control_B_H3K9ac_R1.fastq.gz
+  fastq_raw/Control_B_H3K9ac_R2.fastq.gz
+output:
+  bowtie_align/Control_B_H3K9ac.sorted.bam
+bowtie2 command: bowtie2 -x hg38_index -1 fastq_raw/Control_B_H3K9ac_R1.fastq.gz -2 fastq_raw/Control_B_H3K9ac_R2.fastq.gz | samtools sort -o bowtie_align/Control_B_H3K9ac.sorted.bam
+```
+
+**Why organize this way?**
+
+This directory structure keeps your project clean and organized:
+
+```text
+your_project/
+├── fastq_raw/              ← Original data (never modified)
+│   ├── Control_A_H3K9ac_R1.fastq.gz
+│   ├── Control_A_H3K9ac_R2.fastq.gz
+│   └── ...
+├── bowtie_align/           ← Alignment results (can regenerate)
+│   ├── Control_A_H3K9ac.sorted.bam
+│   └── ...
+├── sample_id.txt           ← Sample list
+└── analysis_script.sh      ← This script
+```
+
+If something goes wrong with alignment, you can safely delete the `bowtie_align/` folder and rerun the script without touching your original raw data.
+
+---
 
 
-## Conclusion
 
-You have now mastered the art of the **Digital Robot**. 
-1.  **Loops** (`for`, `while`) repeat actions.
-2.  **Variables** (`$file`, `$sample`) hold data.
-3.  **Arrays** store lists of files for group analysis.
 
-Use these powers to automate your pipelines!
+**Best Practice: Separate Folders for Each Process**
+
+In real ChIP-seq analysis, you should create a **separate output folder for each processing step and file type**. This keeps your project organized and makes troubleshooting easier. A typical ChIP-seq project might have folders like:
+
+- `fastq_raw/` - Original FASTQ files from sequencing
+- `fastqc_reports/` - Quality control reports
+- `trimmed_fastq/` - Adapter-trimmed reads (if needed)
+- `bowtie_align/` - Aligned BAM files
+- `dedup_bam/` - Deduplicated BAM files
+- `peaks/` - Peak calling results from MACS2
+- `bigwig/` - Coverage tracks for genome browsers
+- `qc_metrics/` - deepTools quality metrics
+
+This folder structure makes it easy to: (1) track which processing stage created which files, (2) quickly find the data you need, (3) delete and regenerate intermediate files without affecting earlier steps, and (4) share your work with collaborators who can immediately understand your project organization.
+
+---
+
+
+
+
+
+## Summary
+
+**What you learned:**
+
+1. **Safe scripting:** Start every script with `#!/bin/bash` and `set -euo pipefail`
+2. **Sample list creation:** Use `ls` and `sed` to extract clean sample IDs from messy filenames
+3. **Single-end:** `ls *.fastq.gz | sed 's/.fastq.gz//' > sample_id.txt`
+4. **Paired-end:** `ls *_R1.fastq.gz | sed 's/_R1.fastq.gz//' > sample_id.txt`
+5. **Automation:** Use `while read` loops to process all samples automatically
+
+**The key insight:**
+This simple text file (`sample_id.txt`) acts as a "roll call" or "attendance sheet" for your entire analysis pipeline. It's the foundation that makes large-scale automation possible.
+
+**Next steps:**
+
+In the following tutorials, you'll use this sample list to automate quality control, alignment, peak calling, and visualization for your ChIP-seq experiment.
