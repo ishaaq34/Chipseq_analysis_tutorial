@@ -5,7 +5,7 @@
 
 
 
-Complete information for all sequencing runs associated with this repository is available through the [NCBI SRA Run Selector (PRJNA475794)] (https://www.ncbi.nlm.nih.gov/Traces/study/?acc=PRJNA475794&o=acc_s%3Aa). The Run Selector provides an interactive interface to inspect sequencing metadata, including library layout, platform, read length, and experimental design.
+Complete information for all sequencing runs associated with this repository is available through the [NCBI SRA Run Selector (PRJNA475794)](https://www.ncbi.nlm.nih.gov/Traces/study/?acc=PRJNA475794&o=acc_s%3Aa). The Run Selector provides an interactive interface to inspect sequencing metadata, including library layout, platform, read length, and experimental design.
 
 From this interface, you can download the full metadata table as well as a plain accession list containing the SRR identifiers. The accession list can be saved as `srr_list.txt` and used directly for automated data retrieval. Unwanted runs can be removed from this file before download, allowing precise control over which datasets are processed.
 
@@ -53,9 +53,6 @@ Usually, you need to download many samples. Instead of typing the command 10 tim
     SRR7297998
     SRR7298003
     ```
-
-
-
 
 
 2.  Run this "Loop" to download them one by one:
