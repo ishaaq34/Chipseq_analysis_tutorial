@@ -53,9 +53,10 @@ chipseq_tutorial/
 
 We use a "Pipe" (`|`) to connect two tools: `bowtie2` aligns the data, and `samtools` sorts it immediately.
 
-**Why Sort?** A puzzle is useless if the pieces are in random order. We sort them by chromosome location (Left to Right) so we can look at them later. And we are working on clean pieces **(fastq files in the fastq_cleaned folder)** for alignment 
+**Why Sort?** A puzzle is useless if the pieces are in random order. We sort them by chromosome location (Left to Right) so we can look at them later. 
 
-**Run Bowtie2 alignment for paired end (R1 and R2) sample**
+
+**Run Bowtie2 alignment for paired end (R1 and R2) sample in the fastq_cleaned directory**
 ```bash
 mkdir -p bowalign
 
