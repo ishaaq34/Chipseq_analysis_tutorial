@@ -1,7 +1,7 @@
 #  02: Getting the Raw Data (FASTQ)
 
 > [!NOTE]
-> **Project Context:** While this tutorial teaches you how to download data from SRA, our specific project utilizes **ENCODE** data (CEBPA, H3K27me3, H3K9ac). The `fastq-dl` tool is excellent for public SRA data, but ENCODE data is often downloaded directly from the ENCODE portal. I have worked on [SRA data](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE115704#:~:text=GEO%20Accession%20viewer&text=GEO%20help:%20Mouse%20over%20screen%20elements%20for%20information.&text=Here%20we%20report%20that%20the,a%20sperm%2Dspecific%20chromatin%20signature ) to demonstrate data download to the alignemnt step. 
+> **Project Context:** While this tutorial teaches you how to download data from SRA, our specific project utilizes **ENCODE** data (CEBPA, H3K27me3, H3K9ac). The `fastq-dl` tool is excellent for public SRA data, but ENCODE data is often downloaded directly from the ENCODE portal. I have worked on [SRA data](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE115704#:~:text=GEO%20Accession%20viewer&text=GEO%20help:%20Mouse%20over%20screen%20elements%20for%20information.&text=Here%20we%20report%20that%20the,a%20sperm%2Dspecific%20chromatin%20signature ) to demonstrate steps from data download to the alignemnt step. 
 
 ## Level 1: Basic Concept 
 
