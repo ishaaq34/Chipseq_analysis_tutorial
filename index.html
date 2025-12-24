@@ -36,10 +36,10 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-876f4e26.js";
+            window.path_to_searchindex_js = "searchindex-5db23b83.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-5578a832.js"></script>
+        <script src="toc-9c36ea23.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -176,58 +176,80 @@
                 <div id="mdbook-content" class="content">
                     <main>
                         <h1 id="welcome-to-the-practical-chip-seq-tutorial"><a class="header" href="#welcome-to-the-practical-chip-seq-tutorial">Welcome to the Practical ChIP-seq Tutorial</a></h1>
-<h2 id="1-overview"><a class="header" href="#1-overview">1. Overview</a></h2>
-<p>Chromatin Immunoprecipitation followed by sequencing (ChIP-seq) represents a transformative genome-wide methodology that enables researchers to map the locations where DNA-binding proteins, histone modifications, and other chromatin-associated factors interact with DNA across the entire genome. By revealing these precise binding locations, ChIP-seq provides direct insights into gene regulatory mechanisms at the molecular level, fundamentally advancing our understanding of how genes are controlled in both normal physiology and disease states.</p>
-<h2 id="2-historical-context-and-technical-evolution"><a class="header" href="#2-historical-context-and-technical-evolution">2. Historical Context and Technical Evolution</a></h2>
-<p>Prior to the development of ChIP-seq, researchers investigating protein-DNA interactions relied predominantly on low-throughput approaches or array-based technologies, each with significant limitations. Traditional ChIP-PCR methods could only examine a handful of pre-selected genomic regions at a time, requiring prior knowledge of potential binding sites and leaving vast portions of the genome unexplored. While microarray-based ChIP-chip technology represented an advancement, it remained constrained to predefined genomic regions represented on the array platform, offered limited resolution for pinpointing exact binding locations, and exhibited a restricted dynamic range that reduced sensitivity to weaker binding events.</p>
-<p>The convergence of whole-genome sequencing and next-generation sequencing technologies created both the opportunity and the imperative for a fundamentally different approach. Courtsey: <a href="https://www.nature.com/articles/nrg2641">ChIP–seq: advantages and challenges of a maturing technology</a></p>
-<h2 id="3-landmark-contributions-to-biomedical-science"><a class="header" href="#3-landmark-contributions-to-biomedical-science">3. Landmark Contributions to Biomedical Science</a></h2>
-<p>ChIP-seq has enabled numerous groundbreaking discoveries that have fundamentally transformed our understanding of human biology and disease mechanisms. The technology has elucidated the molecular underpinnings of circadian rhythms, explaining how our 24-hour body clock functions at the chromatin level and providing mechanistic insights into why circadian disruption through shift work increases disease susceptibility (<a href="https://www.science.org/doi/10.1126/science.1226339">Koike et al., 2012</a>).</p>
-<p>The landmark ENCODE Project leveraged ChIP-seq extensively to demonstrate that approximately 80% of the human genome exhibits biochemical function, fundamentally revising the perception that much of our genome represents “junk DNA” by revealing millions of gene regulatory elements throughout previously unannotated regions (<a href="https://www.nature.com/articles/nature11247">ENCODE Project, 2012</a>).</p>
-<p>These discoveries collectively demonstrate ChIP-seq’s direct impact on personalized medicine, cancer therapeutics, and our fundamental comprehension of gene regulatory networks.</p>
-<h2 id="4-experimental-methodology"><a class="header" href="#4-experimental-methodology">4. Experimental Methodology</a></h2>
-<p>A standard ChIP-seq experiment proceeds through a well-established experimental workflow.</p>
-<p>Initially, formaldehyde cross-linking stabilizes protein-DNA complexes in vivo, effectively capturing a snapshot of cellular chromatin architecture at the moment of fixation. Subsequently, chromatin is mechanically or enzymatically sheared into fragments, creating a population of DNA fragments suitable for immunoprecipitation and subsequent sequencing.</p>
-<p>The immunoprecipitation step employs an antibody with specificity for the protein or histone modification of interest, enriching for DNA fragments that were bound by the target factor.</p>
-<p>Following antibody-based enrichment, cross-links are reversed to release the DNA from associated proteins, and the DNA is purified to remove proteins and other cellular contaminants.</p>
-<p>Finally, the enriched DNA population is converted into a sequencing library compatible with high-throughput sequencing platforms, most commonly those manufactured by Illumina.</p>
-<p>The inclusion of appropriate controls represents a critical aspect of robust ChIP-seq experimental design. Matched input DNA, representing whole-cell extract collected prior to immunoprecipitation, serves as the primary control for modeling background signal and DNA accessibility biases.</p>
-<h2 id="5-computational-analysis-pipeline"><a class="header" href="#5-computational-analysis-pipeline">5. Computational Analysis Pipeline</a></h2>
-<p>Raw sequencing data emerges from the sequencer in <strong>FASTQ format</strong>, containing both the nucleotide sequence of each read and associated per-base quality scores that quantify the confidence of each base call. Critically, FASTQ files provide no information regarding the genomic origin of these sequences; this positional information must be established through computational alignment.</p>
-<p>Specialized alignment algorithms such as <strong>Bowtie2</strong> map these reads to a reference genome, generating <strong>Sequence Alignment/Map (SAM)</strong> files that record each read’s genomic coordinate, alignment quality metrics, and other relevant mapping information.</p>
-<p>Given that <strong>SAM files</strong> exist as plain text and consequently occupy substantial storage space while processing inefficiently, they are routinely converted into <strong>Binary Alignment/Map (BAM)</strong> format. <strong>BAM</strong> files has the same information but in a compressed format that is much faster for computers to process and index. In practice, <strong>SAM files</strong> are often never written to disk, as aligners stream their output directly into BAM files during alignment.</p>
-<p>Following alignment and BAM file generation, peak calling algorithms, exemplified by <strong>MACS3</strong>, identify genomic regions exhibiting significant enrichment of <strong>ChIP signal relative to input controls</strong>, outputting coordinates of putative binding sites along with statistical confidence metrics (saved as peak files and bedgraph).</p>
-<p>The information encoded in <strong>BAM</strong> files can be extracted and reformatted into <strong>Browser Extensible Data (BED)</strong> files,  which is a simple list of genomic intervals written as start and end positions on the genome. These intervals can show where reads pile up or where peaks occur. This format facilitates downstream analyses including <strong>motif discovery</strong> and <strong>gene annotation</strong>.</p>
-<p>Complementing these discrete interval representations, <strong>BigWig</strong> files are created from <strong>BAM files</strong>. They store the signal across the genome, meaning how many reads are in each region or how strong the ChIP-seq signal is, in a compact format that loads quickly in genome browsers.</p>
+<p><code>ChIP-seq</code> <code>chromatin-immunoprecipitation</code> <code>epigenetics</code> <code>genome-wide-binding</code> <code>transcription-factors</code> <code>histone-modifications</code> <code>NGS</code> <code>introduction</code></p>
+<h2 id="1-what-is-chip-seq"><a class="header" href="#1-what-is-chip-seq">1. What is ChIP-seq?</a></h2>
+<p>ChIP-seq (Chromatin Immunoprecipitation followed by sequencing) answers one key question: <strong>Where do proteins interact with DNA in our genome?</strong></p>
+<p>Think of your genome as a massive library with 3 billion books. Certain proteins act as “bookmarks” that control which genes are active. ChIP-seq lets us find all these bookmarks at once, across the entire genome.</p>
+<p>By mapping these binding locations, we learn how genes are turned on and off—knowledge that is critical for understanding both normal biology and diseases like cancer.</p>
+<hr>
+<h2 id="2-a-brief-history--why-chip-seq-matters"><a class="header" href="#2-a-brief-history--why-chip-seq-matters">2. A Brief History &amp; Why ChIP-seq Matters</a></h2>
+<p>Before ChIP-seq, researchers had limited options for studying protein-DNA interactions. ChIP-PCR could only examine a handful of pre-selected regions—like searching for a word in a book by checking only 10 pages. ChIP-chip improved on this by using microarrays, but it remained constrained to predefined genomic regions and offered limited resolution (<a href="https://www.nature.com/articles/nrg2641">Park, 2009</a>).</p>
+<p>The arrival of next-generation sequencing in the mid-2000s changed everything. ChIP-seq enabled genome-wide, high-resolution mapping for the first time, allowing scientists to see the complete picture of protein-DNA interactions across the entire genome.</p>
+<p>This breakthrough enabled landmark discoveries. The <a href="https://www.nature.com/articles/nature11247">ENCODE Project (2012)</a> used ChIP-seq extensively to demonstrate that approximately 80% of the human genome has biochemical function—fundamentally overturning the long-held “junk DNA” myth. That same year, researchers used ChIP-seq to reveal <a href="https://www.science.org/doi/10.1126/science.1226339">how our 24-hour body clock is encoded in chromatin</a>, explaining at the molecular level why circadian disruption increases disease risk.</p>
+<p>These discoveries demonstrate ChIP-seq’s direct impact on personalized medicine, cancer research, and our understanding of gene regulation.</p>
+<hr>
+<h2 id="3-how-chip-seq-works-the-experiment"><a class="header" href="#3-how-chip-seq-works-the-experiment">3. How ChIP-seq Works (The Experiment)</a></h2>
+<p>A ChIP-seq experiment captures where proteins bind to DNA through five connected steps. First, formaldehyde <strong>cross-links</strong> proteins to DNA, freezing them in place like taking a snapshot. Next, the DNA is <strong>sheared</strong> into small fragments—imagine cutting a long rope into shorter segments that are easier to handle.</p>
+<p>The key step is <strong>immunoprecipitation</strong>: antibodies that recognize your protein of interest act like magnets, pulling out only the DNA fragments attached to that specific protein. After this enrichment, <strong>reverse cross-linking</strong> releases the DNA from the proteins, leaving you with purified DNA fragments that were bound by your target. Finally, these fragments are <strong>sequenced</strong>, generating millions of short reads that reveal the genomic locations where your protein was bound (<a href="https://www.nature.com/articles/nrg3306">Furey, 2012</a>).</p>
+<hr>
+<h2 id="4-computational-analysis-pipeline"><a class="header" href="#4-computational-analysis-pipeline">4. Computational Analysis Pipeline</a></h2>
+<p>The millions of reads from Section 3 arrive as data files. Here’s how we process them:</p>
+<pre><code class="language-text">FASTQ → BAM → Peaks + BigWig
+</code></pre>
+<p>After sequencing, you receive data in <strong>FASTQ format</strong>—a text file containing millions of short DNA sequences (= reads), each with a quality score showing how confident we are in each letter (= base call). At this stage, we don’t know <em>where</em> in the genome these sequences came from. That’s what the next step figures out.</p>
+<p><strong>Alignment</strong> (= mapping) uses software like <strong>Bowtie2</strong> to match each read to its location on a reference genome. The output is a <strong>SAM file</strong> (Sequence Alignment/Map), which records where each read landed, how well it matched, and other details.</p>
+<p>SAM files are plain text and take up a lot of space. So we compress them into <strong>BAM format</strong> (Binary Alignment/Map)—same information, but smaller and faster to work with. In most pipelines, SAM files are never saved; the aligner writes directly to BAM.</p>
+<p>Next comes <strong>peak calling</strong>. Tools like <strong>MACS3</strong> scan the BAM file and find regions where reads pile up more than expected—these “peaks” are likely protein binding sites. The output includes peak coordinates and statistical parameters (= p-values, q-values, fold enrichment), saved as <strong>BED files</strong> and <strong>bedGraph files</strong>.</p>
+<p><strong>BED files</strong> are simple lists of genomic locations (chromosome, start position, end position). They’re used for many downstream tasks like finding DNA motifs or linking peaks to nearby genes (= annotation).</p>
+<p><strong>bedGraph files</strong> are similar to BED files but include a fourth column: a numerical value (like signal intensity or coverage) for each region. This format is human-readable text, useful for inspection, but results in large file sizes for whole-genome data.</p>
+<p><strong>BigWig files</strong> contain the same signal information as bedGraph but differ in two key ways:</p>
+<ol>
+<li><strong>Binary format</strong>: Data is stored in compressed binary rather than plain text, reducing file size significantly</li>
+<li><strong>Indexed structure</strong>: An internal index allows software to retrieve data from any genomic region without reading the entire file</li>
+</ol>
+<p>In practice, this means: when you open a bedGraph in a genome browser, the software must scan from the beginning of the file to find your region of interest. With BigWig, the software uses the index to jump directly to the relevant data block. For a 3-billion-base-pair human genome, this difference makes BigWig the standard format for visualization.</p>
+<hr>
+<h2 id="5-who-is-this-tutorial-for"><a class="header" href="#5-who-is-this-tutorial-for">5. Who Is This Tutorial For?</a></h2>
+<p>This tutorial is designed for:</p>
+<ul>
+<li><strong>Biology students</strong> new to bioinformatics</li>
+<li><strong>Researchers</strong> who want hands-on ChIP-seq analysis skills</li>
+<li><strong>Anyone</strong> who prefers learning by doing, not just reading</li>
+</ul>
+<p><strong>No prior coding experience is required.</strong> We explain every step.</p>
 <hr>
 <h2 id="6-why-this-tutorial"><a class="header" href="#6-why-this-tutorial">6. Why This Tutorial?</a></h2>
-<p>We built this course to solve the common frustrations of bioinformatics learning. Here is what makes it different:</p>
-<h3 id="1-the-tiered-learning-method"><a class="header" href="#1-the-tiered-learning-method">1. The “Tiered” Learning Method</a></h3>
-<p>We believe you shouldn’t just run code—you should understand it. Every chapter is broken into three distinct levels:</p>
-<ul>
-<li><strong>Level 1: Basic Concept (The “Why”):</strong> We use simple English and real-world analogies (like “Jigsaw Puzzles” for Alignment) to explain the biology.</li>
-<li><strong>Level 2: Execution (The “How”):</strong> We provide the exact code, line-by-line, to run on your machine.</li>
-<li><strong>Level 3: Interpretation (The “So What?”):</strong> We teach you how to read the output. A plot is useless if you don’t know what a “good” result looks like.</li>
-</ul>
-<h3 id="2-a-complete-pipeline"><a class="header" href="#2-a-complete-pipeline">2. A Complete Pipeline</a></h3>
-<p>We don’t skip steps. You will go from:</p>
-<ol>
-<li><strong>Downloading</strong> raw FASTQ files from GEO.</li>
-<li><strong>Aligning</strong> reads with Bowtie2.</li>
-<li><strong>Calling Peaks</strong> with MACS2.</li>
-<li><strong>Visualizing</strong> data with deepTools.</li>
-<li><strong>Annotating</strong> genomic features with ChIPseeker.</li>
-</ol>
+<p>We built this course to solve common frustrations of bioinformatics learning. Here’s what makes it different:</p>
+<h3 id="the-tiered-learning-method"><a class="header" href="#the-tiered-learning-method">The “Tiered” Learning Method</a></h3>
+<p>We believe you shouldn’t just run code—you should understand it. Every chapter is broken into three levels:</p>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>Level</th><th>Focus</th><th>What You’ll Get</th></tr>
+</thead>
+<tbody>
+<tr><td><strong>Level 1: Basic Concept</strong></td><td>The “Why”</td><td>Simple explanations with real-world analogies</td></tr>
+<tr><td><strong>Level 2: Execution</strong></td><td>The “How”</td><td>Exact code to run, line-by-line</td></tr>
+<tr><td><strong>Level 3: Interpretation</strong></td><td>The “So What?”</td><td>How to read output and spot good vs. bad results</td></tr>
+</tbody>
+</table>
+</div>
+<p>By the end, you’ll have the skills—and the code—to analyze your own ChIP-seq data.</p>
 <hr>
-<h2 id="7--data-used-for-this-tutorial---experimental-context"><a class="header" href="#7--data-used-for-this-tutorial---experimental-context">7.  Data used for this tutorial - Experimental Context</a></h2>
-<p>I performed the analysis in two distinct parts, each serving a different methodological purpose.</p>
-<p>In the first part, I demonstrated the complete ChIP-seq preprocessing workflow, from raw data retrieval to read alignment. For this, I used publicly available <a href="https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE115704#:~:text=GEO%20Accession%20viewer&amp;text=GEO%20help:%20Mouse%20over%20screen%20elements%20for%20information.&amp;text=Here%20we%20report%20that%20the,a%20sperm%2Dspecific%20chromatin%20signature">SRA data</a> from a <a href="10.1038/s41467-018-06236-8">study examining three histone modifications in C. elegans sperm, oocytes, and early embryos</a> data . This dataset was selected specifically to illustrate the practical steps involved in downloading raw sequencing data , organizing metadata, and performing alignment in a reproducible manner.</p>
-<p>In the second part of the analysis, I used pre-aligned ChIP-seq BAM files from <a href="https://www.encodeproject.org/carts/ca521f95-7835-4369-88a9-b89f98fb39ad/">ENCODE</a> to demonstrate downstream analyses. These data were generated in the human BLaER1 cell line under defined stimulation conditions (17β-estradiol, interleukin-3, and CSF1 for 18 hours) and represent isogenic biological replicates. The dataset includes ChIP-seq for the transcription factor CEBPA and the histone modifications H3K27me3 and H3K9ac, along with matched input controls. This resource was selected to illustrate peak calling, normalization, and comparative analysis using standardized, high-quality ENCODE data.</p>
-<p>By the end of this tutorial, you will have the skills—and the code—to answer these questions for your own research.</p>
-<p><strong>Let’s get started</strong></p>
+<h2 id="7-dataset-used-in-this-tutorial"><a class="header" href="#7-dataset-used-in-this-tutorial">7. Dataset Used in This Tutorial</a></h2>
+<p>We use two datasets to teach different parts of the pipeline:</p>
+<h3 id="part-1-preprocessing-fastq--bam"><a class="header" href="#part-1-preprocessing-fastq--bam">Part 1: Preprocessing (FASTQ → BAM)</a></h3>
+<p><strong>Source:</strong> <a href="https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE115704">GSE115704</a> — Histone modifications in <em>C. elegans</em> sperm, oocytes, and early embryos.</p>
+<p><strong>Why this dataset?</strong> It’s publicly available and demonstrates the practical steps of downloading, organizing, and aligning raw data.</p>
+<h3 id="part-2-downstream-analysis-bam--peaks--visualization"><a class="header" href="#part-2-downstream-analysis-bam--peaks--visualization">Part 2: Downstream Analysis (BAM → Peaks → Visualization)</a></h3>
+<p><strong>Source:</strong> <a href="https://www.encodeproject.org/carts/ca521f95-7835-4369-88a9-b89f98fb39ad/">ENCODE BLaER1 data</a> — Human cell line with ChIP-seq for CEBPA, H3K27me3, and H3K9ac.</p>
+<p><strong>Why this dataset?</strong> Pre-aligned, high-quality data that lets us focus on peak calling, normalization, and comparative analysis.</p>
+<hr>
+<h2 id="lets-get-started"><a class="header" href="#lets-get-started">Let’s Get Started</a></h2>
+<p>You’re ready to begin. In the next chapter, we’ll set up your computational environment by installing the required tools.</p>
 <blockquote class="blockquote-tag blockquote-tag-note">
 <p class="blockquote-tag-title"><svg viewbox="0 0 16 16" width="18" height="18"><path d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8Zm8-6.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13ZM6.5 7.75A.75.75 0 0 1 7.25 7h1a.75.75 0 0 1 .75.75v2.75h.25a.75.75 0 0 1 0 1.5h-2a.75.75 0 0 1 0-1.5h.25v-2h-.25a.75.75 0 0 1-.75-.75ZM8 6a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z"></path></svg>Note</p>
-<p><strong>Next : Before starting the analysis, we will install the required bioinformatics tools</strong></p>
+<p><strong>Up Next:</strong> Before diving into analysis, we’ll set up your computational environment with the bioinformatics tools you’ll need throughout this tutorial.</p>
 </blockquote>
 
                     </main>
@@ -235,7 +257,7 @@
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
 
-                            <a rel="next prefetch" href="00_setup_environment.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next prefetch" href="01_setup_environment.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
                             </a>
 
@@ -246,7 +268,7 @@
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
 
-                    <a rel="next prefetch" href="00_setup_environment.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next prefetch" href="01_setup_environment.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
                     </a>
             </nav>

@@ -36,10 +36,10 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-876f4e26.js";
+            window.path_to_searchindex_js = "searchindex-5db23b83.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-5578a832.js"></script>
+        <script src="toc-9c36ea23.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -175,7 +175,8 @@
 
                 <div id="mdbook-content" class="content">
                     <main>
-                        <h1 id="05-handling-duplicates--quality-control"><a class="header" href="#05-handling-duplicates--quality-control">05. Handling Duplicates &amp; Quality Control</a></h1>
+                        <h1 id="handling-duplicates--quality-control"><a class="header" href="#handling-duplicates--quality-control">Handling Duplicates &amp; Quality Control</a></h1>
+<p><code>PCR-duplicates</code> <code>optical-duplicates</code> <code>Picard</code> <code>samtools</code> <code>MarkDuplicates</code> <code>deduplication</code> <code>read-groups</code> <code>MultiQC</code></p>
 <h2 id="1-basic-concept-the-photocopier-analogy"><a class="header" href="#1-basic-concept-the-photocopier-analogy">1. Basic Concept: The “Photocopier” Analogy</a></h2>
 <p>Imagine you are trying to read a rare, handwritten manuscript (your DNA sample). You want to digitize it, so you take photos (sequencing reads) of different pages.</p>
 <ul>
@@ -183,6 +184,10 @@
 <li><strong>Duplicates (Artifacts):</strong> Now, imagine the photocopier gets stuck and prints 100 copies of a <em>random, unimportant page</em> just because of a machine error. These copies don’t mean that page is 100 times more important; they are just <strong>junk</strong>. In sequencing, this is called <strong>PCR duplication</strong>—where the chemistry accidentally over-copies a single DNA fragment.</li>
 </ul>
 <p><strong>Goal:</strong> We want to keep the “popular pages” (real biological signal) but throw away the “accidental machine copies” (PCR duplicates) so they don’t trick us into thinking a random spot is important.</p>
+<blockquote class="blockquote-tag blockquote-tag-note">
+<p class="blockquote-tag-title"><svg viewbox="0 0 16 16" width="18" height="18"><path d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8Zm8-6.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13ZM6.5 7.75A.75.75 0 0 1 7.25 7h1a.75.75 0 0 1 .75.75v2.75h.25a.75.75 0 0 1 0 1.5h-2a.75.75 0 0 1 0-1.5h.25v-2h-.25a.75.75 0 0 1-.75-.75ZM8 6a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z"></path></svg>Note</p>
+<p><strong>Two Tools, Same Goal:</strong> This chapter covers two methods for duplicate removal. <strong>Picard</strong> (Section 3) offers fine-grained control with read groups and optical duplicate detection—ideal for complex multi-replicate studies. <strong>Samtools</strong> (Section 4) provides a simpler, single-pipeline approach—sufficient for most ChIP-seq analyses. Choose the method that fits your workflow.</p>
+</blockquote>
 <hr>
 <h2 id="2-understanding-the-details"><a class="header" href="#2-understanding-the-details">2. Understanding the Details</a></h2>
 <p>For those who want to understand the “under the hood” mechanics, here is what are different types of duplicates and  the Read Groups .</p>
@@ -206,10 +211,10 @@
 <li>With Read Groups, Picard sees: “Oh, one is from Replicate 1 and one is from Replicate 2. They are different samples. Keep both!”</li>
 </ul>
 <p>*<strong>Full hierarchy in RGing</strong></p>
-<pre><code>RGSM  → biological sample (Control H3k9ac)
+<pre><code class="language-text">RGSM  → biological sample (Control H3k9ac)
   └── RGLB → library prep (usually lib1 however if Different library preps (even from same sample) RGLB=lib1 RGLB=lib2 )
         └── RGPU → flowcell + lane (from header of Fastq file )
-              └── RGID → unique ID tying it all together (replicates of Control H3k9ac: Control H3k9ac_R1, ControlH3k9ac_R2 )
+              └── RGID → unique ID tying it all together (replicates: H3K27me3_IP_rep1, H3K27me3_IP_rep2)
 
 
 </code></pre>
@@ -225,88 +230,201 @@
 <h1 id="31-adding-rgs-to-each-bam-file"><a class="header" href="#31-adding-rgs-to-each-bam-file">3.1 Adding RGs to each Bam file</a></h1>
 <p><strong>Minimal augmented RG setup (merge BAM replicates)</strong></p>
 <p>This read-group configuration is designed for the simplest defensible case: merging biological or technical ChIP-seq replicates and proceeding directly to peak calling.</p>
-<pre><code>picard AddOrReplaceReadGroups \
-  I=H3K9ac_R1.bam \                 # Input BAM file (aligned, typically coordinate-sorted)
-  O=H3K9ac_R1.RG.bam \              # Output BAM with read-group (RG) tags added/replaced
-  RGID=H3K9ac_R1 \                  # Read Group ID: corresponds to: one replicate , If a replicate spans multiple lanes, you will have multiple RGIDs per replicate.
-  RGSM=H39kac \                     # biological sample
+<p><strong>Input files needed:</strong></p>
+<ul>
+<li>Filtered BAM file: <code>bowalign_filtered/H3K27me3_IP_rep1.filtered.bam</code> (from section 05)</li>
+</ul>
+<pre><code class="language-bash">mkdir -p picard_rg_bam
 
+picard AddOrReplaceReadGroups \
+  I=bowalign_filtered/H3K27me3_IP_rep1.filtered.bam \
+  O=picard_rg_bam/H3K27me3_IP_rep1.RG.bam \
+  RGID=H3K27me3_IP_rep1 \
+  RGSM=H3K9ac
 </code></pre>
+<p><strong>What this does:</strong></p>
+<ul>
+<li><strong>I=</strong> specifies the input BAM file from the alignment step</li>
+<li><strong>O=</strong> specifies the output BAM file with read-group tags added</li>
+<li><strong>RGID=</strong> sets a unique Read Group ID (one per replicate)</li>
+<li><strong>RGSM=</strong> sets the biological sample name (used for grouping replicates)</li>
+</ul>
 <p><strong>Minimal augmented RG setup (optical duplicates enabled)</strong></p>
 <p>This configuration extends the previous one by adding the minimum required metadata to make optical duplicate detection meaningful.
 The addition of RGPU, encoding the flowcell and lane, defines the physical neighborhood in which optical duplicates can occur.</p>
-<pre><code>picard AddOrReplaceReadGroups \
-  I=H3K9ac_R1.bam \
-  O=H3K9ac_R1.RG.bam \
-  RGID=H3K9ac_R1 \
-  RGSM=H3K9ac \
-  RGPL=ILLUMINA \                  # REQUIRED for optical duplicate logic
-  RGPU=CA0TUACXX.1                 # REQUIRED: flowcell.lane (from FASTQ header)
+<pre><code class="language-bash">picard AddOrReplaceReadGroups \
+  I=bowalign_filtered/H3K27me3_IP_rep1.filtered.bam \     # Input: MAPQ-filtered BAM from section 05
+  O=picard_rg_bam/H3K27me3_IP_rep1.RG.bam \           # Output with RG tags
+  RGID=H3K27me3_IP_rep1 \                      # Read Group ID
+  RGSM=H3K9ac \                          # Biological sample
+  RGPL=ILLUMINA \                        # REQUIRED for optical duplicate logic
+  RGPU=CA0TUACXX.1                       # REQUIRED: flowcell.lane (from FASTQ header)
 </code></pre>
 <p>More from <a href="https://broadinstitute.github.io/picard/command-line-overview.html#AddOrReplaceReadGroups">GATK: Read Groups</a>
 <a href="https://gatk.broadinstitute.org/hc/en-us/articles/360037052812-MarkDuplicates-Picard">Picard markduplicates</a></p>
 <h3 id="step-32-mark-duplicates-be-careful"><a class="header" href="#step-32-mark-duplicates-be-careful">Step 3.2: Mark Duplicates (Be Careful!)</a></h3>
 <p>First, we will just <strong>mark</strong> the duplicates but <strong>keep them</strong> in the file. This is like highlighting the duplicate pages in yellow but not throwing them in the trash yet. This is important for Quality Control (QC) to see how bad the duplication problem is.</p>
+<p><strong>Input files needed:</strong></p>
+<ul>
+<li>Filtered BAM file with read groups: <code>picard_rg_bam/H3K27me3_IP_rep1.RG.bam</code></li>
+</ul>
 <pre><code class="language-bash"># ----- 3.3 Mark duplicates (keep all reads, just mark) -----
 
+mkdir -p picard_markdup picard_markdup_metrics
 
 # Run Picard MarkDuplicates
 picard MarkDuplicates \
-  I=sample01.bam \
-  O=sample01.marked.bam \
-  M=metrics.txt \
+  I=picard_rg_bam/H3K27me3_IP_rep1.RG.bam \
+  O=picard_markdup/H3K27me3_IP_rep1.marked.bam \
+  M=picard_markdup_metrics/H3K27me3_IP_rep1.metrics.txt \
   REMOVE_DUPLICATES=false
 
 # Index the new file
-samtools index sample01.marked.bam
+samtools index picard_markdup/H3K27me3_IP_rep1.marked.bam
 </code></pre>
+<p><strong>What this does:</strong></p>
 <ul>
-<li><code>I="$bam"</code>: Input BAM file.</li>
-<li><code>O=...</code>: Output BAM file (with duplicates marked).</li>
-<li><code>M=...</code>: Metrics file (report card showing how many duplicates were found).</li>
-<li><code>REMOVE_DUPLICATES=false</code>: Crucial! identifying them, not deleting them.</li>
+<li><strong>I=</strong> specifies input BAM file with read groups</li>
+<li><strong>O=</strong> specifies output BAM file with duplicates marked (not removed)</li>
+<li><strong>M=</strong> creates metrics file reporting duplicate statistics</li>
+<li><strong>REMOVE_DUPLICATES=false</strong> marks duplicates but keeps all reads in the file</li>
+<li><strong>samtools index</strong> creates index for marked BAM file</li>
 </ul>
+<blockquote class="blockquote-tag blockquote-tag-important">
+<p class="blockquote-tag-title"><svg viewbox="0 0 16 16" width="18" height="18"><path d="M0 1.75C0 .784.784 0 1.75 0h12.5C15.216 0 16 .784 16 1.75v9.5A1.75 1.75 0 0 1 14.25 13H8.06l-2.573 2.573A1.458 1.458 0 0 1 3 14.543V13H1.75A1.75 1.75 0 0 1 0 11.25Zm1.75-.25a.25.25 0 0 0-.25.25v9.5c0 .138.112.25.25.25h2a.75.75 0 0 1 .75.75v2.19l2.72-2.72a.749.749 0 0 1 .53-.22h6.5a.25.25 0 0 0 .25-.25v-9.5a.25.25 0 0 0-.25-.25Zm7 2.25v2.5a.75.75 0 0 1-1.5 0v-2.5a.75.75 0 0 1 1.5 0ZM9 9a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z"></path></svg>Important</p>
+<p><strong>Why keep marked files?</strong> The Picard metrics file (<code>.metrics.txt</code>) contains duplicate rates that <strong>MultiQC</strong> can aggregate into summary reports. However, for <strong>downstream analysis (peak calling, BigWig generation)</strong>, always use the <strong>deduplicated BAMs</strong> to prevent PCR artifacts from inflating your signal.</p>
+<p><em>Note:</em> While MACS can handle duplicates internally via <code>--keep-dup</code> options, using pre-deduplicated BAMs is the recommended practice—it gives you explicit control and avoids relying on MACS’s position-based duplicate detection, which differs from Picard/samtools fragment-level detection. [<a href="https://github.com/macs3-project/MACS/issues/33">GitHub #33</a>] [<a href="https://www.biostars.org/p/318974/#319028">Biostars</a>]</p>
+</blockquote>
+<p><strong>Aggregate metrics with MultiQC:</strong></p>
+<pre><code class="language-bash"># Run MultiQC on Picard metrics folder
+multiqc picard_dedup_metrics/ -o multiqc_report/
+</code></pre>
+<p>This generates an interactive HTML report showing duplicate rates across all samples.</p>
 <h3 id="step-33-remove-duplicates-clean-up"><a class="header" href="#step-33-remove-duplicates-clean-up">Step 3.3: Remove Duplicates (Clean Up)</a></h3>
 <p>Now that we’ve checked the quality, we create a “clean” version of our data for analysis. We remove the marked duplicates so they don’t interfere with peak calling.</p>
 <pre><code class="language-bash"># ----- 3.4 Create a duplicate-removed BAM by filtering marked BAM -----
 
+mkdir -p picard_dedup_bam picard_dedup_metrics
 
 # Run Picard to REMOVE duplicates
 picard MarkDuplicates \
-  I=sample01.bam \
-  O=sample01.dedup.bam \
-  M=dedup_metrics.txt \
+  I=picard_rg_bam/H3K27me3_IP_rep1.RG.bam \
+  O=picard_dedup_bam/H3K27me3_IP_rep1.dedup.bam \
+  M=picard_dedup_metrics/H3K27me3_IP_rep1.metrics.txt \
   REMOVE_DUPLICATES=true
 
 # Index the new file
-samtools index sample01.dedup.bam
+samtools index picard_dedup_bam/H3K27me3_IP_rep1.dedup.bam
 </code></pre>
 <ul>
 <li><code>REMOVE_DUPLICATES=true</code>: This time, we actually delete the highlighted duplicates.</li>
 </ul>
+<h3 id="after-picard-deduplication"><a class="header" href="#after-picard-deduplication">After Picard Deduplication</a></h3>
+<pre><code class="language-text">chipseq_tutorial/
+├── fastq_raw/
+├── fastq_cleaned/
+├── genome_index/
+├── bowalign/                    ← Aligned BAMs
+├── bowalign_filtered/           ← Filtered BAMs
+├── picard_rg_bam/               ← BAMs with Read Groups
+│   ├── H3K27me3_IP_rep1.RG.bam
+│   ├── H3K27me3_IP_rep1.RG.bam.bai
+│   └── ...
+├── picard_dedup_bam/            ← Final Deduplicated BAMs
+│   ├── H3K27me3_IP_rep1.dedup.bam
+│   ├── H3K27me3_IP_rep1.dedup.bam.bai
+│   └── ...
+├── picard_metrics/              ← Duplication Reports
+│   ├── H3K27me3_IP_rep1.metrics.txt
+│   └── ...
+└── sample_id.txt
+</code></pre>
 <hr>
-<h2 id="4-samtools"><a class="header" href="#4-samtools">4. Samtools</a></h2>
-<p>Samtools provides a lightweight and reliable way to handle duplicates without relying on read groups. The following steps use samtools to correctly prepare paired-end reads and mark or remove duplicate fragments.</p>
-<pre><code># Paired-end mates are placed next to each other. It Groups reads by read name
-samtools collate -o namecollate.bam example.bam
+<h2 id="4-samtools-simple-alternative"><a class="header" href="#4-samtools-simple-alternative">4. Samtools (Simple Alternative)</a></h2>
+<p>Samtools provides a lightweight and reliable way to handle duplicates without the complexity of read groups. Choose this option if you want a straightforward workflow.</p>
+<h3 id="step-41-prepare-bam-for-duplicate-detection"><a class="header" href="#step-41-prepare-bam-for-duplicate-detection">Step 4.1: Prepare BAM for Duplicate Detection</a></h3>
+<pre><code class="language-bash"># Paired-end mates are placed next to each other. Groups reads by read name
+samtools collate -o temp/H3K27me3_IP_rep1.collate.bam bowalign_filtered/H3K27me3_IP_rep1.filtered.bam
 
-# it operates on the adjacent read pairs to synchronize mate flags , compute fragment-level information and add mate-related tags
-
-samtools fixmate -m namecollate.bam fixmate.bam
+# Synchronize mate flags and add mate-related tags
+samtools fixmate -m temp/H3K27me3_IP_rep1.collate.bam temp/H3K27me3_IP_rep1.fixmate.bam
 
 # Coordinate sort for duplicate marking
-
-samtools sort -o positionsort.bam fixmate.bam
-
-# Mark or remove duplicates (-r after the markdup for deduplication) 
-samtools markdup positionsort.bam markdup.bam
-
-# Index the new file
-samtools index markdup.bam
-
+samtools sort -o temp/H3K27me3_IP_rep1.positionsort.bam temp/H3K27me3_IP_rep1.fixmate.bam
 </code></pre>
-<p>This samtools-based workflow is simpler than Picard and avoids the need for read-group metadata, while still providing accurate duplicate detection for paired-end data. It is well suited for ChIP-seq and other enrichment-based analyses where straightforward duplicate handling is sufficient.</p>
+<h3 id="step-42-mark-duplicates-keep-for-qc"><a class="header" href="#step-42-mark-duplicates-keep-for-qc">Step 4.2: Mark Duplicates (Keep for QC)</a></h3>
+<pre><code class="language-bash"># Mark duplicates but KEEP them in the output
+samtools markdup temp/H3K27me3_IP_rep1.positionsort.bam samtools_markdup/H3K27me3_IP_rep1.marked.bam
+
+# Index the file
+samtools index samtools_markdup/H3K27me3_IP_rep1.marked.bam
+</code></pre>
+<h3 id="step-43-remove-duplicates-clean-for-analysis"><a class="header" href="#step-43-remove-duplicates-clean-for-analysis">Step 4.3: Remove Duplicates (Clean for Analysis)</a></h3>
+<pre><code class="language-bash"># Remove duplicates with -r flag
+samtools markdup -r temp/H3K27me3_IP_rep1.positionsort.bam samtools_dedup_bam/H3K27me3_IP_rep1.dedup.bam
+
+# Index the file
+samtools index samtools_dedup_bam/H3K27me3_IP_rep1.dedup.bam
+</code></pre>
+<p>This samtools-based workflow is simpler than Picard and avoids the need for read-group metadata, while still providing accurate duplicate detection for paired-end data.</p>
+<h3 id="step-44-automation-loop-all-samples"><a class="header" href="#step-44-automation-loop-all-samples">Step 4.4: Automation Loop (All Samples)</a></h3>
+<pre><code class="language-bash">#!/bin/bash
+set -euo pipefail
+
+mkdir -p samtools_dedup_bam
+
+while read -r sample; do
+  echo "Processing $sample..."
+
+  # All steps piped together - no temp files needed!
+  samtools collate -u -O "bowalign_filtered/${sample}.filtered.bam" | \
+    samtools fixmate -m -u - - | \
+    samtools sort -u - | \
+    samtools markdup -r - "samtools_dedup_bam/${sample}.dedup.bam"
+
+  # Index the final output
+  samtools index "samtools_dedup_bam/${sample}.dedup.bam"
+
+  echo "Finished $sample"
+done &lt; sample_id.txt
+</code></pre>
+<p><strong>Why use pipes?</strong></p>
+<pre><code>collate → fixmate → sort → markdup
+  ↓         ↓        ↓       ↓
+ pipe     pipe     pipe    file
+</code></pre>
+<ul>
+<li><strong><code>-u</code> flag</strong>: Outputs uncompressed BAM for faster streaming between commands</li>
+<li><strong><code>-</code> symbol</strong>: Represents stdin/stdout, allowing data to flow through the pipeline</li>
+<li><strong>No temp files</strong>: Everything processes in memory, saving disk space and I/O time</li>
+<li><strong>Faster</strong>: No waiting for disk writes between each step</li>
+</ul>
 <p>More <a href="https://www.htslib.org/algorithms/duplicate.html">samtools</a></p>
+<h3 id="after-samtools-deduplication"><a class="header" href="#after-samtools-deduplication">After Samtools Deduplication</a></h3>
+<pre><code class="language-text">chipseq_tutorial/
+├── bowalign_filtered/           ← Input: MAPQ-filtered BAM files (from section 05)
+│   ├── H3K27me3_IP_rep1.filtered.bam
+│   └── ...
+├── samtools_markdup/            ← Duplicates marked (not removed)
+│   ├── H3K27me3_IP_rep1.marked.bam
+│   └── ...
+├── samtools_dedup_bam/          ← Duplicates removed
+│   ├── H3K27me3_IP_rep1.dedup.bam
+│   ├── H3K27me3_IP_rep1.dedup.bam.bai
+│   └── ...
+└── sample_id.txt
+</code></pre>
+<hr>
+<h2 id="summary"><a class="header" href="#summary">Summary</a></h2>
+<ol>
+<li><strong>Understand:</strong> PCR duplicates inflate signal artificially; we mark/remove them.</li>
+<li><strong>Action:</strong> Use Picard (with read groups) or samtools to handle duplicates.</li>
+<li><strong>Result:</strong> Clean, deduplicated BAM files ready for peak calling.</li>
+</ol>
+<blockquote class="blockquote-tag blockquote-tag-note">
+<p class="blockquote-tag-title"><svg viewbox="0 0 16 16" width="18" height="18"><path d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8Zm8-6.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13ZM6.5 7.75A.75.75 0 0 1 7.25 7h1a.75.75 0 0 1 .75.75v2.75h.25a.75.75 0 0 1 0 1.5h-2a.75.75 0 0 1 0-1.5h.25v-2h-.25a.75.75 0 0 1-.75-.75ZM8 6a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z"></path></svg>Note</p>
+<p><strong>Up Next:</strong> We’ll assess library complexity to understand how deeply our libraries were sequenced.</p>
+</blockquote>
 
                     </main>
 

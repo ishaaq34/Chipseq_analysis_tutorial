@@ -36,10 +36,10 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-876f4e26.js";
+            window.path_to_searchindex_js = "searchindex-5db23b83.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-5578a832.js"></script>
+        <script src="toc-9c36ea23.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -175,7 +175,8 @@
 
                 <div id="mdbook-content" class="content">
                     <main>
-                        <h1 id="03-understanding-and-cleaning-your-data-fastq--fastp"><a class="header" href="#03-understanding-and-cleaning-your-data-fastq--fastp">03: Understanding and Cleaning Your Data (FASTQ &amp; fastp)</a></h1>
+                        <h1 id="understanding-and-cleaning-your-data-fastq--fastp"><a class="header" href="#understanding-and-cleaning-your-data-fastq--fastp">Understanding and Cleaning Your Data (FASTQ &amp; fastp)</a></h1>
+<p><code>FASTQ-format</code> <code>fastp</code> <code>quality-control</code> <code>adapter-trimming</code> <code>Phred-scores</code> <code>read-filtering</code> <code>QC-reports</code> <code>quality-assessment</code></p>
 <h2 id="1-basic-concept-the-anatomy-of-a-read"><a class="header" href="#1-basic-concept-the-anatomy-of-a-read">1: Basic Concept (The Anatomy of a Read)</a></h2>
 <p>A FASTQ file is just a text file full of DNA sequences. But unlike a simple list of letters, every single read carries extra baggage (its quality score).</p>
 <p>Think of every read like a <strong>Luggage Tag</strong> with 4 lines of information:</p>
@@ -202,14 +203,14 @@ FDFFFHHHHHJIJGIJIJJHJJJJJJIIJIJGIHFIIJJIIIIJG        &lt;-- Quality: Each charac
 <h3 id="21-basic-cleaning-single-end"><a class="header" href="#21-basic-cleaning-single-end">2.1 Basic Cleaning (Single-End)</a></h3>
 <pre><code class="language-bash"># -i: Input (dirty)
 # -o: Output (clean)
-fastp -i fastq_raw/SRR7297994.fastq.gz -o fastq_cleaned/SRR7297994.clean.fastq.gz
+fastp -i fastq_raw/H3K27me3_IP_rep1.fastq.gz -o fastq_cleaned/H3K27me3_IP_rep1.clean.fastq.gz
 </code></pre>
-<h3 id="22-basic-cleaning-paired-end"><a class="header" href="#22-basic-cleaning-paired-end">2.2 Basic Cleaning (Paired-End)</a></h3>
-<p>For paired-end data, we must process R1 and R2 together so they stay synchronized.</p>
-<pre><code class="language-bash">fastp -i in.R1.fq.gz -I in.R2.fq.gz \
-      -o out.R1.fq.gz -O out.R2.fq.gz \
-     
+<blockquote class="blockquote-tag blockquote-tag-note">
+<p class="blockquote-tag-title"><svg viewbox="0 0 16 16" width="18" height="18"><path d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8Zm8-6.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13ZM6.5 7.75A.75.75 0 0 1 7.25 7h1a.75.75 0 0 1 .75.75v2.75h.25a.75.75 0 0 1 0 1.5h-2a.75.75 0 0 1 0-1.5h.25v-2h-.25a.75.75 0 0 1-.75-.75ZM8 6a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z"></path></svg>Note</p>
+<p><strong>This dataset uses single-end sequencing.</strong> If you have paired-end data, you would use:</p>
+<pre><code class="language-bash">fastp -i in.R1.fq.gz -I in.R2.fq.gz -o out.R1.fq.gz -O out.R2.fq.gz
 </code></pre>
+</blockquote>
 <p><strong>What does fastp do automatically?</strong></p>
 <ul>
 <li><strong>Quality Filtering:</strong> Drops reads if too many bases have low scores (default: Phred -q &lt; 15).</li>
@@ -223,11 +224,11 @@ fastp -i fastq_raw/SRR7297994.fastq.gz -o fastq_cleaned/SRR7297994.clean.fastq.g
 You can use <code>awk</code> (a math tool for text) to count directly from the compressed file.</p>
 <p><strong>Count Total Reads:</strong></p>
 <pre><code class="language-bash"># A FASTQ record is 4 lines. We count total lines and divide by 4.
-gzcat fastq_raw/SRR7297994.fastq.gz | wc -l | awk '{print $1/4 " reads"}'
+gzcat fastq_raw/H3K27me3_IP_rep1.fastq.gz | wc -l | awk '{print $1/4 " reads"}'
 </code></pre>
 <p><strong>Count Total Bases (Coverage):</strong></p>
 <pre><code class="language-bash"># Sums the length of line 2 (sequence) for every record
-gzcat fastq_raw/SRR7297994.fastq.gz | awk 'NR%4==2 {b+=length($0)} END{print b " bases"}'
+gzcat fastq_raw/H3K27me3_IP_rep1.fastq.gz | awk 'NR%4==2 {b+=length($0)} END{print b " bases"}'
 </code></pre>
 <ul>
 <li><em>Approximation:</em> If you have 100 Million bases and your genome is 3 Billion bases (Human), your coverage is roughly 0.03x.</li>
@@ -238,33 +239,20 @@ The <code>fastp</code> developers provide a handy script called  <a href="https:
 <pre><code class="language-bash"># Process 3 files at a time (-f 3), using 2 threads per file (-t 2)
 python parallel.py -i /fastq_raw -o /fastq_cleaned -r /fastp_reports -f 3 -t 2
 </code></pre>
-<p>-f 3
-This sets the batch size. The script will process 3 files at a time.</p>
-<p>-t 2
-This sets the number of threads used for each task. Here each file is processed with 2 threads.</p>
+<p><strong>Parameter explanation:</strong></p>
+<ul>
+<li><code>-f 3</code>: Sets the batch size—the script processes 3 files at a time</li>
+<li><code>-t 2</code>: Sets the number of threads per file—each file is processed with 2 threads</li>
+</ul>
 <p>This automatically finds pairs and generates HTML reports for every sample.</p>
 <hr>
 <blockquote class="blockquote-tag blockquote-tag-important">
 <p class="blockquote-tag-title"><svg viewbox="0 0 16 16" width="18" height="18"><path d="M0 1.75C0 .784.784 0 1.75 0h12.5C15.216 0 16 .784 16 1.75v9.5A1.75 1.75 0 0 1 14.25 13H8.06l-2.573 2.573A1.458 1.458 0 0 1 3 14.543V13H1.75A1.75 1.75 0 0 1 0 11.25Zm1.75-.25a.25.25 0 0 0-.25.25v9.5c0 .138.112.25.25.25h2a.75.75 0 0 1 .75.75v2.19l2.72-2.72a.749.749 0 0 1 .53-.22h6.5a.25.25 0 0 0 .25-.25v-9.5a.25.25 0 0 0-.25-.25Zm7 2.25v2.5a.75.75 0 0 1-1.5 0v-2.5a.75.75 0 0 1 1.5 0ZM9 9a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z"></path></svg>Important</p>
 <p><a href="https://github.com/OpenGene/fastp/blob/master/parallel.py">parallel.py</a> avoids the need to explicitly loop over <code>sample_id.txt</code> in a Bash script.</p>
 </blockquote>
-<pre><code class="language-text">
-chipseq_tutorial/
-├── fastq_raw/                    ← Raw FASTQ files
-│   ├── SRR7297994.fastq.gz
-│   ├── SRR7297995.fastq.gz
-│   └── ...
-├── fastq_cleaned/                ← Fastp cleaned and trimmed reads
-│   ├── SRR7297994.clean.fastq.gz
-│   ├── SRR7297995.clean.fastq.gz
-│   ├── SRR7297998.clean.fastq.gz
-│   ├── SRR7298003.clean.fastq.gz
-│   └── ...
-├── fastp_reports/          ← Fastp QC and trimming reports
-│   ├── SRR7297994.html
-│   ├── SRR7297995.json
-│   ├── SRR7297998.html
-│   ├── SRR7298003.json
+<pre><code class="language-text">chipseq_tutorial/
+│   ├── Input_rep1.html
+│   ├── Input_rep2.html
 │   └── ...
 └── sample_id.txt
 </code></pre>
@@ -274,12 +262,16 @@ chipseq_tutorial/
 <li><strong>Action:</strong> Always run <code>fastp</code> to trim adapters, low-quality bases, and too-short reads.</li>
 <li><strong>Check:</strong> Use <code>wc -l</code> or <code>awk</code> for instant feedback on your data size.</li>
 </ol>
+<blockquote class="blockquote-tag blockquote-tag-note">
+<p class="blockquote-tag-title"><svg viewbox="0 0 16 16" width="18" height="18"><path d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8Zm8-6.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13ZM6.5 7.75A.75.75 0 0 1 7.25 7h1a.75.75 0 0 1 .75.75v2.75h.25a.75.75 0 0 1 0 1.5h-2a.75.75 0 0 1 0-1.5h.25v-2h-.25a.75.75 0 0 1-.75-.75ZM8 6a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z"></path></svg>Note</p>
+<p><strong>Up Next:</strong> With clean reads in hand, we’re ready to align them to a reference genome using Bowtie2.</p>
+</blockquote>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="02_geo_fastq_download.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="03_geo_fastq_download.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
                             </a>
 
@@ -293,7 +285,7 @@ chipseq_tutorial/
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="02_geo_fastq_download.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="03_geo_fastq_download.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
                     </a>
 

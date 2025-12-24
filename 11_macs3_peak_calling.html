@@ -1,0 +1,491 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>MACS3 Peak Calling - ChIP-seq Analysis Tutorial </title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon-de23e50b.svg">
+        <link rel="shortcut icon" href="favicon-8114d1fc.png">
+        <link rel="stylesheet" href="css/variables-8adf115d.css">
+        <link rel="stylesheet" href="css/general-2459343d.css">
+        <link rel="stylesheet" href="css/chrome-ae938929.css">
+        <link rel="stylesheet" href="css/print-9e4910d8.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="fonts/fonts-9644e21d.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="mdbook-highlight-css" href="highlight-493f70e1.css">
+        <link rel="stylesheet" id="mdbook-tomorrow-night-css" href="tomorrow-night-4c0ae647.css">
+        <link rel="stylesheet" id="mdbook-ayu-highlight-css" href="ayu-highlight-3fdfc3ac.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="custom-7f17e3e7.css">
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+            window.path_to_searchindex_js = "searchindex-5db23b83.js";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc-9c36ea23.js"></script>
+    </head>
+    <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>S</kbd> or <kbd>/</kbd> to search in the book</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
+    <div id="mdbook-body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="mdbook-sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("mdbook-sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+                sidebar_toggle.checked = false;
+            }
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
+        </script>
+
+        <nav id="mdbook-sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="mdbook-sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="mdbook-page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="mdbook-menu-bar-hover-placeholder"></div>
+                <div id="mdbook-menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="mdbook-sidebar-toggle" class="icon-button" for="mdbook-sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="mdbook-sidebar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M0 96C0 78.3 14.3 64 32 64H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H416c17.7 0 32 14.3 32 32z"/></svg></span>
+                        </label>
+                        <button id="mdbook-theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="mdbook-theme-list">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M371.3 367.1c27.3-3.9 51.9-19.4 67.2-42.9L600.2 74.1c12.6-19.5 9.4-45.3-7.6-61.2S549.7-4.4 531.1 9.6L294.4 187.2c-24 18-38.2 46.1-38.4 76.1L371.3 367.1zm-19.6 25.4l-116-104.4C175.9 290.3 128 339.6 128 400c0 3.9 .2 7.8 .6 11.6c1.8 17.5-10.2 36.4-27.8 36.4H96c-17.7 0-32 14.3-32 32s14.3 32 32 32H240c61.9 0 112-50.1 112-112c0-2.5-.1-5-.2-7.5z"/></svg></span>
+                        </button>
+                        <ul id="mdbook-theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-ayu">Ayu</button></li>
+                        </ul>
+                        <button id="mdbook-search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="mdbook-searchbar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352c79.5 0 144-64.5 144-144s-64.5-144-144-144S64 128.5 64 208s64.5 144 144 144z"/></svg></span>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">ChIP-seq Analysis Tutorial </h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <span class=fa-svg id="print-button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M128 0C92.7 0 64 28.7 64 64v96h64V64H354.7L384 93.3V160h64V93.3c0-17-6.7-33.3-18.7-45.3L400 18.7C388 6.7 371.7 0 354.7 0H128zM384 352v32 64H128V384 368 352H384zm64 32h32c17.7 0 32-14.3 32-32V256c0-35.3-28.7-64-64-64H64c-35.3 0-64 28.7-64 64v96c0 17.7 14.3 32 32 32H64v64c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V384zm-16-88c-13.3 0-24-10.7-24-24s10.7-24 24-24s24 10.7 24 24s-10.7 24-24 24z"/></svg></span>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="mdbook-search-wrapper" class="hidden">
+                    <form id="mdbook-searchbar-outer" class="searchbar-outer">
+                        <div class="search-wrapper">
+                            <input type="search" id="mdbook-searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="mdbook-searchresults-outer" aria-describedby="searchresults-header">
+                            <div class="spinner-wrapper">
+                                <span class=fa-svg id="fa-spin"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M304 48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zm0 416c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM48 304c26.5 0 48-21.5 48-48s-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48zm464-48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM142.9 437c18.7-18.7 18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zm0-294.2c18.7-18.7 18.7-49.1 0-67.9S93.7 56.2 75 75s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zM369.1 437c18.7 18.7 49.1 18.7 67.9 0s18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9z"/></svg></span>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="mdbook-searchresults-outer" class="searchresults-outer hidden">
+                        <div id="mdbook-searchresults-header" class="searchresults-header"></div>
+                        <ul id="mdbook-searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('mdbook-sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('mdbook-sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#mdbook-sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="mdbook-content" class="content">
+                    <main>
+                        <h1 id="peak-calling-with-macs3-the-summit-search"><a class="header" href="#peak-calling-with-macs3-the-summit-search">Peak Calling with MACS3 (The Summit Search)</a></h1>
+<p><code>MACS3</code> <code>peak-calling</code> <code>ChIP-seq</code> <code>narrow-peaks</code> <code>broad-peaks</code> <code>p-value</code> <code>transcription-factors</code></p>
+<h2 id="1-basic-concept-the-heap-hunt"><a class="header" href="#1-basic-concept-the-heap-hunt">1. Basic Concept (The “Heap” Hunt)</a></h2>
+<h3 id="what-is-a-peak"><a class="header" href="#what-is-a-peak">What is a Peak?</a></h3>
+<p>Imagine you are looking for hidden treasure on a long beach (the Genome).</p>
+<ul>
+<li><strong>Random Reads:</strong> Sand scattered everywhere evenly (Background noise).</li>
+<li><strong>A “Peak”:</strong> A huge heap of sand in one specific spot.</li>
+</ul>
+<p>This heap means thousands of protein molecules were bound to that exact spot of DNA.</p>
+<h3 id="signal-vs-noise"><a class="header" href="#signal-vs-noise">Signal vs. Noise</a></h3>
+<ul>
+<li><strong>Signal:</strong> The Heap (Peak).</li>
+<li><strong>Noise:</strong> The random thin layer of sand everywhere else (Input/Control).</li>
+</ul>
+<p><strong>MACS3</strong> is the software that scans the beach, measures the height of the sand pile, and calculates if it is “significantly” higher than the background.</p>
+<h3 id="narrow-vs-broad-peaks"><a class="header" href="#narrow-vs-broad-peaks">Narrow vs. Broad Peaks</a></h3>
+<p>Different histone modifications and chromatin marks create distinct peak shapes based on their biological function:</p>
+<img width="661" height="371" alt="Screenshot 2025-12-21 at 12 36 14 PM" src="https://github.com/user-attachments/assets/ea7d96e9-d8eb-4e4c-822c-0e7efe82821f" />
+<hr>
+<h2 id="2-requirements"><a class="header" href="#2-requirements">2. Requirements</a></h2>
+<h3 id="input-files"><a class="header" href="#input-files">Input Files</a></h3>
+<p>You need the following files in your workspace:</p>
+<p><strong>BAM files:</strong> Located in <code>encode_bam/</code> directory</p>
+<blockquote class="blockquote-tag blockquote-tag-important">
+<p class="blockquote-tag-title"><svg viewbox="0 0 16 16" width="18" height="18"><path d="M0 1.75C0 .784.784 0 1.75 0h12.5C15.216 0 16 .784 16 1.75v9.5A1.75 1.75 0 0 1 14.25 13H8.06l-2.573 2.573A1.458 1.458 0 0 1 3 14.543V13H1.75A1.75 1.75 0 0 1 0 11.25Zm1.75-.25a.25.25 0 0 0-.25.25v9.5c0 .138.112.25.25.25h2a.75.75 0 0 1 .75.75v2.19l2.72-2.72a.749.749 0 0 1 .53-.22h6.5a.25.25 0 0 0 .25-.25v-9.5a.25.25 0 0 0-.25-.25Zm7 2.25v2.5a.75.75 0 0 1-1.5 0v-2.5a.75.75 0 0 1 1.5 0ZM9 9a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z"></path></svg>Important</p>
+<p><strong>ENCODE Pre-processing:</strong> These BAM files from ENCODE are already deduplicated and filtered for mapping quality (MAPQ ≥ 30). This is documented in <a href="./10_bam_summary_fingerprint.html">Tutorial 10</a>. You do NOT need to run additional filtering.</p>
+</blockquote>
+<hr>
+<h2 id="3-execution-step-by-step"><a class="header" href="#3-execution-step-by-step">3. Execution (Step-by-Step)</a></h2>
+<p>We call peaks on <strong>each replicate individually</strong>, then assess reproducibility using IDR (Irreproducible Discovery Rate). This is the <a href="https://www.encodeproject.org/chip-seq/transcription_factor/">ENCODE standard workflow</a>.</p>
+<h3 id="step-1-create-output-directory"><a class="header" href="#step-1-create-output-directory">Step 1: Create Output Directory</a></h3>
+<pre><code class="language-bash">mkdir -p macs3_results
+</code></pre>
+<h3 id="step-2-h3k9ac-narrow-peaks---both-replicates"><a class="header" href="#step-2-h3k9ac-narrow-peaks---both-replicates">Step 2: H3K9ac (Narrow Peaks) - Both Replicates</a></h3>
+<p>H3K9ac (Acetylation) creates sharp, tall spikes at active promoters and enhancers.</p>
+<p><strong>Replicate 1:</strong></p>
+<pre><code class="language-bash">macs3 callpeak \
+  -t encode_bam/H3K9ac_ENCFF534IPX.bam \
+  -c encode_bam/Input_ENCFF110SOB.bam \
+  -f BAM \
+  -g hs \
+  -n H3K9ac_ENCFF534IPX \
+  -p 0.01 \
+  --keep-dup all \
+  --outdir macs3_results
+</code></pre>
+<p><strong>Replicate 2:</strong></p>
+<pre><code class="language-bash">macs3 callpeak \
+  -t encode_bam/H3K9ac_ENCFF193NPE.bam \
+  -c encode_bam/Input_ENCFF919XCV.bam \
+  -f BAM \
+  -g hs \
+  -n H3K9ac_ENCFF193NPE \
+  -p 0.01 \
+  --keep-dup all \
+  --outdir macs3_results
+</code></pre>
+<h3 id="expected-outputs"><a class="header" href="#expected-outputs">Expected Outputs</a></h3>
+<p>After running MACS3, you will have:</p>
+<pre><code class="language-bash">macs3_results/
+├── H3K9ac_ENCFF534IPX_peaks.narrowPeak
+├── H3K9ac_ENCFF534IPX_peaks.xls
+├── ... (similar files for all 6 replicates)
+└── H3K9ac_idr_peaks.txt        # After IDR analysis
+</code></pre>
+<p><strong>Parameter Explanation:</strong></p>
+<ul>
+<li><code>-t</code>: Treatment file (IP sample - the enriched DNA).</li>
+<li><code>-c</code>: Control file (Input - background DNA).</li>
+<li><code>-f BAM</code>: Input file format.</li>
+<li><code>-g hs</code>: Genome size (<code>hs</code> = human ~2.7Gb, can also use numeric <code>2.7e9</code> or <code>2.9e9</code> for hg38).</li>
+<li><code>-n</code>: Output file prefix (use the ENCODE accession for clarity).</li>
+<li><code>-p 0.01</code>: P-value cutoff. Keep only peaks with p-value &lt; 0.01 (1% significance threshold).
+<ul>
+<li><strong>Why <code>-p</code> instead of <code>-q</code>?</strong> We use IDR (Irreproducible Discovery Rate)  to filter for reproducible peaks between replicates. Starting with lenient <code>-p</code> thresholds captures more candidate peaks, then IDR applies stringent reproducibility filtering. This “liberal discovery + stringent validation” approach is standard for replicated ChIP-seq.</li>
+</ul>
+</li>
+<li><code>--keep-dup all</code>: For deduplicated BAM files (duplicates already removed). Use <code>--keep-dup 1</code> if BAMs still contain duplicates.</li>
+<li><code>--outdir</code>: Output directory.</li>
+</ul>
+<p><strong>Optional Parameters:</strong></p>
+<ul>
+<li>
+<p><code>-B</code> or <code>--bdg</code>: Generate bedGraph files for fragment pileup and control lambda.</p>
+</li>
+<li>
+<p><code>--bdg --SPMR</code>: Combine with <code>-B</code> to normalize bedGraph by signal per million reads (SPMR)</p>
+</li>
+<li>
+<p><code>-f BAMPE</code>: Explicitly specify paired-end BAM format (BAMPE = BAM with PE alignment)</p>
+</li>
+<li>
+<p><code>--nomodel --extsize &lt;size&gt;</code>: Override automatic fragment size estimation (only needed if model building fails)</p>
+</li>
+</ul>
+<blockquote class="blockquote-tag blockquote-tag-note">
+<p class="blockquote-tag-title"><svg viewbox="0 0 16 16" width="18" height="18"><path d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8Zm8-6.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13ZM6.5 7.75A.75.75 0 0 1 7.25 7h1a.75.75 0 0 1 .75.75v2.75h.25a.75.75 0 0 1 0 1.5h-2a.75.75 0 0 1 0-1.5h.25v-2h-.25a.75.75 0 0 1-.75-.75ZM8 6a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z"></path></svg>Note</p>
+<p><strong>Summit positions for motif analysis:</strong> This tutorial does not use <code>--call-summits</code> in MACS3 because precise summit positions will be extracted during IDR analysis , where we identify reproducible peaks and derive consensus summits for motif discovery.</p>
+</blockquote>
+<h3 id="step-3-h3k27me3-broad-peaks---both-replicates"><a class="header" href="#step-3-h3k27me3-broad-peaks---both-replicates">Step 3: H3K27me3 (Broad Peaks) - Both Replicates</a></h3>
+<p>H3K27me3 (Trimethylation) creates wide, gentle hills marking repressed chromatin domains.</p>
+<p><strong>Replicate 1:</strong></p>
+<pre><code class="language-bash">macs3 callpeak \
+  -t encode_bam/H3K27me3_ENCFF532DQH.bam \
+  -c encode_bam/Input_ENCFF110SOB.bam \
+  -f BAM \
+  -g hs \
+  -n H3K27me3_ENCFF532DQH \
+  --broad -p 0.01\
+  --keep-dup all \
+  --outdir macs3_results
+</code></pre>
+<p><strong>Replicate 2:</strong></p>
+<pre><code class="language-bash">macs3 callpeak \
+  -t encode_bam/H3K27me3_ENCFF164ALR.bam \
+  -c encode_bam/Input_ENCFF919XCV.bam \
+  -f BAM \
+  -g hs \
+  -n H3K27me3_ENCFF164ALR \
+   --broad -p 0.01\
+  --keep-dup all \
+  --outdir macs3_results
+</code></pre>
+<h3 id="step-4-cebpa-narrow-peaks---transcription-factor---both-replicates"><a class="header" href="#step-4-cebpa-narrow-peaks---transcription-factor---both-replicates">Step 4: CEBPA (Narrow Peaks - Transcription Factor) - Both Replicates</a></h3>
+<p>Transcription factors like CEBPA bind to very specific DNA sequences, creating extremely sharp peaks.</p>
+<p><strong>Replicate 1:</strong></p>
+<pre><code class="language-bash">macs3 callpeak \
+  -t encode_bam/ceb_ENCFF327JFG.bam \
+  -c encode_bam/Input_ENCFF110SOB.bam \
+  -f BAM \
+  -g hs \
+  -n ceb_ENCFF327JFG \
+  -p 0.01 \
+  --keep-dup all \
+  --outdir macs3_results
+</code></pre>
+<p><strong>Replicate 2:</strong></p>
+<pre><code class="language-bash">macs3 callpeak \
+  -t encode_bam/ceb_ENCFF744SVA.bam \
+  -c encode_bam/Input_ENCFF919XCV.bam \
+  -f BAM \
+  -g hs \
+  -n ceb_ENCFF744SVA \
+  -p 0.01 \
+  --keep-dup all \
+  --outdir macs3_results
+</code></pre>
+<hr>
+<h2 id="4-understanding-the-outputs"><a class="header" href="#4-understanding-the-outputs">4. Understanding the Outputs</a></h2>
+<p>After running the commands, inspect <code>macs3_results/</code>. For each sample, you’ll see:</p>
+<h3 id="file-types"><a class="header" href="#file-types">File Types</a></h3>
+<h4 id="1-_peaksnarrowpeak-or-_peaksbroadpeak--bed6--4-10-cols-narrow-and-bed6--3-9-cols-broad"><a class="header" href="#1-_peaksnarrowpeak-or-_peaksbroadpeak--bed6--4-10-cols-narrow-and-bed6--3-9-cols-broad">1. <code>*_peaks.narrowPeak</code> (or <code>*_peaks.broadPeak</code>)  [BED6 + 4 (10 cols) narrow and BED6 + 3 (9 cols) broad]</a></h4>
+<ul>
+<li><strong>What is it?</strong> The final list of called peaks.</li>
+<li><strong>Format:</strong> BED-like format with 10 columns:
+<ul>
+<li>Columns 1-3: Chromosome, start, end</li>
+<li>Column 4: Peak name</li>
+<li>Column 5: Integer score (for display)</li>
+<li>Column 6: Strand (always <code>.</code> for ChIP-seq)</li>
+<li>Column 7: Fold enrichment</li>
+<li>Column 8: -log10(p-value)</li>
+<li>Column 9: -log10(q-value)</li>
+<li>Column 10: Summit position (relative to start)</li>
+</ul>
+</li>
+<li><strong>Use:</strong> Open in IGV or use for downstream analysis (annotation, motif finding).</li>
+</ul>
+<p><strong>View the file:</strong></p>
+<pre><code class="language-text">rajaishaqnabikhan@Rajas-MacBook-Pro bws % head -4 macs3_results/H3K9ac_ENCFF193NPE_peaks.narrowPeak
+
+chr1 777980 778754 H3K9ac_ENCFF193NPE_peak_1a 67 . 3.55173 8.65761 6.72906 109
+chr1 777980 778754 H3K9ac_ENCFF193NPE_peak_1b 473 . 9.73436 49.6911 47.3476 508
+chr1 778874 779368 H3K9ac_ENCFF193NPE_peak_2 254 . 7.6257 27.596 25.4103 313
+chr1 826684 827604 H3K9ac_ENCFF193NPE_peak_3 975 . 18.662 100.173 97.5777 717
+
+</code></pre>
+<p><strong>Interpreting the columns:</strong></p>
+<ul>
+<li>Peak <code>H3K9ac_ENCFF193NPE_peak_3</code> has the highest score (975) and fold enrichment (18.7x)</li>
+<li>Column 10 (e.g., 717 for peak_3) is the summit offset: summit is at position 826684+717 = 827401</li>
+</ul>
+<h4 id="3-_peaksxls"><a class="header" href="#3-_peaksxls">3. <code>*_peaks.xls</code></a></h4>
+<ul>
+<li><strong>What is it?</strong> Excel-friendly table with detailed peak statistics.</li>
+<li><strong>Contents:</strong> All peak coordinates plus:
+<ul>
+<li><code>fold_enrichment</code>: How many times higher than background (e.g., 10.5 = 10.5x enrichment)</li>
+<li><code>-log10(pvalue)</code>: Statistical significance (higher = more significant)</li>
+<li><code>-log10(qvalue)</code>: FDR-corrected p-value (accounts for multiple testing)</li>
+</ul>
+</li>
+<li><strong>Use:</strong> Filter peaks, rank by significance, extract statistics for publication.</li>
+</ul>
+<p><strong>Example interpretation:</strong></p>
+<pre><code class="language-text">Peak with fold_enrichment=15.3, -log10(qvalue)=50.2
+→ Signal is 15.3x higher than background
+→ q-value = 10^-50.2 ≈ 6.3e-51 (extremely significant!)
+</code></pre>
+<h4 id="4-_modelr-narrow-peaks-only"><a class="header" href="#4-_modelr-narrow-peaks-only">4. <code>*_model.r</code> (narrow peaks only)</a></h4>
+<ul>
+<li>
+<p><strong>What is it?</strong> R script that generates a PDF showing the shift model.</p>
+</li>
+<li>
+<p><strong>Use:</strong> QC visualization showing fragment length estimation.</p>
+</li>
+<li>
+<p><strong>How to use:</strong></p>
+<pre><code class="language-bash">Rscript macs3_results/H3K9ac_ENCFF534IPX_model.r &gt;  macs3_results/H3K9ac_ENCFF534IPX_mode.pdf
+</code></pre>
+</li>
+</ul>
+<hr>
+<h2 id="directory-structure-after-peak-calling"><a class="header" href="#directory-structure-after-peak-calling">Directory Structure After Peak Calling</a></h2>
+<pre><code class="language-text">chipseq_tutorial/
+├── encode_bam/                  ← ENCODE BAM files (input)
+│   ├── H3K9ac_ENCFF534IPX.bam
+│   ├── H3K27me3_ENCFF532DQH.bam
+│   ├── ceb_ENCFF327JFG.bam
+│   └── ...                      (
+├── deeptools_qc/                ← QC from deeptools
+│   ├── fingerprints.pdf
+│   ├── coverage_histogram.pdf
+│   └── ...
+└── macs3_results/               ← MACS3 outputs
+    ├── H3K9ac_ENCFF534IPX_peaks.narrowPeak
+    ├── H3K9ac_ENCFF534IPX_peaks.xls
+    ├── H3K9ac_ENCFF534IPX_summits.bed
+    ├── H3K9ac_ENCFF534IPX_model.r
+    ├── H3K27me3_ENCFF532DQH_peaks.broadPeak
+    ├── H3K27me3_ENCFF532DQH_peaks.xls
+    ├── ceb_ENCFF327JFG_peaks.narrowPeak
+    ├── ceb_ENCFF327JFG_peaks.xls
+    └── ...                       
+</code></pre>
+<hr>
+<h2 id="summary"><a class="header" href="#summary">Summary</a></h2>
+<p>You have successfully called peaks using MACS3 for:</p>
+<ol>
+<li><strong>H3K9ac</strong> (narrow peaks, active histone mark)</li>
+<li><strong>H3K27me3</strong> (broad peaks, repressive mark)</li>
+<li><strong>CEBPA</strong> (narrow peaks, transcription factor)</li>
+</ol>
+<p><strong>Peak calling strategy:</strong></p>
+<ul>
+<li>Used <code>-p 0.01</code> for lenient discovery (captures candidate peaks)</li>
+<li>Will apply IDR filtering in Tutorial 13 for stringent validation</li>
+<li>No <code>--call-summits</code> here - summits extracted during IDR analysis</li>
+</ul>
+<blockquote class="blockquote-tag blockquote-tag-note">
+<p class="blockquote-tag-title"><svg viewbox="0 0 16 16" width="18" height="18"><path d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8Zm8-6.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13ZM6.5 7.75A.75.75 0 0 1 7.25 7h1a.75.75 0 0 1 .75.75v2.75h.25a.75.75 0 0 1 0 1.5h-2a.75.75 0 0 1 0-1.5h.25v-2h-.25a.75.75 0 0 1-.75-.75ZM8 6a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z"></path></svg>Note</p>
+<p><strong>Up Next:</strong> Calculate FRiP (Fraction of Reads in Peaks) quality metrics to validate peak enrichment, then assess reproducibility with IDR and perform motif discovery.</p>
+</blockquote>
+<hr>
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="10_bam_summary_fingerprint.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
+                            </a>
+
+                            <a rel="next prefetch" href="12_frip_quality_metrics.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="10_bam_summary_fingerprint.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
+                    </a>
+
+                    <a rel="next prefetch" href="12_frip_quality_metrics.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
+                    </a>
+            </nav>
+
+        </div>
+
+        <template id=fa-eye><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M288 32c-80.8 0-145.5 36.8-192.6 80.6C48.6 156 17.3 208 2.5 243.7c-3.3 7.9-3.3 16.7 0 24.6C17.3 304 48.6 356 95.4 399.4C142.5 443.2 207.2 480 288 480s145.5-36.8 192.6-80.6c46.8-43.5 78.1-95.4 93-131.1c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C433.5 68.8 368.8 32 288 32zM432 256c0 79.5-64.5 144-144 144s-144-64.5-144-144s64.5-144 144-144s144 64.5 144 144zM288 192c0 35.3-28.7 64-64 64c-11.5 0-22.3-3-31.6-8.4c-.2 2.8-.4 5.5-.4 8.4c0 53 43 96 96 96s96-43 96-96s-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6z"/></svg></span></template>
+        <template id=fa-eye-slash><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M38.8 5.1C28.4-3.1 13.3-1.2 5.1 9.2S-1.2 34.7 9.2 42.9l592 464c10.4 8.2 25.5 6.3 33.7-4.1s6.3-25.5-4.1-33.7L525.6 386.7c39.6-40.6 66.4-86.1 79.9-118.4c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C465.5 68.8 400.8 32 320 32c-68.2 0-125 26.3-169.3 60.8L38.8 5.1zM223.1 149.5C248.6 126.2 282.7 112 320 112c79.5 0 144 64.5 144 144c0 24.9-6.3 48.3-17.4 68.7L408 294.5c5.2-11.8 8-24.8 8-38.5c0-53-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6c0 10.2-2.4 19.8-6.6 28.3l-90.3-70.8zm223.1 298L373 389.9c-16.4 6.5-34.3 10.1-53 10.1c-79.5 0-144-64.5-144-144c0-6.9 .5-13.6 1.4-20.2L83.1 161.5C60.3 191.2 44 220.8 34.5 243.7c-3.3 7.9-3.3 16.7 0 24.6c14.9 35.7 46.2 87.7 93 131.1C174.5 443.2 239.2 480 320 480c47.8 0 89.9-12.9 126.2-32.5z"/></svg></span></template>
+        <template id=fa-copy><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M502.6 70.63l-61.25-61.25C435.4 3.371 427.2 0 418.7 0H255.1c-35.35 0-64 28.66-64 64l.0195 256C192 355.4 220.7 384 256 384h192c35.2 0 64-28.8 64-64V93.25C512 84.77 508.6 76.63 502.6 70.63zM464 320c0 8.836-7.164 16-16 16H255.1c-8.838 0-16-7.164-16-16L239.1 64.13c0-8.836 7.164-16 16-16h128L384 96c0 17.67 14.33 32 32 32h47.1V320zM272 448c0 8.836-7.164 16-16 16H63.1c-8.838 0-16-7.164-16-16L47.98 192.1c0-8.836 7.164-16 16-16H160V128H63.99c-35.35 0-64 28.65-64 64l.0098 256C.002 483.3 28.66 512 64 512h192c35.2 0 64-28.8 64-64v-32h-47.1L272 448z"/></svg></span></template>
+        <template id=fa-play><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M73 39c-14.8-9.1-33.4-9.4-48.5-.9S0 62.6 0 80V432c0 17.4 9.4 33.4 24.5 41.9s33.7 8.1 48.5-.9L361 297c14.3-8.7 23-24.2 23-41s-8.7-32.2-23-41L73 39z"/></svg></span></template>
+        <template id=fa-clock-rotate-left><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M75 75L41 41C25.9 25.9 0 36.6 0 57.9V168c0 13.3 10.7 24 24 24H134.1c21.4 0 32.1-25.9 17-41l-30.8-30.8C155 85.5 203 64 256 64c106 0 192 86 192 192s-86 192-192 192c-40.8 0-78.6-12.7-109.7-34.4c-14.5-10.1-34.4-6.6-44.6 7.9s-6.6 34.4 7.9 44.6C151.2 495 201.7 512 256 512c141.4 0 256-114.6 256-256S397.4 0 256 0C185.3 0 121.3 28.7 75 75zm181 53c-13.3 0-24 10.7-24 24V256c0 6.4 2.5 12.5 7 17l72 72c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-65-65V152c0-13.3-10.7-24-24-24z"/></svg></span></template>
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr-ef4e11c1.min.js"></script>
+        <script src="mark-09e88c2c.min.js"></script>
+        <script src="searcher-c2a407aa.js"></script>
+
+        <script src="clipboard-1626706a.min.js"></script>
+        <script src="highlight-abc7f01d.js"></script>
+        <script src="book-a0b12cfe.js"></script>
+
+        <!-- Custom JS scripts -->
+        <script src="custom-42beaf49.js"></script>
+
+
+
+    </div>
+    </body>
+</html>

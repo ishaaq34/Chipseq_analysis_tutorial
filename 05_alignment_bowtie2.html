@@ -36,10 +36,10 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-876f4e26.js";
+            window.path_to_searchindex_js = "searchindex-5db23b83.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-5578a832.js"></script>
+        <script src="toc-9c36ea23.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -175,7 +175,8 @@
 
                 <div id="mdbook-content" class="content">
                     <main>
-                        <h1 id="04-alignment-solving-the-jigsaw-puzzle"><a class="header" href="#04-alignment-solving-the-jigsaw-puzzle">04: Alignment (Solving the Jigsaw Puzzle)</a></h1>
+                        <h1 id="alignment-solving-the-jigsaw-puzzle"><a class="header" href="#alignment-solving-the-jigsaw-puzzle">Alignment (Solving the Jigsaw Puzzle)</a></h1>
+<p><code>Bowtie2</code> <code>alignment</code> <code>BAM-files</code> <code>single-end</code> <code>paired-end</code> <code>samtools</code> <code>genome-index</code> <code>MAPQ</code> <code>quality-control</code> <code>multimapping</code> <code>ChIP-seq</code> <code>flagstat</code> <code>MultiQC</code> <code>filtering</code></p>
 <h2 id="basic-concept-the-puzzle"><a class="header" href="#basic-concept-the-puzzle">Basic Concept (The “Puzzle”)</a></h2>
 <p>Imagine your Reference Genome is the <strong>Picture on the Puzzle Box</strong> (a complete image of the DNA).
 Your Reads (FASTAS) are the millions of tiny <strong>Puzzle Pieces</strong> scattered on the floor.</p>
@@ -194,7 +195,7 @@ bowtie2-build genome_index/ce.fa genome_index/ce_index            # ce.fa = C. e
 </code></pre>
 <p><em>You only do this once!</em></p>
 <p>You can download the C. elegans reference genome from Ensembl using the following link:  <a href="https://ftp.ensembl.org/pub/release-115/fasta/caenorhabditis_elegans/dna/Caenorhabditis_elegans.WBcel235.dna.toplevel.fa.gz">C. elegans genome</a>.  Place it in the <strong>genome_index</strong> directory, decompress it, and rename the file to <code>ce.fa</code></p>
-<h2 id="after-indexing-bowtie2"><a class="header" href="#after-indexing-bowtie2">After Indexing (Bowtie2)</a></h2>
+<h3 id="after-indexing-bowtie2"><a class="header" href="#after-indexing-bowtie2">After Indexing (Bowtie2)</a></h3>
 <pre><code class="language-text">chipseq_tutorial/
 ├── fastq_raw/
 │   └── ...
@@ -214,59 +215,92 @@ bowtie2-build genome_index/ce.fa genome_index/ce_index            # ce.fa = C. e
 <h3 id="step-2-single-sample-alignment"><a class="header" href="#step-2-single-sample-alignment">Step 2: Single Sample Alignment</a></h3>
 <p>We use a “Pipe” (<code>|</code>) to connect two tools: <code>bowtie2</code> aligns the data, and <code>samtools</code> sorts it immediately.</p>
 <p><strong>Why Sort?</strong> A puzzle is useless if the pieces are in random order. We sort them by chromosome location (Left to Right) so we can look at them later.</p>
-<p><strong>Run Bowtie2 alignment for paired end (R1 and R2) sample in the fastq_cleaned directory</strong></p>
+<p><strong>Run Bowtie2 alignment for a single-end sample</strong></p>
+<p><strong>Input files needed:</strong></p>
+<ul>
+<li>Reference genome index: <code>genome_index/ce_index</code> (created in previous step)</li>
+<li>Cleaned FASTQ file: <code>fastq_cleaned/H3K27me3_IP_rep1.clean.fastq.gz</code></li>
+</ul>
 <pre><code class="language-bash">mkdir -p bowalign
 
-bowtie2 -x  genome_index/ce_index  \                  # 1. The Reference Map
-  -1 fastq_cleaned/Sample1_R1.clean.fastq.gz \       # 2. Input Read 1 assume - SRR7297994_R1.clean.fastq.gz
-  -2 fastq_cleaned/Sample1_R2.clean.fastq.gz \       # 3. Input Read 2 - SRR7297994_R2.clean.fastq.gz
-  -p 6 --no-unal \                       # 4. Use 6 threads,  `--no-unal` — suppresses unaligned reads in the output.
-  2&gt; bowalign/Sample1.log |              # 5. Save the log file...
-  samtools sort -@ 6 -o bowalign/Sample1.sorted.bam  # 6. ...and sort the result!
-</code></pre>
-<p><strong>Run Bowtie2 alignment for a single-end sample</strong></p>
-<pre><code># Run Bowtie2 alignment for a single sample
 bowtie2 -x genome_index/ce_index \
-  -u fastq_cleaned/SRR7297994.clean.fastq.gz \
+  -U fastq_cleaned/H3K27me3_IP_rep1.clean.fastq.gz \
   -p 6 --no-unal \
-  2&gt; bowalign/Sample1.log | samtools sort -@ 6 -o bowalign/Sample1.sorted.bam
+  2&gt; bowalign/H3K27me3_IP_rep1.log | \
+  samtools sort -@ 6 -o bowalign/H3K27me3_IP_rep1.sorted.bam
 
+samtools index bowalign/H3K27me3_IP_rep1.sorted.bam
+</code></pre>
+<p><strong>What this does:</strong></p>
+<ol>
+<li><strong>bowtie2</strong> aligns reads to the reference genome using the <code>-U</code> flag for single-end data</li>
+<li><strong>-p 6</strong> uses 6 CPU threads for faster processing</li>
+<li><strong>–no-unal</strong> suppresses unaligned reads from output (reads that don’t match the genome are excluded, saving disk space and processing time downstream)</li>
+<li><strong>2&gt;</strong> saves alignment statistics to a log file</li>
+<li><strong>samtools sort</strong> sorts alignments by genomic position (required for downstream analysis)</li>
+<li><strong>samtools index</strong> creates an index file (.bai) for fast random access</li>
+</ol>
+<blockquote class="blockquote-tag blockquote-tag-note">
+<p class="blockquote-tag-title"><svg viewbox="0 0 16 16" width="18" height="18"><path d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8Zm8-6.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13ZM6.5 7.75A.75.75 0 0 1 7.25 7h1a.75.75 0 0 1 .75.75v2.75h.25a.75.75 0 0 1 0 1.5h-2a.75.75 0 0 1 0-1.5h.25v-2h-.25a.75.75 0 0 1-.75-.75ZM8 6a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z"></path></svg>Note</p>
+<p><strong>If you have paired-end data</strong>, use <code>-1</code> and <code>-2</code> flags instead of <code>-U</code>:</p>
+</blockquote>
+<pre><code class="language-bash">bowtie2 -x genome_index/ce_index \
+  -1 fastq_cleaned/Sample_R1.clean.fastq.gz \
+  -2 fastq_cleaned/Sample_R2.clean.fastq.gz \
+  -p 6 --no-unal \
+  2&gt; bowalign/Sample.log | samtools sort -@ 6 -o bowalign/Sample.sorted.bam
+
+samtools index bowalign/Sample.sorted.bam
 </code></pre>
 <p><strong>Final Touch:</strong>
 We always “index” the BAM file. Think of this as creating a <strong>Table of Contents</strong> so the computer can jump to any chromosome instantly.</p>
-<pre><code class="language-bash">samtools index bowalign/Sample1.sorted.bam
+<pre><code class="language-bash">samtools index bowalign/H3K27me3_IP_rep1.sorted.bam
 </code></pre>
 <h3 id="output-structure"><a class="header" href="#output-structure"><strong>Output Structure</strong></a></h3>
 <p>After running this step, your directory should look like:</p>
-<pre><code>
-bowalign/
- ├── SRR7297994.log
- ├── SRR7297994.sorted.bam
- └── SRR7297994.sorted.bam.bai
+<pre><code class="language-text">bowalign/
+├── H3K27me3_IP_rep1.log
+├── H3K27me3_IP_rep1.sorted.bam
+└── H3K27me3_IP_rep1.sorted.bam.bai
 </code></pre>
 <p>Once this single run completes successfully, you can confidently automate for all samples.</p>
 <h3 id="step-3-automation-loop"><a class="header" href="#step-3-automation-loop">Step 3: Automation Loop</a></h3>
-<p>Through <a href="https://github.com/ishaaq34/Chipseq_analysis_tutorial/blob/main/src/03_sample_list_creation.md#ready-for-use">Sample list section</a> ,  here is the script to run this for all your samples:</p>
-<pre><code>#!/bin/bash
+<p>After creating <code>sample_id.txt</code> (see <a href="02_geo_fastq_download.html#24-creating-sample-id-list">Step 2.4 in file 02</a>), here is the script to run this for all your samples:</p>
+<pre><code class="language-bash">#!/bin/bash
 set -euo pipefail
 
 mkdir -p bowalign bowalign_log
-
 
 while read -r sample; do
   echo "Aligning $sample"
 
   bowtie2 -x genome_index/ce_index \
-    -1 fastq_cleaned/${sample}_R1.clean.fq.gz" \
-    -2 fastq_cleaned/${sample}_R2.clean.fq.gz" \
+    -U "fastq_cleaned/${sample}.clean.fastq.gz" \
     -p 6 --no-unal \
-    2&gt; bowalign_log/${sample}.bowtie2.log"
-  | samtools sort -@ 6 -o bowalign/${sample}.sorted.bam"
+    2&gt; "bowalign_log/${sample}.bowtie2.log" \
+    | samtools sort -@ 6 -o "bowalign/${sample}.sorted.bam"
 
-  samtools index "${OUTDIR}/${sample}.sorted.bam"
+  samtools index "bowalign/${sample}.sorted.bam"
 
 done &lt; sample_id.txt
+</code></pre>
+<blockquote class="blockquote-tag blockquote-tag-note">
+<p class="blockquote-tag-title"><svg viewbox="0 0 16 16" width="18" height="18"><path d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8Zm8-6.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13ZM6.5 7.75A.75.75 0 0 1 7.25 7h1a.75.75 0 0 1 .75.75v2.75h.25a.75.75 0 0 1 0 1.5h-2a.75.75 0 0 1 0-1.5h.25v-2h-.25a.75.75 0 0 1-.75-.75ZM8 6a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z"></path></svg>Note</p>
+<p><strong>Paired-end while loop</strong> (if your samples have _R1 and_R2 files):</p>
+</blockquote>
+<pre><code class="language-bash">while read -r sample; do
+  echo "Aligning $sample"
 
+  bowtie2 -x genome_index/ce_index \
+    -1 "fastq_cleaned/${sample}_R1.clean.fastq.gz" \
+    -2 "fastq_cleaned/${sample}_R2.clean.fastq.gz" \
+    -p 6 --no-unal \
+    2&gt; "bowalign_log/${sample}.log" | \
+  samtools sort -@ 6 -o "bowalign/${sample}.sorted.bam"
+
+  samtools index "bowalign/${sample}.sorted.bam"
+
+done &lt; sample_id.txt
 </code></pre>
 <hr>
 <h2 id="optimization"><a class="header" href="#optimization">Optimization</a></h2>
@@ -289,71 +323,217 @@ done &lt; sample_id.txt
 <p><a href="https://wiki.csi.cuny.edu/HPCCWiki/BOWTIE2">BOWTIE2 - HPCC Wiki</a></p>
 <p><a href="https://github.com/samtools/samtools/issues">Guidance with using multiple threads with samtools - GitHub</a></p>
 <p><strong>Example with GNU Parallel</strong>:</p>
-<pre><code>#!/bin/bash
+<pre><code class="language-bash">#!/bin/bash
 set -euo pipefail
+
 mkdir -p bowalign bowalign_log
 
-cat sample_id.txt | parallel -j 3 '                     # -j 3 → runs 3 samples (jobs) in parallel
+parallel -j 2 '
+  bowtie2 \
+    -x genome_index/ce_index \
+    -U fastq_cleaned/{}.clean.fastq.gz \
+    -p 4 \
+    --no-unal \
+    2&gt; bowalign_log/{}.log \
+  | samtools sort \
+      -@ 2 \
+      -m 1G \
+      -o bowalign/{}.sorted.bam
 
-  bowtie2 -x genome_index/ce_index \
-    -1 fastq_cleaned/${sample}_R1.clean.fq.gz  \
-    -2 fastq_cleaned/${sample}_R2.clean.fq.gz  \
-    -p 4 --no-unal \                                   # -p 4 → bowtie2 uses 4 CPU threads per sample
-    2&gt;  bowalign_log/{}.log | samtools sort -@ 2 \           # -@ 2 → samtools sort uses 2 CPU threads per sample
-    -o bowalign/{}.sorted.bam
-
-  samtools index bowalign/{}.sorted.bam                 # samtools index is single-threaded
-'
+  samtools index bowalign/{}.sorted.bam
+' :::: sample_id.txt
 </code></pre>
-<p>Effective CPU usage (implied by this setup)</p>
+<p><strong>Effective CPU usage (implied by this setup):</strong></p>
 <ul>
-<li>
-<p>Per sample:  4 threads (bowtie2) + 2 threads (samtools sort) = 6 threads</p>
-</li>
-<li>
-<p>Total at once: 3 parallel jobs × 6 threads = 18 CPU threads</p>
-</li>
-<li>
-<p>Adjust based on available CPU cores and memory.</p>
-</li>
+<li>2 parallel samples (<code>-j 2</code>)</li>
+<li>Per sample: bowtie2 (4 threads, <code>-p 4</code>) + samtools sort (2 threads, <code>-@ 2</code>)</li>
+<li>Total ≈ 12 threads → safe on a 16-core machine</li>
 </ul>
-<h2 id="after-alignment-bowtie2"><a class="header" href="#after-alignment-bowtie2">After Alignment (Bowtie2)</a></h2>
 <pre><code class="language-text">chipseq_tutorial/
-├── fastq_fastq_raw/
-│   └── ...
-├── fastq_fastq_cleaned/
-│   └── ...
+├── fastq_raw/
+├── fastq_cleaned/
 ├── fastp_reports/
-│   └── ...
 ├── genome_index/
-│   └── ...
 ├── bowalign/                ← Aligned BAM files
-│   ├── SRR7297994.sorted.bam
-│   ├── SRR7297994.sorted.bam.bai
-│   ├── SRR7297995.sorted.bam
-│   ├── SRR7297995.sorted.bam.bai
-│   ├── SRR7297998.sorted.bam
-│   ├── SRR7297998.sorted.bam.bai
-│   ├── SRR7298003.sorted.bam
-│   ├── SRR7298003.sorted.bam.bai
+│   ├── H3K27me3_IP_rep1.sorted.bam
+│   ├── H3K27me3_IP_rep1.sorted.bam.bai
 │   └── ...
 ├── bowalign_log/            ← Alignment statistics
-│   ├── SRR7297994.log
-│   ├── SRR7297995.log
-│   ├── SRR7297998.log
-│   ├── SRR7298003.log
+│   ├── H3K27me3_IP_rep1.log
 │   └── ...
 └── sample_id.txt
 </code></pre>
-<h3 id="quality-check-samtools-flagstat"><a class="header" href="#quality-check-samtools-flagstat">Quality Check: <code>samtools flagstat</code></a></h3>
-<p>Did the alignment work? Let’s check the score.</p>
-<pre><code class="language-bash">samtools flagstat bowalign/Sample1.sorted.bam
+<h3 id="understanding-bam-file-structure"><a class="header" href="#understanding-bam-file-structure">Understanding BAM File Structure</a></h3>
+<p>Before we check alignment quality, let’s look at what’s inside a BAM file. BAM files store alignment information in a structured format with <strong>11 mandatory columns</strong>:</p>
+<pre><code class="language-bash"># View the first few alignments in human-readable format
+samtools view bowalign/H3K27me3_IP_rep1.sorted.bam | head -3
 </code></pre>
+<p><strong>Example output (single-end data):</strong></p>
+<pre><code class="language-text">SRR7297994.1    0    I      15200    42    76M    *    0    0    ACGTACGT...    IIIIIIII...
+SRR7297994.2    0    II     98432    30    76M    *    0    0    TGCATGCA...    IIIHHHHH...
+SRR7297994.3   16    III    45123     0    76M    *    0    0    GATTACA...     IIIHHHGG...
+</code></pre>
+<p><strong>Column Breakdown (First 5 of 11 columns):</strong></p>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>Column</th><th>Name</th><th>Example</th><th>Description</th></tr>
+</thead>
+<tbody>
+<tr><td>1</td><td>QNAME</td><td>SRR7297994.1</td><td>Read/Query name</td></tr>
+<tr><td>2</td><td><strong>FLAG</strong></td><td>0, 16</td><td><strong>Bitwise FLAG</strong> (flagstat reads this!)</td></tr>
+<tr><td>3</td><td>RNAME</td><td>I, II, III</td><td>Reference sequence name (chromosome)</td></tr>
+<tr><td>4</td><td>POS</td><td>15200</td><td>Leftmost mapping position</td></tr>
+<tr><td>5</td><td><strong>MAPQ</strong></td><td>42, 30, 0</td><td><strong>Mapping Quality score</strong> (0-255)</td></tr>
+</tbody>
+</table>
+</div>
+<p><strong>What Each QC Tool Evaluates:</strong></p>
+<p><strong><code>samtools flagstat</code></strong> reads <strong>Column 2 (FLAG)</strong>:</p>
+<ul>
+<li>Bit 4: Read unmapped?</li>
+<li>Bit 256: Secondary alignment?</li>
+<li>Bit 1024: PCR/optical duplicate?</li>
+<li>Bit 2048: Supplementary alignment?</li>
+<li>And more… (see FLAG section below)</li>
+</ul>
+<blockquote class="blockquote-tag blockquote-tag-tip">
+<p class="blockquote-tag-title"><svg viewbox="0 0 16 16" width="18" height="18"><path d="M8 1.5c-2.363 0-4 1.69-4 3.75 0 .984.424 1.625.984 2.304l.214.253c.223.264.47.556.673.848.284.411.537.896.621 1.49a.75.75 0 0 1-1.484.211c-.04-.282-.163-.547-.37-.847a8.456 8.456 0 0 0-.542-.68c-.084-.1-.173-.205-.268-.32C3.201 7.75 2.5 6.766 2.5 5.25 2.5 2.31 4.863 0 8 0s5.5 2.31 5.5 5.25c0 1.516-.701 2.5-1.328 3.259-.095.115-.184.22-.268.319-.207.245-.383.453-.541.681-.208.3-.33.565-.37.847a.751.751 0 0 1-1.485-.212c.084-.593.337-1.078.621-1.489.203-.292.45-.584.673-.848.075-.088.147-.173.213-.253.561-.679.985-1.32.985-2.304 0-2.06-1.637-3.75-4-3.75ZM5.75 12h4.5a.75.75 0 0 1 0 1.5h-4.5a.75.75 0 0 1 0-1.5ZM6 15.25a.75.75 0 0 1 .75-.75h2.5a.75.75 0 0 1 0 1.5h-2.5a.75.75 0 0 1-.75-.75Z"></path></svg>Tip</p>
+<p><strong>Decode FLAGS:</strong> Use <a href="https://broadinstitute.github.io/picard/explain-flags.html">Explain SAM Flags</a> to understand bitwise FLAG values.</p>
+</blockquote>
+<h3 id="multimapping--the-lost-gps"><a class="header" href="#multimapping--the-lost-gps">Multimapping &amp; The “Lost GPS”</a></h3>
+<p>Sometimes a read is repetitive (e.g., “ATATATAT”). It fits in 50 different places on the genome.
+The aligner doesn’t know which spot is correct, so it gives it a <strong>Low MAPQ Score</strong> (Mapping Quality).
+<strong>MAPQ filtering</strong> (<code>-q 30</code>) reads <strong>Column 5 (MAPQ)</strong>:</p>
+<ul>
+<li><strong>MAPQ = 0:</strong> “I have NO clue where this goes. It fits in many places.” (Multimapped)</li>
+<li><strong>MAPQ &gt; 30:</strong> “I am highly confident this read belongs EXACTLY here.” (Unique)</li>
+</ul>
+<h3 id="quality-check-samtools-flagstat--samtools-stats"><a class="header" href="#quality-check-samtools-flagstat--samtools-stats">Quality Check: <code>samtools flagstat</code> &amp; <code>samtools stats</code></a></h3>
+<p>Did the alignment work? Let’s check the score using two tools:</p>
+<ul>
+<li><strong>flagstat</strong>: Quick alignment summary (mapped reads, pairs, etc.)</li>
+<li><strong>stats</strong>: Comprehensive metrics including MAPQ distribution (for MultiQC visualization)</li>
+</ul>
+<pre><code class="language-bash"># Create QC output directory for alignment metrics
+mkdir -p bowalign_qc
+
+# Quick summary with flagstat
+samtools flagstat bowalign/H3K27me3_IP_rep1.sorted.bam &gt; bowalign_qc/H3K27me3_IP_rep1.flagstat.txt
+
+# Comprehensive stats (includes MAPQ distribution for MultiQC)
+samtools stats bowalign/H3K27me3_IP_rep1.sorted.bam &gt; bowalign_qc/H3K27me3_IP_rep1.stats.txt
+</code></pre>
+<p><strong>Batch processing for all samples:</strong></p>
+<pre><code class="language-bash">#!/bin/bash
+set -euo pipefail
+
+mkdir -p bowalign_qc
+
+while read -r sample; do
+  echo "Running QC for: $sample"
+  
+  # Generate flagstat summary
+  samtools flagstat bowalign/${sample}.sorted.bam &gt; bowalign_qc/${sample}.flagstat.txt
+  
+  # Generate comprehensive stats (for MultiQC)
+  samtools stats bowalign/${sample}.sorted.bam &gt; bowalign_qc/${sample}.stats.txt
+  
+done &lt; sample_id.txt
+
+# Generate MultiQC report with all QC results
+echo "Generating MultiQC report..."
+multiqc bowalign_qc/ -o bowalign_qc/ -n alignment_qc_report
+echo "MultiQC report saved: bowalign_qc/alignment_qc_report.html"
+</code></pre>
+<p>This creates an interactive HTML report (<code>alignment_qc_report.html</code>) with visualizations of alignment metrics across all samples, including MAPQ distribution plots.</p>
+<hr>
 <p><strong>What to look for:</strong></p>
 <ul>
-<li><strong>Mapping Rate:</strong> Ideally <strong>&gt;80-90%</strong>. If it’s &lt;50%, your DNA might be contaminated (e.g., bacteria in a human sample).</li>
-<li><strong>Properly Paired:</strong> Ideally <strong>high</strong>. This means R1 and R2 pointed towards each other at the correct distance.</li>
+<li><strong>Mapping Rate:</strong> Ideally <strong>&gt;80-90%</strong>. If it’s &lt;50%, your DNA might be contaminated (e.g., bacteria in a sample).</li>
+<li><strong>Goal:</strong> High mapping percentage indicates good quality alignment.</li>
+<li><strong>Warning:</strong> If mapping is low (&lt;50%), you may have the wrong organism or bad sequencing.</li>
 </ul>
+<p><strong>The Sensitivity-Specificity Trade-off:</strong></p>
+<p>Multi-mapping reads critically influence the balance between sensitivity and specificity in ChIP-seq peak detection. Excluding multi-mappers, standard practice in most peak callers, improves specificity by preventing artificial signal inflation in repetitive regions but reduces sensitivity for genuine binding events within those regions (<a href="https://www.encodeproject.org/">ENCODE Project Consortium, 2012</a>). This trade-off is acceptable for transcription factors and chromatin features predominantly in unique genomic loci. However, repetitive and transposable elements (REs/TEs) constitute significant genome portions with important regulatory roles, and discarding multi-mapped reads substantially underrepresents regulatory events in these regions (<a href="https://www.ncbi.nlm.nih.gov/pmc/articles/">He et al., 2022</a>). For studies involving repetitive elements or broad chromatin domains, alternative strategies include paired-end sequencing (reduces mapping ambiguity), probabilistic allocation methods like <em>Allo</em> and <em>MuMRescueLite</em> (allocate reads based on uniquely mapped read distributions), or consensus sequence mapping (family-level TE insights) (<a href="https://academic.oup.com/">Chung et al., 2011</a>; <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/">He et al., 2022</a>). Caution is advised as improper use can lead to double-counting and false positives.</p>
+<h4 id="quick-manual-mapq-check"><a class="header" href="#quick-manual-mapq-check">Quick Manual MAPQ Check</a></h4>
+<p>For a <strong>quick manual inspection</strong> of MAPQ distribution (complementary to the MultiQC visualization):</p>
+<pre><code class="language-bash">samtools view bowalign/H3K27me3_IP_rep1.sorted.bam | awk '{print $5}' | sort -n | uniq -c &gt; bowalign_qc/H3K27me3_IP_rep1.mapq.txt
+</code></pre>
+<p><strong>Understanding the Manual Output:</strong></p>
+<ul>
+<li><strong>If you see lots of 0s:</strong> Your file includes “Lost GPS” reads (Multimappers).</li>
+<li><strong>If your scores start at 30+:</strong> Your file has <strong>Already Filtered</strong> the bad reads.</li>
+</ul>
+<p><strong>Output format: <code>count</code> <code>MAPQ_score</code></strong></p>
+<pre><code class="language-text">123964  30  &lt;-- Lowest score is 30 (Good confidence)
+1928 31
+20741 32
+1477 33
+4040 34
+34434 35
+14294 36
+53329 37
+30665 38
+88528 39
+77123 40
+2960636 42  &lt;-- Highest score is 42 (Perfect confidence)
+</code></pre>
+<p><em>Verdict: This BAM file contains only uniquely mapped, high-quality reads.</em></p>
+<hr>
+<h3 id="filtering-multi-mapping-reads"><a class="header" href="#filtering-multi-mapping-reads">Filtering Multi-mapping Reads</a></h3>
+<p>For standard ChIP-seq analysis (TFs, histone marks in unique regions), filter BAM files to retain only high-quality uniquely mapped reads:</p>
+<pre><code class="language-bash"># Create directory for filtered BAM files
+mkdir -p bowalign_filtered
+
+# Filter out multi-mappers (keep only MAPQ ≥ 30)
+samtools view -b -q 30 bowalign/H3K27me3_IP_rep1.sorted.bam &gt; bowalign_filtered/H3K27me3_IP_rep1.filtered.bam
+
+# Index the filtered BAM
+samtools index bowalign_filtered/H3K27me3_IP_rep1.filtered.bam
+</code></pre>
+<p><strong>Batch processing for all samples:</strong></p>
+<pre><code class="language-bash">#!/bin/bash
+set -euo pipefail
+
+mkdir -p bowalign_filtered
+
+while read -r sample; do
+  echo "Filtering multi-mappers for: $sample"
+  samtools view -b -q 30 bowalign/${sample}.sorted.bam &gt; bowalign_filtered/${sample}.filtered.bam
+  samtools index bowalign_filtered/${sample}.filtered.bam
+done &lt; sample_id.txt
+</code></pre>
+<blockquote class="blockquote-tag blockquote-tag-note">
+<p class="blockquote-tag-title"><svg viewbox="0 0 16 16" width="18" height="18"><path d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8Zm8-6.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13ZM6.5 7.75A.75.75 0 0 1 7.25 7h1a.75.75 0 0 1 .75.75v2.75h.25a.75.75 0 0 1 0 1.5h-2a.75.75 0 0 1 0-1.5h.25v-2h-.25a.75.75 0 0 1-.75-.75ZM8 6a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z"></path></svg>Note</p>
+<p>The <code>-q 30</code> flag filters out reads with MAPQ &lt; 30 (removes multi-mappers and low-confidence alignments). Most downstream tools (MACS2, deepTools) can also filter by MAPQ, so this step is optional but recommended for cleaner data.</p>
+</blockquote>
+<hr>
+<h3 id="directory-structure-after-alignment-qc"><a class="header" href="#directory-structure-after-alignment-qc">Directory Structure After Alignment QC</a></h3>
+<pre><code class="language-text">chipseq_tutorial/
+├── fastq_raw/
+├── fastq_cleaned/
+├── genome_index/
+├── bowalign/                    ← Aligned BAM files
+│   ├── H3K27me3_IP_rep1.sorted.bam
+│   ├── H3K27me3_IP_rep1.sorted.bam.bai
+│   └── ...
+├── bowalign_log/                ← Alignment statistics
+│   ├── H3K27me3_IP_rep1.log
+│   └── ...
+├── bowalign_qc/                 ← Quality control metrics
+│   ├── H3K27me3_IP_rep1.flagstat.txt
+│   ├── H3K27me3_IP_rep1.stats.txt
+│   ├── H3K27me3_IP_rep1.mapq.txt
+│   ├── alignment_qc_report.html
+│   ├── alignment_qc_report_data/
+│   └── ...
+├── bowalign_filtered/           ← Filtered BAM files (MAPQ ≥ 30)
+│   ├── H3K27me3_IP_rep1.filtered.bam
+│   ├── H3K27me3_IP_rep1.filtered.bam.bai
+│   └── ...
+└── sample_id.txt
+</code></pre>
 <hr>
 <h2 id="summary"><a class="header" href="#summary">Summary</a></h2>
 <ol>
@@ -361,6 +541,10 @@ cat sample_id.txt | parallel -j 3 '                     # -j 3 → runs 3 sample
 <li><strong>Action:</strong> Use <code>bowtie2</code> to align and <code>samtools sort</code> to organize.</li>
 <li><strong>Result:</strong> A <strong>Sorted BAM</strong> file (the solved puzzle), ready for peak calling.</li>
 </ol>
+<blockquote class="blockquote-tag blockquote-tag-note">
+<p class="blockquote-tag-title"><svg viewbox="0 0 16 16" width="18" height="18"><path d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8Zm8-6.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13ZM6.5 7.75A.75.75 0 0 1 7.25 7h1a.75.75 0 0 1 .75.75v2.75h.25a.75.75 0 0 1 0 1.5h-2a.75.75 0 0 1 0-1.5h.25v-2h-.25a.75.75 0 0 1-.75-.75ZM8 6a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z"></path></svg>Note</p>
+<p><strong>Up Next:</strong> Before peak calling, we need to remove PCR duplicates and assess library quality.</p>
+</blockquote>
 
                     </main>
 

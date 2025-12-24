@@ -36,10 +36,10 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-876f4e26.js";
+            window.path_to_searchindex_js = "searchindex-5db23b83.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-5578a832.js"></script>
+        <script src="toc-9c36ea23.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -175,7 +175,8 @@
 
                 <div id="mdbook-content" class="content">
                     <main>
-                        <h1 id="tutorial-06-experiment-design--bam-quality-control"><a class="header" href="#tutorial-06-experiment-design--bam-quality-control">Tutorial 06: Experiment Design &amp; BAM Quality Control</a></h1>
+                        <h1 id="experiment-design--bam-quality-control"><a class="header" href="#experiment-design--bam-quality-control">Experiment Design &amp; BAM Quality Control</a></h1>
+<p><code>ENCODE</code> <code>BAM-files</code> <code>samtools</code> <code>flagstat</code> <code>MAPQ</code> <code>quality-control</code> <code>alignment-QC</code> <code>deepTools</code> <code>single-end</code></p>
 <h2 id="1-basic-concept-the-experiment--the-file"><a class="header" href="#1-basic-concept-the-experiment--the-file">1. Basic Concept (The Experiment &amp; The File)</a></h2>
 <h3 id="11-the-experiment-story"><a class="header" href="#11-the-experiment-story">1.1 The Experiment Story</a></h3>
 <p>This tutorial uses real data from <strong>BLaER1 cells</strong> (human immune cells).</p>
@@ -226,7 +227,10 @@
 </div>
 <hr>
 <h3 id="22-simplest-and-easiet-way-to-donwload-all-the-bam-files-in-the-working-folder"><a class="header" href="#22-simplest-and-easiet-way-to-donwload-all-the-bam-files-in-the-working-folder">2.2 Simplest and easiet way to donwload all the bam files in the working folder</a></h3>
-<pre><code>cat &lt;&lt;EOF | xargs -n 2 -P 4 wget -c -O
+<pre><code class="language-bash">#!/bin/bash
+set -euo pipefail
+
+cat &lt;&lt;EOF | xargs -n 2 -P 4 wget -c -O
 ceb_ENCFF327JFG.bam        https://www.encodeproject.org/files/ENCFF327JFG/@@download/ENCFF327JFG.bam
 ceb_ENCFF744SVA.bam        https://www.encodeproject.org/files/ENCFF744SVA/@@download/ENCFF744SVA.bam
 H3K27me3_ENCFF164ALR.bam   https://www.encodeproject.org/files/ENCFF164ALR/@@download/ENCFF164ALR.bam
@@ -236,64 +240,44 @@ H3K9ac_ENCFF534IPX.bam     https://www.encodeproject.org/files/ENCFF534IPX/@@dow
 Input_ENCFF110SOB.bam      https://www.encodeproject.org/files/ENCFF110SOB/@@download/ENCFF110SOB.bam
 Input_ENCFF919XCV.bam      https://www.encodeproject.org/files/ENCFF919XCV/@@download/ENCFF919XCV.bam
 EOF
-
 </code></pre>
 <h2 id="3-basic-quality-checks"><a class="header" href="#3-basic-quality-checks">3. Basic Quality Checks</a></h2>
-<p>Before processing, we verify the BAM files are healthy.</p>
+<p>Before processing, we verify the BAM files are healthy. For detailed explanations of these metrics, see <a href="./05_alignment_bowtie2.html">Section 05: Alignment QC</a>.</p>
 <p><strong>3.1. Create a smaller test file (Optional)</strong>
 Working with full genomes takes time. For testing, we can extract just chromosome 11 and 12:</p>
-<pre><code class="language-bash">samtools view -b -h sample.bam chr11 chr12 | samtools sort -o sample.chr11_12.bam
+<pre><code class="language-bash">samtools view -b -h ceb_ENCFF327JFG.bam chr11 chr12 | samtools sort -o ceb_ENCFF327JFG.chr11_12.bam
 </code></pre>
 <p><strong>3.2. Get Alignment Stats</strong></p>
+<p>For detailed explanation of <code>flagstat</code> output, see <a href="./05_alignment_bowtie2.html#understanding-bam-file-structure">Understanding BAM File Structure</a>.</p>
 <pre><code class="language-bash"># Quick summary
-samtools flagstat sample.bam &gt; sample.flagstat.txt
-
-
+samtools flagstat ceb_ENCFF327JFG.bam &gt; ceb_ENCFF327JFG.flagstat.txt
+cat ceb_ENCFF327JFG.flagstat.txt
 </code></pre>
-<hr>
-<p><strong>Interpreting <code>flagstat</code></strong></p>
-<p>What do the numbers mean?</p>
-<pre><code class="language-text">
-2565563 + 0 in total (QC-passed reads + QC-failed reads)        # Total reads in this BAM; all passed QC
-2565563 + 0 primary                                            # All reads are primary alignments
-0 + 0 secondary                                                # No secondary alignments; no multimappers kept
-0 + 0 supplementary                                            # No supplementary/chimeric alignments
-0 + 0 duplicates                                               # No PCR/optical duplicates recorded (relevant for Picard marked duplicates).
-0 + 0 primary duplicates                                       # Same as above; no duplicate flags present
-2565563 + 0 mapped (100.00% : N/A)                             # Every read in the file is mapped
-2565563 + 0 primary mapped (100.00% : N/A)                     # All primary reads are mapped
-0 + 0 paired in sequencing                                     # Single-end data; no paired-end flags present
-0 + 0 read1                                                    # No read1 because this is not paired-end
-0 + 0 read2                                                    # No read2 for the same reason
-0 + 0 properly paired (N/A : N/A)                              # Paired-end metric; irrelevant for single-end data
-0 + 0 with itself and mate mapped                              # Paired-end metric; not applicable
-0 + 0 singletons (N/A : N/A)                                   # Not meaningful for single-end data
-0 + 0 with mate mapped to a different chr                      # Paired-end metric; not applicable
-0 + 0 with mate mapped to a different chr (mapQ&gt;=5)            # Same paired-end metric; irrelevant here
-
-
+<p><strong>Output:</strong></p>
+<pre><code class="language-text">2565563 + 0 in total (QC-passed reads + QC-failed reads)
+2565563 + 0 primary
+0 + 0 secondary
+0 + 0 supplementary
+0 + 0 duplicates
+0 + 0 primary duplicates
+2565563 + 0 mapped (100.00% : N/A)
+2565563 + 0 primary mapped (100.00% : N/A)
+0 + 0 paired in sequencing
+0 + 0 read1
+0 + 0 read2
+0 + 0 properly paired (N/A : N/A)
+0 + 0 with itself and mate mapped
+0 + 0 singletons (N/A : N/A)
+0 + 0 with mate mapped to a different chr
+0 + 0 with mate mapped to a different chr (mapQ&gt;=5)
 </code></pre>
-<ul>
-<li><strong>Goal:</strong> High mapping % (&gt;80%).</li>
-<li><strong>Warning:</strong> If mapping is low (&lt;50%), you may have the wrong organism or bad sequencing.</li>
-</ul>
-<h3 id="33-multimapping--the-lost-gps"><a class="header" href="#33-multimapping--the-lost-gps">3.3 Multimapping &amp; The “Lost GPS”</a></h3>
-<p>Sometimes a read is repetitive (e.g., “ATATATAT”). It fits in 50 different places on the genome.
-The aligner doesn’t know which spot is correct, so it gives it a <strong>Low MAPQ Score</strong> (Mapping Quality).</p>
-<ul>
-<li><strong>MAPQ = 0:</strong> “I have NO clue where this goes. It fits in many places.” (Multimapped)</li>
-<li><strong>MAPQ &gt; 30:</strong> “I am highly confident this read belongs EXACTLY here.” (Unique)</li>
-</ul>
-<p><strong>How to check MAPQ distribution:</strong></p>
-<pre><code class="language-bash">samtools view sample.bam | awk '{print $5}' | sort -n | uniq -c
+<p><strong>Verdict: 100% mapping rate - High-quality alignment, single-end data, no duplicates</strong></p>
+<p><strong>3.3. Check MAPQ Distribution</strong></p>
+<p>For detailed explanation of MAPQ scores and multimapping, see <a href="./05_alignment_bowtie2.html#multimapping--the-lost-gps">Multimapping &amp; The “Lost GPS”</a>.</p>
+<pre><code class="language-bash">samtools view ceb_ENCFF327JFG.bam | awk '{print $5}' | sort -n | uniq -c
 </code></pre>
-<p><strong>Understanding the Output:</strong></p>
-<ul>
-<li><strong>If you see lots of 0s:</strong> Your file includes “Lost GPS” reads (Multimappers).</li>
-<li><strong>If your scores start at 30+:</strong> Your file has <strong>Already Filtered</strong> the bad reads.</li>
-</ul>
-<p><strong>Example of a Clean File (Filtered):</strong></p>
-<pre><code class="language-text">123964  30  &lt;-- Lowest score is 30 (Good confidence)
+<p><strong>Output:</strong></p>
+<pre><code class="language-text">123964  30  ← Lowest score is 30 (Good confidence)
 1928 31
 20741 32
 1477 33
@@ -304,9 +288,24 @@ The aligner doesn’t know which spot is correct, so it gives it a <strong>Low M
 30665 38
 88528 39
 77123 40
-2960636 42  &lt;-- Highest score is 42 (Perfect confidence)
+2960636 42  ← Highest score is 42 (Perfect confidence)
 </code></pre>
-<p><em>Verdict: This BAM file contains only uniquely mapped, high-quality reads.</em></p>
+<p><strong>Verdict: MAPQ ≥ 30 - File contains only uniquely mapped, high-quality reads</strong></p>
+<hr>
+<h2 id="directory-structure-after-bam-qc"><a class="header" href="#directory-structure-after-bam-qc">Directory Structure After BAM QC</a></h2>
+<pre><code class="language-text">chipseq_tutorial/
+├── encode_bam/                  ← ENCODE BAM files
+│   ├── ceb_ENCFF327JFG.bam
+│   ├── H3K9ac_ENCFF193NPE.bam
+│   └── ...                      (8 BAM files total)
+├── encode_bam_qc/               ← QC metrics for ENCODE BAMs
+│   ├── ceb_ENCFF327JFG.flagstat.txt
+│   ├── ceb_ENCFF327JFG.mapq.txt
+│   ├── H3K9ac_ENCFF193NPE.flagstat.txt
+│   ├── H3K9ac_ENCFF193NPE.mapq.txt
+│   └── ...                      (16 QC files total)
+└── sample_id.txt
+</code></pre>
 <hr>
 <h2 id="summary"><a class="header" href="#summary">Summary</a></h2>
 <ol>
@@ -314,6 +313,10 @@ The aligner doesn’t know which spot is correct, so it gives it a <strong>Low M
 <li><strong>Files:</strong> BAMs are compressed alignment maps.</li>
 <li><strong>QC:</strong> We use <code>samtools flagstat</code> and check <strong>MAPQ scores</strong> to ensure we aren’t analyzing “lost” multimapping reads.</li>
 </ol>
+<blockquote class="blockquote-tag blockquote-tag-note">
+<p class="blockquote-tag-title"><svg viewbox="0 0 16 16" width="18" height="18"><path d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8Zm8-6.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13ZM6.5 7.75A.75.75 0 0 1 7.25 7h1a.75.75 0 0 1 .75.75v2.75h.25a.75.75 0 0 1 0 1.5h-2a.75.75 0 0 1 0-1.5h.25v-2h-.25a.75.75 0 0 1-.75-.75ZM8 6a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z"></path></svg>Note</p>
+<p><strong>Up Next:</strong> We’ll perform cross-correlation analysis to estimate fragment length and assess signal quality.</p>
+</blockquote>
 
                     </main>
 
