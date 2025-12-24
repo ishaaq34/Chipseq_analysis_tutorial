@@ -23,7 +23,7 @@ Imagine you shout **"HELLO"** (Forward Reads). A split second later, you hear th
 * The distance we slid them telling us the **True Fragment Length**.
 
 ---
-<img width="639" height="403" alt="Screenshot 2025-12-10 at 11 39 06 AM" src="https://github.com/user-attachments/assets/cfc18aa5-2c0d-4772-ad2a-f4ae8c0f578d" />
+<img width="639" height="403" alt="Screenshot 2025-12-10 at 11 39 06 AM" src="./images/cross_correlation_concept.png" />
 
 *(Source:[Genome-wide analysis of transcription factor binding sites based on ChIP-Seq data](https://www.nature.com/articles/nmeth.1246)*
 
@@ -85,7 +85,7 @@ H3K9ac_ENCFF193NPE.chr11_12.bam   #1  BAM file name (input to SPP QC)
 
 ---
 
-<img width="758" height="504" alt="Screenshot 2025-12-15 at 9 23 05 PM" src="https://github.com/user-attachments/assets/696f703d-a182-466f-aeb3-bf19a07b0272" />
+<img width="758" height="504" alt="Screenshot 2025-12-15 at 9 23 05 PM" src="./images/fragment_length_estimate.png" />
 
 ---
 
@@ -104,7 +104,7 @@ We compare the Height of the Real Peak (Signal) to the Phantom Peak (Noise).
 
 ---
 
-<img width="943" height="470" alt="image3" src="https://github.com/user-attachments/assets/5b03189d-8fb7-4f4c-8145-5b5930921e05" />
+<img width="943" height="470" alt="image3" src="./images/cross_correlation_plot.png" />
 
  ---
 

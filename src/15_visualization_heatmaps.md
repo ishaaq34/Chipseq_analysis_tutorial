@@ -153,7 +153,7 @@ plotProfile \
 
 This tells us about **Promoter Activity**.
 
-<img width="900" height="271" alt="Screenshot 2025-12-15 at 7 10 31 PM" src="https://github.com/user-attachments/assets/294305c8-a488-45b8-bf90-d1c0a0d6a1be" />
+<img width="900" height="271" alt="Screenshot 2025-12-15 at 7 10 31 PM" src="./images/heatmap_viz_1.png" />
 
 * **Input (Background):** Flat line (~1.2-1.5). No enrichment. This is good quality control.
 * **H3K9ac (Active Mark):** **Huge spike** right at the TSS (reaching ~12-25!). This confirms H3K9ac is strongly associated with active promoters.
@@ -164,7 +164,7 @@ This tells us about **Promoter Activity**.
 
 This tells us about **Domain Structure**.
 
-<img width="1022" height="323" alt="Screenshot 2025-12-10 at 12 14 14 PM" src="https://github.com/user-attachments/assets/0c10ed9f-6ff9-43a1-82d6-0c029973c56f" />
+<img width="1022" height="323" alt="Screenshot 2025-12-10 at 12 14 14 PM" src="./images/heatmap_viz_2.png" />
 
 * **H3K9ac:** Spike at the start (TSS), then rapid drop. It's a "Starting Gun" mark.
 * **H3K27me3:** Stays elevated across the **entire gene body**, slowly decaying. It's a "Blanket" mark that covers the whole region to silence it.

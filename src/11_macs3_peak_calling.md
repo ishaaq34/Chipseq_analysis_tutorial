@@ -24,7 +24,7 @@ This heap means thousands of protein molecules were bound to that exact spot of 
 
 Different histone modifications and chromatin marks create distinct peak shapes based on their biological function:
 
-<img width="661" height="371" alt="Screenshot 2025-12-21 at 12 36 14 PM" src="https://github.com/user-attachments/assets/ea7d96e9-d8eb-4e4c-822c-0e7efe82821f" />
+<img width="661" height="371" alt="Screenshot 2025-12-21 at 12 36 14 PM" src="./images/peak_types_narrow_broad.png" />
 
 ---
 

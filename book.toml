@@ -6,7 +6,8 @@ language = "en"
 [output.html]
 additional-css = ["custom.css"]
 additional-js = ["custom.js"]
-print = false
+[output.html.print]
+enable = false
 
 
 
