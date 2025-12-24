@@ -36,7 +36,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-0b7a68e8.js";
+            window.path_to_searchindex_js = "searchindex-876f4e26.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-5578a832.js"></script>
@@ -272,46 +272,24 @@ computeMatrix scale-regions \
 <hr>
 <p>Each panel shows average signal around transcription start sites (±3 kb), and the differences between tracks are clear.</p>
 <p>The input tracks show low, smooth signal with no sharp peak at the TSS. This is what background looks like and confirms there is no real promoter-specific enrichment in the inputs.</p>
-<p>CEB ChIP-seq shows weak enrichment relative to input and does not produce strong, sharp peaks. FRiP values are low (∼5–7%), which is typical for sequence-specific transcription factor ChIP-seq. Thus, individual CEBP binding events are difficult to discern at the whole-genome scale.</p>
+<p>CEB ChIP-seq and  input peaks are not much distinguisnbkle. Looking back to FRiP values are low (∼5–7%), which is typical for sequence-specific transcription factor ChIP-seq. Thus, individual CEBP binding events are difficult to discern at the whole-genome scale.</p>
 <p>The H3K27me3 tracks show broader enrichment across the promoter region. The signal rises gradually toward the TSS and spreads over several kilobases, which fits a repressive chromatin mark that acts over domains rather than sharply at promoters.</p>
 <p>The H3K9ac tracks are very different. They show strong, narrow peaks centered exactly at the TSS, with signal far higher than all other tracks. This reflects active promoter-associated acetylation and clear separation from background.</p>
 <hr><img width="1022" height="323" alt="Screenshot 2025-12-10 at 12 14 14 PM" src="https://github.com/user-attachments/assets/0c10ed9f-6ff9-43a1-82d6-0c029973c56f" />
 <hr>
-<p>Across all genes, the meta-profiles show clear and reproducible mark-specific patterns that are obvious from both the shape of the curves and their amplitude on the Y axis.</p>
-<p>The <strong>input tracks</strong> sit around <strong>~1.22–1.30</strong> along the entire region, with only a very small rise near the TSS, which confirms that the background structure is low and there are no major mapping or copy-number artifacts.</p>
-<p>In contrast, the <strong>ceb ChIP</strong> reaches <strong>~1.45–1.50</strong> at the TSS before dropping back to ~1.30 across the gene body, a pattern and magnitude that match promoter-restricted occupancy of a transcription factor.</p>
-<p><strong>H3K27me3</strong> shows a broader profile with TSS values rising to <strong>~2.0–2.2</strong> and gradually decaying toward ~1.5 at the TES, consistent with the expected spread of a repressive chromatin domain rather than a sharply localized promoter mark.</p>
-<p><strong>H3K9ac</strong> displays the highest dynamic range: the TSS peak reaches ~8–10 in one replicate and ~5 in the other, dropping to ~2–3 across the gene body, which is exactly the kind of focused acetylation seen at active promoters.</p>
-<p>The fact that replicates for each mark reach similar Y-axis heights and have nearly identical curve shapes indicates that the enrichment is real, reproducible, and well above the input background.</p>
+<p>The genome-wide metagene profiles show clear differences between input, CEBP, and histone marks across transcription start sites (TSS) and transcription end sites (TES).</p>
+<p>The input tracks show low-amplitude signal with mild structure around both TSS and TES, consistent with background chromatin features and technical biases rather than true enrichment. There is no sharp localization to either boundary.</p>
+<p>CEB ChIP-seq and  input peaks are not much distinguisnbkle.</p>
+<p>In contrast, H3K27me3 shows broad enrichment centered near the TSS that extends across the gene body and decays toward the TES. The signal is moderate in amplitude and spread over several kilobases, consistent with its role as a repressive chromatin mark acting over domains rather than forming sharp peaks.</p>
+<p>H3K9ac displays strong, sharp enrichment precisely at the TSS, with signal levels far exceeding input and transcription factor profiles. The signal decreases steadily across the gene body and approaches baseline near the TES, consistent with promoter-focused acetylation associated with active transcription.</p>
 <hr>
-<h3 id="32-comparison-portrait-vs-panorama"><a class="header" href="#32-comparison-portrait-vs-panorama">3.2 Comparison: Portrait vs Panorama</a></h3>
-<div class="table-wrapper">
-<table>
-<thead>
-<tr><th style="text-align: left">Mark</th><th style="text-align: left">Uses TSS Mode (Portrait)</th><th style="text-align: left">Uses Scaled Mode (Panorama)</th></tr>
-</thead>
-<tbody>
-<tr><td style="text-align: left"><strong>Input</strong></td><td style="text-align: left">Flat (~1.25).</td><td style="text-align: left">Flat (~1.25).</td></tr>
-<tr><td style="text-align: left"><strong>CEBPA</strong></td><td style="text-align: left">Small bump at TSS (~1.5).</td><td style="text-align: left">Bump at start, then flat.</td></tr>
-<tr><td style="text-align: left"><strong>H3K27me3</strong></td><td style="text-align: left">Broad peak (~2.0-3.0).</td><td style="text-align: left">Rise at start (~2.3), slope down gene body.</td></tr>
-<tr><td style="text-align: left"><strong>H3K9ac</strong></td><td style="text-align: left">Sharp spike (~25).</td><td style="text-align: left">Spike at start, rapid drop to ~1.</td></tr>
-</tbody>
-</table>
-</div>
-<p>This step takes the per-replicate matrix files generated by computeMatrix and converts each one into a heatmap and plot using a single command.</p>
-<pre><code> plotHeatmap -m mat.gz \                 #`matrix_TSS.gz` or `matrix_Body.gz`
-        -out profile_heat.pdf \
-        --colorMap jet \
-        --missingDataColor "#FFF6EB" \
-        --refPointLabel "TSS" \
-        --plotFileFormat pdf --dpi 600
-</code></pre>
-<hr><img width="852" height="436" alt="Screenshot 2025-12-10 at 12 47 38 PM" src="https://github.com/user-attachments/assets/57933355-b628-4b6f-a861-70bf54a60985" />
-<hr>
-<p>Input shows a flat, diffuse signal with no structured enrichment, consistent with background and technical bias.
-H3K9ac displays a sharp, TSS-centered peak with strong promoter-specific enrichment, indicating a successful ChIP and correct biological localization.</p>
-<h4 id="more"><a class="header" href="#more">More</a></h4>
-<p>Consider trying different parameters of the compute matrix and plotprofile/plotheatmap, and see how much they influence the plotting and representation. Consider having the bedfile of the lines/sines/pEl</p>
+<h3 id="avergae-bws"><a class="header" href="#avergae-bws">Avergae bws</a></h3>
+<h2 id="ipinput"><a class="header" href="#ipinput">IP/Input</a></h2>
+<h1 id="compute-matrix-and-plots"><a class="header" href="#compute-matrix-and-plots">Compute matrix and plots</a></h1>
+<p>The CEBP profile shows a shallow negative dip centered at the TSS, with values remaining close to zero across the region. This indicates that, after normalization to input, CEBP enrichment at promoters is very weak and in places indistinguishable from background.</p>
+<p>In contrast, H3K27me3 shows a modest but reproducible positive enrichment flanking the TSS, with a narrow dip exactly at the TSS itself.</p>
+<p>H3K9ac displays a strong, clearly positive log2(IP/Input) peak centered at the TSS, reaching well above background and decaying symmetrically away from promoters.</p>
+<p>Now, to find the peak of the Ceb peaks , we want to focus son peak that were identifdied in macs and idr produced cosnsesis peaks</p>
 
                     </main>
 
