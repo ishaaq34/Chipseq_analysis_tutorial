@@ -17,7 +17,6 @@
         <link rel="stylesheet" href="css/variables-8adf115d.css">
         <link rel="stylesheet" href="css/general-2459343d.css">
         <link rel="stylesheet" href="css/chrome-ae938929.css">
-        <link rel="stylesheet" href="css/print-9e4910d8.css" media="print">
 
         <!-- Fonts -->
         <link rel="stylesheet" href="fonts/fonts-9644e21d.css">
@@ -28,6 +27,7 @@
         <link rel="stylesheet" id="mdbook-ayu-highlight-css" href="ayu-highlight-3fdfc3ac.css">
 
         <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="custom-7f17e3e7.css">
 
 
         <!-- Provide site root and default themes to javascript -->
@@ -140,9 +140,6 @@
                     <h1 class="menu-title">ChIP-seq Analysis Tutorial </h1>
 
                     <div class="right-buttons">
-                        <a href="print.html" title="Print this book" aria-label="Print this book">
-                            <span class=fa-svg id="print-button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M128 0C92.7 0 64 28.7 64 64v96h64V64H354.7L384 93.3V160h64V93.3c0-17-6.7-33.3-18.7-45.3L400 18.7C388 6.7 371.7 0 354.7 0H128zM384 352v32 64H128V384 368 352H384zm64 32h32c17.7 0 32-14.3 32-32V256c0-35.3-28.7-64-64-64H64c-35.3 0-64 28.7-64 64v96c0 17.7 14.3 32 32 32H64v64c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V384zm-16-88c-13.3 0-24-10.7-24-24s10.7-24 24-24s24 10.7 24 24s-10.7 24-24 24z"/></svg></span>
-                        </a>
 
                     </div>
                 </div>
@@ -269,18 +266,18 @@ awk '$12 &gt;= 2.0' idr/ceb_idr_peaks.txt | wc -l
 <h3 id="understanding-idr-diagnostic-plots"><a class="header" href="#understanding-idr-diagnostic-plots">Understanding IDR Diagnostic Plots</a></h3>
 <p>IDR generates three diagnostic plots to visualize replicate concordance:</p>
 <p><strong>Plot 1: Rank Consistency Plot</strong></p>
-<img width="232" height="235" alt="image" src="https://github.com/user-attachments/assets/90e32a53-16c6-423e-b42f-af30f9f7ba7e" />
+<img width="232" height="235" alt="image" src="./images/idr_rank_plot.png" />
 <p>This plot displays the normalized rank of peaks in replicate 1 (X-axis) versus replicate 2 (Y-axis). Each point represents a peak shared between replicates, with black/gray points indicating reproducible peaks (IDR &lt; 0.05) and red points showing irreproducible peaks (IDR ≥ 0.05). A strong diagonal indicates good replicate concordance, where high-ranking peaks in one replicate are also high-ranking in the other.</p>
 <p><strong>Plot 2: Signal Consistency Plot</strong></p>
-<img width="276" height="249" alt="image" src="https://github.com/user-attachments/assets/26f276dc-2525-4775-b155-4ef31b4d01ae" />
+<img width="276" height="249" alt="image" src="./images/idr_signal_plot.png" />
 <p>This log10(signal)-log10(signal) plot compares signal strength between replicates, with black points representing reproducible peaks (IDR &lt; 0.05) and red points showing irreproducible peaks (IDR ≥ 0.05). A tight diagonal band for black points confirms that strong peaks are consistently strong in both replicates, validating the biological signal.</p>
 <p><strong>Plot 3: IDR vs Peak Rank</strong></p>
-<img width="237" height="237" alt="image" src="https://github.com/user-attachments/assets/21224773-01fd-4d61-8b91-fb92ae71f0f5" />
+<img width="237" height="237" alt="image" src="./images/idr_score_plot.png" />
 <p>This plot shows peak rank bins for replicate 1 (X-axis, with best peaks on the right) versus -log10(IDR) scores (Y-axis). Individual points represent peaks, with boxplots summarizing IDR distributions within rank bins. The dashed horizontal line marks the IDR = 0.05 cutoff (-log10 ≈ 1.3). A sigmoidal curve where -log10(IDR) increases sharply as peak rank improves indicates that top-ranked peaks have high reproducibility scores, which is expected for quality ChIP-seq data.</p>
 <hr>
 <p><strong>Example of Poor IDR (Cross-Factor Comparison):</strong></p>
 <p>This demonstrates poor IDR results when calculated between biologically unrelated samples (CEBPA replicate vs H3K9ac replicate), shown here for illustration purposes only:</p>
-<img width="1200" height="1200" alt="H3K9ac_ceb_idr_peaks txt" src="https://github.com/user-attachments/assets/1e10e020-1138-46d2-b046-de1a656dd508" />
+<img width="1200" height="1200" alt="H3K9ac_ceb_idr_peaks txt" src="./images/idr_cross_factor.png" />
 <h2 id="3-motif-analysis-finding-dna-binding-sequences"><a class="header" href="#3-motif-analysis-finding-dna-binding-sequences">3. Motif Analysis: Finding DNA Binding Sequences</a></h2>
 <h3 id="why-motif-analysis-matters"><a class="header" href="#why-motif-analysis-matters">Why Motif Analysis Matters</a></h3>
 <p>Reproducible peaks answer <em>where</em> the protein binds.
@@ -343,7 +340,7 @@ findMotifsGenome.pl \
 └── motif1.motif               # Position weight matrix
 </code></pre>
 <p><strong>Example output from CEBPA analysis:</strong></p>
-<img width="1477" height="84" alt="Screenshot 2025-12-22 at 2 31 56 PM" src="https://github.com/user-attachments/assets/5a40f7b3-1a11-4cc7-8405-7001aafdff35" />
+<img width="1477" height="84" alt="Screenshot 2025-12-22 at 2 31 56 PM" src="./images/homer_results.png" />
 <p><strong>Interpreting the results:</strong></p>
 <ul>
 <li><strong>Rank (1):</strong> Top-ranked motif, most strongly enriched among all detected sequences</li>
@@ -441,6 +438,7 @@ findMotifsGenome.pl \
         <script src="book-a0b12cfe.js"></script>
 
         <!-- Custom JS scripts -->
+        <script src="custom-42beaf49.js"></script>
 
 
 

@@ -17,7 +17,6 @@
         <link rel="stylesheet" href="css/variables-8adf115d.css">
         <link rel="stylesheet" href="css/general-2459343d.css">
         <link rel="stylesheet" href="css/chrome-ae938929.css">
-        <link rel="stylesheet" href="css/print-9e4910d8.css" media="print">
 
         <!-- Fonts -->
         <link rel="stylesheet" href="fonts/fonts-9644e21d.css">
@@ -28,6 +27,7 @@
         <link rel="stylesheet" id="mdbook-ayu-highlight-css" href="ayu-highlight-3fdfc3ac.css">
 
         <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="custom-7f17e3e7.css">
 
 
         <!-- Provide site root and default themes to javascript -->
@@ -140,9 +140,6 @@
                     <h1 class="menu-title">ChIP-seq Analysis Tutorial </h1>
 
                     <div class="right-buttons">
-                        <a href="print.html" title="Print this book" aria-label="Print this book">
-                            <span class=fa-svg id="print-button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M128 0C92.7 0 64 28.7 64 64v96h64V64H354.7L384 93.3V160h64V93.3c0-17-6.7-33.3-18.7-45.3L400 18.7C388 6.7 371.7 0 354.7 0H128zM384 352v32 64H128V384 368 352H384zm64 32h32c17.7 0 32-14.3 32-32V256c0-35.3-28.7-64-64-64H64c-35.3 0-64 28.7-64 64v96c0 17.7 14.3 32 32 32H64v64c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V384zm-16-88c-13.3 0-24-10.7-24-24s10.7-24 24-24s24 10.7 24 24s-10.7 24-24 24z"/></svg></span>
-                        </a>
 
                     </div>
                 </div>
@@ -192,7 +189,7 @@ However, the sequencer only reads the <strong>Ends</strong> of these fragments (
 <li>We slide the Forward reads towards the Reverse reads. When they overlap perfectly, the “volume” is loudest (Max Correlation).</li>
 <li>The distance we slid them telling us the <strong>True Fragment Length</strong>.</li>
 </ul>
-<hr><img width="639" height="403" alt="Screenshot 2025-12-10 at 11 39 06 AM" src="https://github.com/user-attachments/assets/cfc18aa5-2c0d-4772-ad2a-f4ae8c0f578d" />
+<hr><img width="639" height="403" alt="Screenshot 2025-12-10 at 11 39 06 AM" src="./images/cross_correlation_concept.png" />
 <p><em>(Source:<a href="https://www.nature.com/articles/nmeth.1246">Genome-wide analysis of transcription factor binding sites based on ChIP-Seq data</a></em></p>
 <hr>
 <h2 id="2-phantompeakqualtools"><a class="header" href="#2-phantompeakqualtools">2: PhantomPeakQualTools</a></h2>
@@ -245,7 +242,7 @@ Rscript /opt/anaconda3/envs/chip/bin/run_spp.R \
 1.339926                         #10 RSC – Relative Strand Cross-correlation
 1                               #11 SPP quality tag (1 = good)
 </code></pre>
-<hr><img width="758" height="504" alt="Screenshot 2025-12-15 at 9 23 05 PM" src="https://github.com/user-attachments/assets/696f703d-a182-466f-aeb3-bf19a07b0272" />
+<hr><img width="758" height="504" alt="Screenshot 2025-12-15 at 9 23 05 PM" src="./images/fragment_length_estimate.png" />
 <hr>
 <h3 id="32-the-metrics-nsc--rsc"><a class="header" href="#32-the-metrics-nsc--rsc">3.2 The Metrics (NSC &amp; RSC)</a></h3>
 <p>We compare the Height of the Real Peak (Signal) to the Phantom Peak (Noise).</p>
@@ -262,7 +259,7 @@ Rscript /opt/anaconda3/envs/chip/bin/run_spp.R \
 </table>
 </div>
 <h3 id="33-interpreting-the-data-example-analysis"><a class="header" href="#33-interpreting-the-data-example-analysis">3.3 Interpreting the Data (Example Analysis)</a></h3>
-<hr><img width="943" height="470" alt="image3" src="https://github.com/user-attachments/assets/5b03189d-8fb7-4f4c-8145-5b5930921e05" />
+<hr><img width="943" height="470" alt="image3" src="./images/cross_correlation_plot.png" />
 <hr>
 <ul>
 <li>As shown in the plot, expectedly, the two input samples show the typical profile of unenriched DNA, with very low signal-to-noise. Their NSC values sit almost exactly at background (1.003 and 1.005), and their RSC values are only 0.62 and 0.64, which is far below what any real ChIP signal produces (NSC  &gt; 1.05 &amp; RSC &gt; 0.8)</li>
@@ -377,6 +374,7 @@ Rscript /opt/anaconda3/envs/chip/bin/run_spp.R \
         <script src="book-a0b12cfe.js"></script>
 
         <!-- Custom JS scripts -->
+        <script src="custom-42beaf49.js"></script>
 
 
 

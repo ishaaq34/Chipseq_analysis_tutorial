@@ -17,7 +17,6 @@
         <link rel="stylesheet" href="css/variables-8adf115d.css">
         <link rel="stylesheet" href="css/general-2459343d.css">
         <link rel="stylesheet" href="css/chrome-ae938929.css">
-        <link rel="stylesheet" href="css/print-9e4910d8.css" media="print">
 
         <!-- Fonts -->
         <link rel="stylesheet" href="fonts/fonts-9644e21d.css">
@@ -28,6 +27,7 @@
         <link rel="stylesheet" id="mdbook-ayu-highlight-css" href="ayu-highlight-3fdfc3ac.css">
 
         <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="custom-7f17e3e7.css">
 
 
         <!-- Provide site root and default themes to javascript -->
@@ -140,9 +140,6 @@
                     <h1 class="menu-title">ChIP-seq Analysis Tutorial </h1>
 
                     <div class="right-buttons">
-                        <a href="print.html" title="Print this book" aria-label="Print this book">
-                            <span class=fa-svg id="print-button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M128 0C92.7 0 64 28.7 64 64v96h64V64H354.7L384 93.3V160h64V93.3c0-17-6.7-33.3-18.7-45.3L400 18.7C388 6.7 371.7 0 354.7 0H128zM384 352v32 64H128V384 368 352H384zm64 32h32c17.7 0 32-14.3 32-32V256c0-35.3-28.7-64-64-64H64c-35.3 0-64 28.7-64 64v96c0 17.7 14.3 32 32 32H64v64c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V384zm-16-88c-13.3 0-24-10.7-24-24s10.7-24 24-24s24 10.7 24 24s-10.7 24-24 24z"/></svg></span>
-                        </a>
 
                     </div>
                 </div>
@@ -297,7 +294,7 @@ plotHeatmap \
 <h2 id="5-reading-the-results"><a class="header" href="#5-reading-the-results">5. Reading the Results</a></h2>
 <h3 id="51-the-tss-profile-portrait"><a class="header" href="#51-the-tss-profile-portrait">5.1 The TSS Profile (Portrait)</a></h3>
 <p>This tells us about <strong>Promoter Activity</strong>.</p>
-<img width="900" height="271" alt="Screenshot 2025-12-15 at 7 10 31 PM" src="https://github.com/user-attachments/assets/294305c8-a488-45b8-bf90-d1c0a0d6a1be" />
+<img width="900" height="271" alt="Screenshot 2025-12-15 at 7 10 31 PM" src="./images/heatmap_viz_1.png" />
 <ul>
 <li><strong>Input (Background):</strong> Flat line (~1.2-1.5). No enrichment. This is good quality control.</li>
 <li><strong>H3K9ac (Active Mark):</strong> <strong>Huge spike</strong> right at the TSS (reaching ~12-25!). This confirms H3K9ac is strongly associated with active promoters.</li>
@@ -306,7 +303,7 @@ plotHeatmap \
 </ul>
 <h3 id="52-the-gene-body-profile-panorama"><a class="header" href="#52-the-gene-body-profile-panorama">5.2 The Gene Body Profile (Panorama)</a></h3>
 <p>This tells us about <strong>Domain Structure</strong>.</p>
-<img width="1022" height="323" alt="Screenshot 2025-12-10 at 12 14 14 PM" src="https://github.com/user-attachments/assets/0c10ed9f-6ff9-43a1-82d6-0c029973c56f" />
+<img width="1022" height="323" alt="Screenshot 2025-12-10 at 12 14 14 PM" src="./images/heatmap_viz_2.png" />
 <ul>
 <li><strong>H3K9ac:</strong> Spike at the start (TSS), then rapid drop. It’s a “Starting Gun” mark.</li>
 <li><strong>H3K27me3:</strong> Stays elevated across the <strong>entire gene body</strong>, slowly decaying. It’s a “Blanket” mark that covers the whole region to silence it.</li>
@@ -379,6 +376,7 @@ plotHeatmap \
         <script src="book-a0b12cfe.js"></script>
 
         <!-- Custom JS scripts -->
+        <script src="custom-42beaf49.js"></script>
 
 
 
