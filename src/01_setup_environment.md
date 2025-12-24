@@ -52,7 +52,7 @@ dependencies: # The tools we want to install
   
 ```
 
-> **Note:** If you downloaded the file [chip.yml](https://github.com/ishaaq34/Chipseq_analysis_tutorial/blob/main/Chip.yml) . You can use that to install all the tools required for the Chip-seq analysis!
+> **Note:** If you downloaded the file [chip.yml](https://raw.githubusercontent.com/ishaaq34/Chipseq_analysis_tutorial/main/Chip.yml) . You can use that to install all the tools required for the Chip-seq analysis!
 
 ### Step 3: Build the Environment
 
