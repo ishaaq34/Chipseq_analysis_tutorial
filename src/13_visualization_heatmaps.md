@@ -55,27 +55,30 @@ This command calculates the coverage scores for plotting.
 **Mode A: Reference-Point (TSS)**
 ```bash
 computeMatrix reference-point \
-    --referencePoint TSS \
-    -b 3000 -a 10000 \                  # 3kb Before, 10kb After
-    -R tss.bed \                        # Regions (The Map)
-    -S sample1.bw sample2.bw \          # Signal (BigWigs)
-    --skipZeros \
-    -o matrix_TSS.gz \
-    --binSize 10 \
-    --numberOfProcessors 4
+  --referencePoint TSS \
+  -R "$REGIONS" \
+  -S \
+    "$BW/ceb_ENCFF327JFG.RPGC.bw" \
+    "$BW/ceb_ENCFF744SVA.RPGC.bw" \
+  -b 3000 -a 3000 \
+  --binSize 250 \
+  --numberOfProcessors 4 \
+  -o bw_plot/ceb_TSS.mat.gz
 ```
 
 **Mode B: Scale-Regions (Gene Body)**
 ```bash
 
 computeMatrix scale-regions \
-    -R genes.bed \
-    -S sample1.bw sample2.bw \
-    --regionBodyLength 5000 \           # Stretch all genes to 5kb
-    -b 1000 -a 1000 \                   # Add 1kb flanks
-    -o matrix_Body.gz \
-    --skipZeros \
-    --binSize 10
+  -R "$REGIONS" \
+  -S \
+    "$BW/ceb_ENCFF327JFG.RPGC.bw" \
+    "$BW/ceb_ENCFF744SVA.RPGC.bw" \
+  --regionBodyLength 5000 \
+  -b 3000 -a 3000 \
+  --binSize 250 \
+  --numberOfProcessors 4 \
+  -o bw_plot/ceb_combined.mat.gz
 ```
 
 ### Step 3: Plotting (The Photo)
@@ -83,24 +86,20 @@ computeMatrix scale-regions \
 Now we turn the `matrix_TSS.gz` and `matrix_Body.gz` into plots.
 
 ```
-# per-group profile
-  plotProfile \
-    --matrixFile mat.gz \
-    --outFileName profile_group.pdf \
-    --perGroup \
-    --dpi 600 \
-    --legendLocation upper-right
+plotProfile \
+  -m ceb_TSS.mat.gz \
+  --perGroup \
+  -out ceb_TSS_profile.pdf
 ```
 
 ```
-# mean profile
-  plotProfile \
-    --matrixFile mat.gz \
-    --outFileName profile.pdf \
-    --dpi 600 \
-    --legendLocation upper-right
+plotProfile \
+  -m ceb_combined.mat.gz \
+  --perGroup \
+  -out ceb_combined_profile.pdf
+
 ````
-
+likwise , you can geberate plots for other IPs and Inputs 
 
 ---
 
@@ -109,21 +108,21 @@ Now we turn the `matrix_TSS.gz` and `matrix_Body.gz` into plots.
 
 ---
 
-<img width="900" height="271" alt="Screenshot 2025-12-15 at 7 10 31 PM" src="https://github.com/user-attachments/assets/294305c8-a488-45b8-bf90-d1c0a0d6a1be" />
+<img width="637" height="393" alt="image" src="https://github.com/user-attachments/assets/5c7b404c-af40-481a-b0db-9e16dbdfcbcf" />
 
 
 
 ---
 
-Each panel shows the expected hierarchy of promoter-proximal enrichment, and the contrast between marks is pretty stark.
+Each panel shows average signal around transcription start sites (±3 kb), and the differences between tracks are clear.
 
-The **input tracks** sit between roughly 1.2 and 1.55 on the y-axis. That flat, low-amplitude range is exactly what you expect from a background signal with no real TSS enrichment.
+The input tracks show low, smooth signal with no sharp peak at the TSS. This is what background looks like and confirms there is no real promoter-specific enrichment in the inputs.
 
-The **two CEB profiles** stay in the same neighborhood, about 1.25 to 1.5, with only small oscillations and a shallow dip at the TSS.  
+CEB ChIP-seq shows weak enrichment relative to input and does not produce strong, sharp peaks. FRiP values are low (∼5–7%), which is typical for sequence-specific transcription factor ChIP-seq. Thus, individual CEBP binding events are difficult to discern at the whole-genome scale.
 
-**H3K27me3** is clearly different. Its signal climbs from about 1.7–2.0 in the flanks to peaks around 2.7–3.0 at the TSS in one replicate and about 2.5–2.75 in the other. That broad, mid-range elevation matches what you expect from a repressive domain mark. 
+The H3K27me3 tracks show broader enrichment across the promoter region. The signal rises gradually toward the TSS and spreads over several kilobases, which fits a repressive chromatin mark that acts over domains rather than sharply at promoters.
 
-**H3K9ac** is different. Instead of hovering around 1–3, it shoots to 12 in one replicate and 25 in the other. Those tall, narrow spikes reflect strong, promoter-proximal acetylation and clean separation from background noise. 
+The H3K9ac tracks are very different. They show strong, narrow peaks centered exactly at the TSS, with signal far higher than all other tracks. This reflects active promoter-associated acetylation and clear separation from background.
 
 ---
 <img width="1022" height="323" alt="Screenshot 2025-12-10 at 12 14 14 PM" src="https://github.com/user-attachments/assets/0c10ed9f-6ff9-43a1-82d6-0c029973c56f" />
