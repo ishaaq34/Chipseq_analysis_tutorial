@@ -119,7 +119,7 @@ Once this single run completes successfully, you can confidently automate for al
 
 ### Step 3: Automation Loop
 
-After creating `sample_id.txt` (see [Step 2.4 in file 02](02_geo_fastq_download.md#24-creating-sample-id-list)), here is the script to run this for all your samples:
+After creating `sample_id.txt` (see [Section 2.4](03_geo_fastq_download.md#24-creating-sample-id-list)), here is the script to run this for all your samples:
 
 ```bash
 #!/bin/bash
