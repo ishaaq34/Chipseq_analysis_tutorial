@@ -35,7 +35,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-5db23b83.js";
+            window.path_to_searchindex_js = "searchindex-cb03dba5.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-9c36ea23.js"></script>
@@ -247,9 +247,18 @@ python parallel.py -i /fastq_raw -o /fastq_cleaned -r /fastp_reports -f 3 -t 2
 <p><a href="https://github.com/OpenGene/fastp/blob/master/parallel.py">parallel.py</a> avoids the need to explicitly loop over <code>sample_id.txt</code> in a Bash script.</p>
 </blockquote>
 <pre><code class="language-text">chipseq_tutorial/
-│   ├── Input_rep1.html
-│   ├── Input_rep2.html
-│   └── ...
+├── fastq_raw/                  # Original FASTQ files
+│   ├── H3K27me3_IP_rep1.fastq.gz
+│   ├── H3K27me3_IP_rep2.fastq.gz
+│   └── Input_rep1.fastq.gz
+├── fastq_cleaned/              # Cleaned FASTQ files
+│   ├── H3K27me3_IP_rep1.clean.fastq.gz
+│   ├── H3K27me3_IP_rep2.clean.fastq.gz
+│   └── Input_rep1.clean.fastq.gz
+├── fastp_reports/              # HTML QC reports
+│   ├── H3K27me3_IP_rep1.html
+│   ├── H3K27me3_IP_rep2.html
+│   └── Input_rep1.html
 └── sample_id.txt
 </code></pre>
 <h2 id="summary"><a class="header" href="#summary">Summary</a></h2>
