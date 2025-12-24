@@ -130,8 +130,8 @@ blockquote {
   margin: 1.5rem 0;
   border-left: 4px solid var(--quote-border);
   background: var(--quote-bg);
-  font-style: italic;
-  font-family: var(--font-heading);
+  font-style: normal;
+  font-family: var(--font-sans);
   color: var(--text-secondary);
 }
 
@@ -183,14 +183,13 @@ pre {
   background-color: #f8fafc;
 }
 
-
-
 /* Code blocks – clearer contrast vs body text */
 pre,
 code {
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
-  font-size: 14px;        /* Smaller than body (16px) */
-  line-height: 1.45;      /* Denser, technical feel */
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+    "Liberation Mono", monospace;
+  font-size: 14px; /* Smaller than body (16px) */
+  line-height: 1.45; /* Denser, technical feel */
 }
 
 /* Inline code should not overpower text */
