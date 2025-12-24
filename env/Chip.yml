@@ -1,0 +1,41 @@
+name: chip
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+
+dependencies:
+  - python=3.10
+  - pip
+
+  # Core QC & preprocessing
+  - fastqc
+  - fastp
+  - cutadapt
+  - trim-galore
+  - fastq-dl
+  - multiqc
+
+  # Alignment & BAM handling
+  - bowtie2
+  - samtools
+  - picard
+  - bedtools
+
+  # Peak calling & ChIP-seq QC
+  - macs3
+  - phantompeakqualtools
+  - deeptools
+
+  # UCSC utilities
+  - ucsc-bedgraphtobigwig
+  - ucsc-bigwiginfo
+  - ucsc-bigwigsummary
+  - ucsc-facount
+  - ucsc-fasize
+
+  # R base (only if you actually need R in this env)
+  - r-base=4.4
+
+  # Optional / specialized
+  - khmer

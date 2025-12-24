@@ -1,0 +1,1 @@
+cmd = homer_test/test_sequences.fa fasta homer_test/motif_output -len 8,10,12

@@ -1,0 +1,21 @@
+name: idr_env3
+channels:
+  - conda-forge
+  - bioconda
+dependencies:
+  - python=3.9
+  - numpy=1.26.4
+  - scipy=1.13.1
+  - matplotlib=3.9.4
+  - pip
+  - pip:
+      - git+https://github.com/nboley/idr.git
+      - contourpy==1.3.0
+      - cycler==0.12.1
+      - cython==3.2.3
+      - fonttools==4.60.2
+      - kiwisolver==1.4.7
+      - packaging==25.0
+      - pillow==11.3.0
+      - pyparsing==3.2.5
+      - python-dateutil==2.9.0.post0
