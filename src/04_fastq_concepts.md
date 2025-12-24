@@ -101,9 +101,18 @@ This automatically finds pairs and generates HTML reports for every sample.
 
 ```text
 chipseq_tutorial/
-│   ├── Input_rep1.html
-│   ├── Input_rep2.html
-│   └── ...
+├── fastq_raw/                  # Original FASTQ files
+│   ├── H3K27me3_IP_rep1.fastq.gz
+│   ├── H3K27me3_IP_rep2.fastq.gz
+│   └── Input_rep1.fastq.gz
+├── fastq_cleaned/              # Cleaned FASTQ files
+│   ├── H3K27me3_IP_rep1.clean.fastq.gz
+│   ├── H3K27me3_IP_rep2.clean.fastq.gz
+│   └── Input_rep1.clean.fastq.gz
+├── fastp_reports/              # HTML QC reports
+│   ├── H3K27me3_IP_rep1.html
+│   ├── H3K27me3_IP_rep2.html
+│   └── Input_rep1.html
 └── sample_id.txt
 ```
 
