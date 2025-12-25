@@ -6,7 +6,6 @@
 **[ Read the Tutorial Book Online](https://ishaaq34.github.io/Chipseq_analysis_tutorial/)**
 
 
-=======
 A comprehensive, hands-on tutorial for ChIP-seq (Chromatin Immunoprecipitation Sequencing) data analysis, covering the complete workflow from raw FASTQ files to publication-ready visualizations and biological insights.
 
 ## Overview
