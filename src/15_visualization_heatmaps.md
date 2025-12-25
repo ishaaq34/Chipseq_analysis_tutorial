@@ -271,6 +271,9 @@ plotProfile \
   -out deeptools_viz/plots/H3K9ac_genes_profile.pdf
 ```
 
+
+<img alt="Additional visualization" src="./images/bw2b.png" />
+
 ---
 
 ## CEBPA Peak-Focused Analysis
