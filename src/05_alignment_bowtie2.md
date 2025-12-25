@@ -52,10 +52,6 @@ chipseq_tutorial/
 
 ### Step 2: Single Sample Alignment
 
-We use a "Pipe" (`|`) to connect two tools: `bowtie2` aligns the data, and `samtools` sorts it immediately.
-
-**Why Sort?** A puzzle is useless if the pieces are in random order. We sort them by chromosome location (Left to Right) so we can look at them later.
-
 **Run Bowtie2 alignment for a single-end sample**
 
 **Input files needed:**

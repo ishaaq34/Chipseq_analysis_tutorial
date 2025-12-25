@@ -30,6 +30,8 @@ Complete information for all sequencing runs associated with this repository is 
 
 From this interface, you can download the full metadata table as well as a plain accession list containing the SRR identifiers. The accession list can be saved as `srr_list.txt` and used directly for automated data retrieval. Unwanted runs can be removed from this file before download, allowing precise control over which datasets are processed.
 
+<img width="639" height="403" alt="ncbi" src="./images/ncbi.png" />
+
 To download data, we use a tool called [fastq-dl](https://github.com/rpetit3/fastq-dl). It acts like a smart librarian—you just give it the ID number, and it deals with the complicated databases for you.
 
 ### 2.1 Download a Single Sample
@@ -78,6 +80,23 @@ while read -r acc; do
   echo "Finished downloading: $acc"
 done < srr_list.txt
 
+```
+
+### 2.3 Parallel Download (The Fast Way)
+
+If you have a powerful computer, you can download multiple files at the same time using `parallel`.
+
+```bash
+#!/bin/bash
+set -euo pipefail
+
+mkdir -p fastq_raw
+
+parallel -j 4 \
+  'echo "Starting download: {}" &&
+   fastq-dl --accession {} --provider SRA --cpus 1 --outdir fastq_raw &&
+   echo "Finished download: {}"' \
+  :::: srr_list.txt
 ```
 
 **Directory structure after download:**
@@ -135,8 +154,6 @@ echo "Renaming complete!"
 After renaming, create `sample_id.txt` with clean sample names for downstream automation:
 
 ```bash
-#!/bin/bash
-set -euo pipefail
 
 # Create sample_id.txt from renamed files
 cd fastq_raw/
@@ -170,37 +187,6 @@ chipseq_tutorial/
 │   └── Input_rep2.fastq.gz
 ├── srr_list.txt                  ← Original SRR ID list
 └── sample_id.txt                 ← Clean sample names for automation
-```
-
-### 2.3 Parallel Download (The Fast Way)
-
-If you have a powerful computer, you can download multiple files at the same time using `parallel`.
-
-```bash
-#!/bin/bash
-set -euo pipefail
-
-mkdir -p fastq_raw
-
-parallel -j 4 \
-  'fastq-dl --accession {} --provider SRA --cpus 1 --outdir fastq_raw' \
-  :::: srr_list.txt
-
-```
-
-**Adding echo statements for progress tracking:**
-
-```bash
-#!/bin/bash
-set -euo pipefail
-
-mkdir -p fastq_raw
-
-parallel -j 4 \
-  'echo "Starting download: {}" &&
-   fastq-dl --accession {} --provider SRA --cpus 1 --outdir fastq_raw &&
-   echo "Finished download: {}"' \
-  :::: srr_list.txt
 ```
 
 ### 2.4 Download an Entire Study

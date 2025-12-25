@@ -105,28 +105,6 @@ This works even without `chmod +x`, but the preferred method is still to use `ch
 
 ---
 
-## The Big Picture: Manual vs. Automated Analysis
-
-Imagine you have a classroom with 100 students and need to process each student's assignment.
-
-**Two approaches:**
-
-1. **Manual Approach:**
-   - Type the command for Student 1
-   - Wait for it to finish
-   - Type for Student 2
-   - Wait again...
-   - Repeat 98 more times (takes days, prone to typos)
-
-2. **Automated Approach:**
-   - Write a small instruction sheet (a script)
-   - Give it to a "robot" (your computer)
-   - The robot processes all 100 students while you drink coffee
-
-This tutorial teaches you the automated approach for ChIP-seq data.
-
----
-
 ## Part 1: Understanding Sample Lists
 
 ### The "Roll Call" Analogy
@@ -298,17 +276,6 @@ ls *_R1.fastq.gz | sed 's/_R1.fastq.gz//' > sample_id.txt
 By listing only the `_R1` files, we get exactly one entry per sample. We then strip off the `_R1.fastq.gz` suffix to get the clean sample name.
 
 The script will automatically know to look for both `_R1` and `_R2` files later when we use this list.
-
----
-
-### Why Not Create the List Manually?
-
-You *could* just type sample names into a text file yourself. However:
-
-- **Prone to typos:** One wrong character breaks your analysis
-- **Not verifiable:** Using `ls` ensures you only list files that actually exist
-
-Automation prevents these errors.
 
 ---
 
