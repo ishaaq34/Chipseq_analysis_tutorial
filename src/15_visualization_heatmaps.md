@@ -150,6 +150,11 @@ The H3K27me3 tracks show broader enrichment across the promoter region. The sign
 The H3K9ac tracks are very different. They show strong, narrow peaks centered exactly at the TSS, with signal far higher than all other tracks. This reflects active promoter-associated acetylation and clear separation from background.
 
 ---
+
+### TSS/TES Metagene Profiles: Genome-Wide Patterns
+
+The following plots show average ChIP-seq signal across transcription start sites (TSS) and transcription end sites (TES):
+
 <img alt="Screenshot 2025-12-10 at 12 14 14 PM" src="./images/bw2.png" />
 
 ---
