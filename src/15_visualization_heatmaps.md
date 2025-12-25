@@ -6,35 +6,6 @@ We want to visualize the "Average" pattern of our protein across all genes. To d
 
 1. **Portrait Mode (Reference-Point):**
     * **Focus:** One specific point (e.g., the Transcription Start Site, **TSS**).
-
-## Directory Structure After Visualization Setup
-
-```text
-chipseq_tutorial/
-├── bigwigs/                    ← Normalized BigWig files (from Tutorial 14)
-├── bw_mean/                    ← **NEW: Averaged BigWig files**
-│   ├── H3K9ac_mean.bw
-│   ├── H3K27me3_mean.bw
-│   └── Input_mean.bw
-├── bw_log2/                    ← **NEW: Log2(IP/Input) normalized files**
-│   ├── H3K9ac_log2IPoverInput.bw
-│   └── H3K27me3_log2IPoverInput.bw
-├── deeptools_viz/              ← **NEW: deepTools visualization outputs**
-│   ├── matrices/               # Computed matrices
-│   │   ├── H3K9ac_TSS.mat.gz
-│   │   ├── H3K9ac_genes.mat.gz
-│   │   └── cebpa_multimark_TSS.mat.gz
-│   └── plots/                  # Generated plots
-│       ├── H3K9ac_TSS_profile.pdf
-│       ├── H3K9ac_genes_profile.pdf
-│       └── cebpa_multimark_heatmap.pdf
-├── tss.bed                     ← **NEW: TSS annotation (1bp positions)**
-├── genes.bed                   ← **NEW: Gene body annotation**
-└── cebpa_peak_promoters.bed    ← **NEW: CEBPA-bound promoters**
-```
-
----
-
     * **Action:** We stand at the TSS and look 3kb upstream and 10kb downstream.
     * **Use Case:** Great for seeing promoter activity (H3K9ac, Transcription Factors).
 
@@ -278,6 +249,8 @@ plotProfile \
   -out deeptools_viz/plots/H3K9ac_TSS_log2_profile.pdf
 ```
 
+<img alt="Additional visualization" src="./images/bw2b.png" />
+
 ### Gene Body Profile with Averaged Signal
 
 Visualize signal across gene bodies using the averaged (non-normalized) BigWigs:
@@ -299,9 +272,6 @@ plotProfile \
   --plotTitle "H3K9ac gene-body (averaged replicates)" \
   -out deeptools_viz/plots/H3K9ac_genes_profile.pdf
 ```
-
-
-<img alt="Additional visualization" src="./images/bw2b.png" />
 
 ---
 
@@ -386,6 +356,28 @@ plotProfile \
 # Heatmap: shows enrichment at individual CEBPA-bound promoters
 plotHeatmap \
   -m deeptools_viz/matrices/cebpa_multimark_TSS.mat.gz \
+  --colorMap RdBu_r \
+  --dpi 600 \
+  -out deeptools_viz/plots/cebpa_multimark_heatmap.pdf
+```
+
+**What this reveals:**
+
+* H3K9ac enrichment at CEBPA peaks indicates active chromatin
+* H3K27me3 depletion at CEBPA peaks confirms absence of repressive marks
+* CEBPA binds preferentially to active (H3K9ac+, H3K27me3-) promoters
+
+---
+
+### Profile Plot
+
+<img alt="Multi-mark profile at CEBPA-bound promoters" src="./images/bw4.png" />
+
+---
+
+### Heatmap
+
+<img alt="Multi-mark heatmap at CEBPA-bound promoters" src="./images/bw5.png" />
 
 ---
 
@@ -415,35 +407,8 @@ chipseq_tutorial/
 └── cebpa_peak_promoters.bed    ← **NEW: CEBPA-bound promoters**
 ```
 
----
-
-  --colorMap RdBu_r \
-  --dpi 600 \
-  -out deeptools_viz/plots/cebpa_multimark_heatmap.pdf
-```
-
-**What this reveals:**
-- H3K9ac enrichment at CEBPA peaks indicates active chromatin
-- H3K27me3 depletion at CEBPA peaks confirms absence of repressive marks
-- CEBPA binds preferentially to active (H3K9ac+, H3K27me3-) promoters
-
----
-
-### Profile Plot
-
-<img alt="Multi-mark profile at CEBPA-bound promoters" src="./images/bw4.png" />
-
----
-
-### Heatmap
-
-<img alt="Multi-mark heatmap at CEBPA-bound promoters" src="./images/bw5.png" />
-
----
-
 ## Summary
 
 CEBPA-bound promoters are enriched for active chromatin (H3K9ac) and depleted for repressive chromatin (H3K27me3).
 
 ---
-
