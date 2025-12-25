@@ -18,11 +18,9 @@ Before we download anything, it helps to understand where the data lives. Think 
 
 ### The Files You Will Encounter
 
-As we process data, we change formats. Think of it like this:
-
-1. **FASTQ (Raw Reads):** The jumbled words. This is what comes off the sequencer. It’s just millions of short strings of letters (A, C, G, T) with no context.
-2. **BAM (Aligned Reads):** The assembled sentences. We map the words to a reference genome so we know where they belong.
-3. **BED/BigWig (Signals):** The highlighted passages. These are simplified files that show us where the interesting "peaks" (protein binding sites) are.
+1. **FASTQ (Raw Reads):**
+2. **BAM (Aligned Reads):**
+3. **BED/BigWig (Signals):**
 
 ---
 
@@ -165,11 +163,13 @@ This file will be used in all downstream automation loops (QC, alignment, dedupl
 
 ```text
 chipseq_tutorial/
-├── fastq_raw/                    ← Renamed for clarity
-│   └── ...
+├── fastq_raw/                    ← Renamed FASTQ files
+│   ├── H3K27me3_IP_rep1.fastq.gz
+│   ├── H3K27me3_IP_rep2.fastq.gz
+│   ├── Input_rep1.fastq.gz
+│   └── Input_rep2.fastq.gz
 ├── srr_list.txt                  ← Original SRR ID list
 └── sample_id.txt                 ← Clean sample names for automation
-
 ```
 
 ### 2.3 Parallel Download (The Fast Way)
