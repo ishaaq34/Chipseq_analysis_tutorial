@@ -199,7 +199,7 @@ multiBamSummary bins -b $IP_FILES --labels $IP_LABELS ...
 This plot shows the cumulative read distribution across the genome. Good ChIP libraries show a clear separation between ChIP and input samples, with ChIP curves rising earlier due to enriched regions. Flat, overlapping curves usually indicate poor enrichment or over-background signal.
 
 ---
-<img width="755" height="574" alt="Screenshot 2025-12-10 at 12 02 40 PM" src="./images/fingerprint_plot.png" />
+<img alt="Screenshot 2025-12-10 at 12 02 40 PM" src="./images/fingerprint_plot.png" />
 
 ---
 
@@ -219,7 +219,7 @@ Next, we look at the overall coverage distribution in each BAM using plotCoverag
 * **ChIPs :** In contrast, every IP sample collapses more sharply; the curves drop faster after coverage 1 because most genomic positions in a ChIP experiment receive almost no reads. Only a small portion of the genome — the actual binding or modification sites — reaches deeper coverage, and that fraction is tiny enough that the tail beyond coverage 2 nearly vanishes.
 
 ---
-<img width="861" height="578" alt="Screenshot 2025-12-10 at 12 03 51 PM" src="./images/coverage_histogram_full.png" />
+<img alt="Screenshot 2025-12-10 at 12 03 51 PM" src="./images/coverage_histogram_full.png" />
 
 ---
 
@@ -228,7 +228,7 @@ Zooming in reveals the difference. Input covers more of the genome at 1x depth, 
 
 ---
 
-<img width="731" height="501" alt="Screenshot 2025-12-10 at 12 04 14 PM" src="./images/coverage_histogram_zoomed.png" />
+<img alt="Screenshot 2025-12-10 at 12 04 14 PM" src="./images/coverage_histogram_zoomed.png" />
 
 ---
 
@@ -242,7 +242,7 @@ Using the binned count matrix, we compute pairwise correlations between samples.
 * **Separation:** Active marks (H3K9ac) should look different from Repressive marks (H3K27me3).
 
 ---
-<img width="667" height="575" alt="Screenshot 2025-12-10 at 12 05 28 PM" src="./images/correlation_heatmap.png" />
+<img alt="Screenshot 2025-12-10 at 12 05 28 PM" src="./images/correlation_heatmap.png" />
 
 ---
 
@@ -257,7 +257,7 @@ Finally, we perform PCA on the same binned count matrix. PCA reduces the data to
 
 ---
 
-<img width="983" height="488" alt="Screenshot 2025-12-10 at 12 05 56 PM" src="./images/pca_plot.png" />
+<img alt="Screenshot 2025-12-10 at 12 05 56 PM" src="./images/pca_plot.png" />
 
 ---
 

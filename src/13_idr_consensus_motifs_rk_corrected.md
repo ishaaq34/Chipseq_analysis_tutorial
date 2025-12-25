@@ -133,19 +133,19 @@ IDR generates three diagnostic plots to visualize replicate concordance:
 
 **Plot 1: Rank Consistency Plot**
 
-<img width="232" height="235" alt="image" src="./images/idr_rank_plot.jpg" />
+<img alt="image" src="./images/idr_rank_plot.jpg" />
 
 This plot displays the normalized rank of peaks in replicate 1 (X-axis) versus replicate 2 (Y-axis). Each point represents a peak shared between replicates, with black/gray points indicating reproducible peaks (IDR < 0.05) and red points showing irreproducible peaks (IDR ≥ 0.05). A strong diagonal indicates good replicate concordance, where high-ranking peaks in one replicate are also high-ranking in the other.
 
 **Plot 2: Signal Consistency Plot**
 
-<img width="276" height="249" alt="image" src="./images/idr_signal_plot.jpg" />
+<img alt="image" src="./images/idr_signal_plot.jpg" />
 
 This log10(signal)-log10(signal) plot compares signal strength between replicates, with black points representing reproducible peaks (IDR < 0.05) and red points showing irreproducible peaks (IDR ≥ 0.05). A tight diagonal band for black points confirms that strong peaks are consistently strong in both replicates, validating the biological signal.
 
 **Plot 3: IDR vs Peak Rank**
 
-<img width="237" height="237" alt="image" src="./images/idr_score_plot.jpg" />
+<img alt="image" src="./images/idr_score_plot.jpg" />
 
 This plot shows peak rank bins for replicate 1 (X-axis, with best peaks on the right) versus -log10(IDR) scores (Y-axis). Individual points represent peaks, with boxplots summarizing IDR distributions within rank bins. The dashed horizontal line marks the IDR = 0.05 cutoff (-log10 ≈ 1.3). A sigmoidal curve where -log10(IDR) increases sharply as peak rank improves indicates that top-ranked peaks have high reproducibility scores, which is expected for quality ChIP-seq data.
 
@@ -155,7 +155,7 @@ This plot shows peak rank bins for replicate 1 (X-axis, with best peaks on the r
 
 This demonstrates poor IDR results when calculated between biologically unrelated samples (CEBPA replicate vs H3K9ac replicate), shown here for illustration purposes only:
 
-<img width="1200" height="1200" alt="H3K9ac_ceb_idr_peaks txt" src="./images/idr_cross_factor.png" />
+<img alt="H3K9ac_ceb_idr_peaks txt" src="./images/idr_cross_factor.png" />
 
 ## 3. Motif Analysis: Finding DNA Binding Sequences
 
@@ -237,7 +237,7 @@ idr/cebpa_motifs/
 
 **Example output from CEBPA analysis:**
 
-<img width="1477" height="84" alt="Screenshot 2025-12-22 at 2 31 56 PM" src="./images/homer_results.png" />
+<img alt="Screenshot 2025-12-22 at 2 31 56 PM" src="./images/homer_results.png" />
 
 **Interpreting the results:**
 

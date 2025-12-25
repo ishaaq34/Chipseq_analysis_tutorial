@@ -30,7 +30,7 @@ Complete information for all sequencing runs associated with this repository is 
 
 From this interface, you can download the full metadata table as well as a plain accession list containing the SRR identifiers. The accession list can be saved as `srr_list.txt` and used directly for automated data retrieval. Unwanted runs can be removed from this file before download, allowing precise control over which datasets are processed.
 
-<img width="639" height="403" alt="ncbi" src="./images/ncbi.png" />
+<img alt="ncbi" src="./images/ncbi.png" />
 
 To download data, we use a tool called [fastq-dl](https://github.com/rpetit3/fastq-dl). It acts like a smart librarian—you just give it the ID number, and it deals with the complicated databases for you.
 
