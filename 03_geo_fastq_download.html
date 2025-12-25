@@ -27,7 +27,7 @@
         <link rel="stylesheet" id="mdbook-ayu-highlight-css" href="ayu-highlight-3fdfc3ac.css">
 
         <!-- Custom theme stylesheets -->
-        <link rel="stylesheet" href="custom-e42c941f.css">
+        <link rel="stylesheet" href="custom-fdbfb2b3.css">
 
 
         <!-- Provide site root and default themes to javascript -->
@@ -35,7 +35,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-9a8abcf6.js";
+            window.path_to_searchindex_js = "searchindex-293fc682.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-9c36ea23.js"></script>
@@ -195,6 +195,7 @@
 <h2 id="level-2-fetching-the-data"><a class="header" href="#level-2-fetching-the-data">Level 2: Fetching the data</a></h2>
 <p>Complete information for all sequencing runs associated with this repository is available through the <a href="https://www.ncbi.nlm.nih.gov/Traces/study/?acc=PRJNA475794&amp;o=acc_s%3Aa">NCBI SRA Run Selector (PRJNA475794)</a>. The Run Selector provides an interactive interface to inspect sequencing metadata, including library layout, platform, read length, and experimental design.</p>
 <p>From this interface, you can download the full metadata table as well as a plain accession list containing the SRR identifiers. The accession list can be saved as <code>srr_list.txt</code> and used directly for automated data retrieval. Unwanted runs can be removed from this file before download, allowing precise control over which datasets are processed.</p>
+<img width="639" height="403" alt="ncbi" src="./images/ncbi.png" />
 <p>To download data, we use a tool called <a href="https://github.com/rpetit3/fastq-dl">fastq-dl</a>. It acts like a smart librarian—you just give it the ID number, and it deals with the complicated databases for you.</p>
 <h3 id="21-download-a-single-sample"><a class="header" href="#21-download-a-single-sample">2.1 Download a Single Sample</a></h3>
 <p>If you have a Run ID (starts with <strong>SRR</strong> or <strong>ERR</strong>), use this command:</p>
@@ -237,6 +238,19 @@ while read -r acc; do
   echo "Finished downloading: $acc"
 done &lt; srr_list.txt
 
+</code></pre>
+<h3 id="23-parallel-download-the-fast-way"><a class="header" href="#23-parallel-download-the-fast-way">2.3 Parallel Download (The Fast Way)</a></h3>
+<p>If you have a powerful computer, you can download multiple files at the same time using <code>parallel</code>.</p>
+<pre><code class="language-bash">#!/bin/bash
+set -euo pipefail
+
+mkdir -p fastq_raw
+
+parallel -j 4 \
+  'echo "Starting download: {}" &amp;&amp;
+   fastq-dl --accession {} --provider SRA --cpus 1 --outdir fastq_raw &amp;&amp;
+   echo "Finished download: {}"' \
+  :::: srr_list.txt
 </code></pre>
 <p><strong>Directory structure after download:</strong></p>
 <pre><code class="language-text">chipseq_tutorial/
@@ -287,9 +301,7 @@ echo "Renaming complete!"
 </code></pre>
 <h3 id="24-creating-sample-id-list"><a class="header" href="#24-creating-sample-id-list">2.4: Creating Sample ID List</a></h3>
 <p>After renaming, create <code>sample_id.txt</code> with clean sample names for downstream automation:</p>
-<pre><code class="language-bash">#!/bin/bash
-set -euo pipefail
-
+<pre><code class="language-bash">
 # Create sample_id.txt from renamed files
 cd fastq_raw/
 ls *.fastq.gz | sed 's/.fastq.gz//' &gt; ../sample_id.txt
@@ -315,30 +327,6 @@ Input_rep2
 │   └── Input_rep2.fastq.gz
 ├── srr_list.txt                  ← Original SRR ID list
 └── sample_id.txt                 ← Clean sample names for automation
-</code></pre>
-<h3 id="23-parallel-download-the-fast-way"><a class="header" href="#23-parallel-download-the-fast-way">2.3 Parallel Download (The Fast Way)</a></h3>
-<p>If you have a powerful computer, you can download multiple files at the same time using <code>parallel</code>.</p>
-<pre><code class="language-bash">#!/bin/bash
-set -euo pipefail
-
-mkdir -p fastq_raw
-
-parallel -j 4 \
-  'fastq-dl --accession {} --provider SRA --cpus 1 --outdir fastq_raw' \
-  :::: srr_list.txt
-
-</code></pre>
-<p><strong>Adding echo statements for progress tracking:</strong></p>
-<pre><code class="language-bash">#!/bin/bash
-set -euo pipefail
-
-mkdir -p fastq_raw
-
-parallel -j 4 \
-  'echo "Starting download: {}" &amp;&amp;
-   fastq-dl --accession {} --provider SRA --cpus 1 --outdir fastq_raw &amp;&amp;
-   echo "Finished download: {}"' \
-  :::: srr_list.txt
 </code></pre>
 <h3 id="24-download-an-entire-study"><a class="header" href="#24-download-an-entire-study">2.4 Download an Entire Study</a></h3>
 <p>You can also download everything associated with a study ID (starts with <strong>SRP</strong> or <strong>PRJNA</strong>):</p>

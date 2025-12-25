@@ -27,7 +27,7 @@
         <link rel="stylesheet" id="mdbook-ayu-highlight-css" href="ayu-highlight-3fdfc3ac.css">
 
         <!-- Custom theme stylesheets -->
-        <link rel="stylesheet" href="custom-e42c941f.css">
+        <link rel="stylesheet" href="custom-fdbfb2b3.css">
 
 
         <!-- Provide site root and default themes to javascript -->
@@ -35,7 +35,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-9a8abcf6.js";
+            window.path_to_searchindex_js = "searchindex-293fc682.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-9c36ea23.js"></script>
@@ -244,31 +244,6 @@ echo "Script started"
 </code></pre>
 <p>This works even without <code>chmod +x</code>, but the preferred method is still to use <code>chmod +x</code> and <code>./script.sh</code>.</p>
 <hr>
-<h2 id="the-big-picture-manual-vs-automated-analysis"><a class="header" href="#the-big-picture-manual-vs-automated-analysis">The Big Picture: Manual vs. Automated Analysis</a></h2>
-<p>Imagine you have a classroom with 100 students and need to process each student’s assignment.</p>
-<p><strong>Two approaches:</strong></p>
-<ol>
-<li>
-<p><strong>Manual Approach:</strong></p>
-<ul>
-<li>Type the command for Student 1</li>
-<li>Wait for it to finish</li>
-<li>Type for Student 2</li>
-<li>Wait again…</li>
-<li>Repeat 98 more times (takes days, prone to typos)</li>
-</ul>
-</li>
-<li>
-<p><strong>Automated Approach:</strong></p>
-<ul>
-<li>Write a small instruction sheet (a script)</li>
-<li>Give it to a “robot” (your computer)</li>
-<li>The robot processes all 100 students while you drink coffee</li>
-</ul>
-</li>
-</ol>
-<p>This tutorial teaches you the automated approach for ChIP-seq data.</p>
-<hr>
 <h2 id="part-1-understanding-sample-lists"><a class="header" href="#part-1-understanding-sample-lists">Part 1: Understanding Sample Lists</a></h2>
 <h3 id="the-roll-call-analogy"><a class="header" href="#the-roll-call-analogy">The “Roll Call” Analogy</a></h3>
 <p>Imagine grading 100 students. You don’t want to type <code>"Student_John_Doe_Homework_Final_v2.docx"</code> every single time. You just want a simple list:</p>
@@ -374,14 +349,6 @@ Control_B_H3K9ac_R2.fastq.gz
 <p><strong>Why look for R1?</strong></p>
 <p>By listing only the <code>_R1</code> files, we get exactly one entry per sample. We then strip off the <code>_R1.fastq.gz</code> suffix to get the clean sample name.</p>
 <p>The script will automatically know to look for both <code>_R1</code> and <code>_R2</code> files later when we use this list.</p>
-<hr>
-<h3 id="why-not-create-the-list-manually"><a class="header" href="#why-not-create-the-list-manually">Why Not Create the List Manually?</a></h3>
-<p>You <em>could</em> just type sample names into a text file yourself. However:</p>
-<ul>
-<li><strong>Prone to typos:</strong> One wrong character breaks your analysis</li>
-<li><strong>Not verifiable:</strong> Using <code>ls</code> ensures you only list files that actually exist</li>
-</ul>
-<p>Automation prevents these errors.</p>
 <hr>
 <h2 id="part-3-using-your-sample-list-in-automation"><a class="header" href="#part-3-using-your-sample-list-in-automation">Part 3: Using Your Sample List in Automation</a></h2>
 <p>Now that we have <code>sample_id.txt</code>, we can use it to automate processing of all samples.</p>

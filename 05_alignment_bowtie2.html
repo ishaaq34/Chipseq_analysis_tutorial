@@ -27,7 +27,7 @@
         <link rel="stylesheet" id="mdbook-ayu-highlight-css" href="ayu-highlight-3fdfc3ac.css">
 
         <!-- Custom theme stylesheets -->
-        <link rel="stylesheet" href="custom-e42c941f.css">
+        <link rel="stylesheet" href="custom-fdbfb2b3.css">
 
 
         <!-- Provide site root and default themes to javascript -->
@@ -35,7 +35,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-9a8abcf6.js";
+            window.path_to_searchindex_js = "searchindex-293fc682.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-9c36ea23.js"></script>
@@ -209,8 +209,6 @@ bowtie2-build genome_index/ce.fa genome_index/ce_index            # ce.fa = C. e
 └── sample_id.txt
 </code></pre>
 <h3 id="step-2-single-sample-alignment"><a class="header" href="#step-2-single-sample-alignment">Step 2: Single Sample Alignment</a></h3>
-<p>We use a “Pipe” (<code>|</code>) to connect two tools: <code>bowtie2</code> aligns the data, and <code>samtools</code> sorts it immediately.</p>
-<p><strong>Why Sort?</strong> A puzzle is useless if the pieces are in random order. We sort them by chromosome location (Left to Right) so we can look at them later.</p>
 <p><strong>Run Bowtie2 alignment for a single-end sample</strong></p>
 <p><strong>Input files needed:</strong></p>
 <ul>
