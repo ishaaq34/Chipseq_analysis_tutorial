@@ -224,73 +224,82 @@ By adding 1 to both values, we calculate `log2((IP+1)/(Input+1))` instead. This 
 
 ---
 
-# Compute matrix and plots TSS and Scalar plot (for H3k9ac)
+## Visualization with Normalized Data
 
-```
+### TSS-Centered Profile with log2(IP/Input)
+
+Create profile plots using the log2-normalized BigWig files:
+
+```bash
 computeMatrix reference-point \
-    --referencePoint TSS \
-    -b 3000 -a 3000 \
-    --binSize 250 \
-    -R $TSS_BED \
-    -S bw_log2/${MARK}_log2IPoverInput.bw \
-    --skipZeros --missingDataAsZero \
-    -p $THREADS \
-    -o matrix/${MARK}_TSS_log2.gz
-
+  --referencePoint TSS \
+  -b 3000 -a 3000 \
+  --binSize 250 \
+  -R tss.bed \
+  -S bw_log2/H3K9ac_log2IPoverInput.bw \
+  --skipZeros --missingDataAsZero \
+  -p 6 \
+  -o deeptools_viz/matrices/H3K9ac_TSS_log2.mat.gz
 
 plotProfile \
-    -m matrix/${MARK}_TSS_log2.gz \
-    --refPointLabel TSS \
-    --yAxisLabel "log2(IP/Input)" \
-    --plotTitle "${MARK} log2(IP/Input)" \
-    -out plots/${MARK}_TSS_log2_profile.pdf
-
+  -m deeptools_viz/matrices/H3K9ac_TSS_log2.mat.gz \
+  --refPointLabel TSS \
+  --yAxisLabel "log2(IP/Input)" \
+  --plotTitle "H3K9ac log2(IP/Input)" \
+  -out deeptools_viz/plots/H3K9ac_TSS_log2_profile.pdf
 ```
 
-```
+### Gene Body Profile with Averaged Signal
+
+Visualize signal across gene bodies using the averaged (non-normalized) BigWigs:
+
+```bash
 computeMatrix scale-regions \
-    -b 3000 -a 3000 \
-    --regionBodyLength 5000 \
-    --binSize 250 \
-    -R $GENES_BED \
-    -S bw_mean/${MARK}_mean.bw \
-    --skipZeros --missingDataAsZero \
-    -p $THREADS \
-    -o matrix/${MARK}_genes_norm.gz
+  -b 3000 -a 3000 \
+  --regionBodyLength 5000 \
+  --binSize 250 \
+  -R genes.bed \
+  -S bw_mean/H3K9ac_mean.bw \
+  --skipZeros --missingDataAsZero \
+  -p 6 \
+  -o deeptools_viz/matrices/H3K9ac_genes_mean.mat.gz
 
 plotProfile \
-    -m matrix/${MARK}_genes_norm.gz \
-    --yAxisLabel "RPGC-normalized signal" \
-    --plotTitle "${MARK} gene-body (normalized)" \
-    -out plots/${MARK}_genes_norm_profile.pdf
-done
+  -m deeptools_viz/matrices/H3K9ac_genes_mean.mat.gz \
+  --yAxisLabel "Average signal" \
+  --plotTitle "H3K9ac gene-body (averaged replicates)" \
+  -out deeptools_viz/plots/H3K9ac_genes_profile.pdf
 ```
+
+---
 
 ## CEBPA Peak-Focused Analysis
 
 Now, to focus on peaks identified by MACS3 and validated by IDR, we'll identify promoters overlapping CEBPA consensus peaks.
 
-### Identifying Promoters Overlapping CEBPA Peaks
+### Step 1: Identify Promoters Overlapping CEBPA Peaks
 
 ```bash
 # Count total CEBPA IDR-passed peaks
 wc -l ceb_idr_passed.bed
 # Output: 9468 ceb_idr_passed.bed
 
+# Find promoters that overlap with CEBPA peaks
 bedtools intersect \
-  -a TSS.bed \
+  -a tss.bed \
   -b ceb_idr_passed.bed \
   -u > cebpa_peak_promoters.bed
 
+wc -l cebpa_peak_promoters.bed
+# Output: 5792 cebpa_peak_promoters.bed
+```
 
-(chip) rajaishaqnabikhan@Mac 1.bigwig_smoothlength %  wc -l cebpa_peak_promoters.bed
-    5792 cebpa_peak_promoters.bed
-############################################
-# 4. computeMatrix: TSS-centered
-############################################
+This identifies 5,792 promoters (out of all TSS) that are bound by CEBPA.
 
- Computing TSS-centered signal matrix 
+### Step 2: Create TSS-Centered Heatmap for CEBPA-Bound Promoters
 
+```bash
+# Compute matrix for CEBPA signal at CEBPA-bound promoters
 computeMatrix reference-point \
   --referencePoint TSS \
   -b 2000 -a 2000 \
@@ -298,32 +307,21 @@ computeMatrix reference-point \
   -S bw_log2/ceb_log2IPoverInput.bw \
   --binSize 25 \
   --skipZeros \
-  -p 8\
-  -o ceb_idr_TSS.mat.gz
+  -p 8 \
+  -o deeptools_viz/matrices/ceb_idr_TSS.mat.gz
 
-
-
-
-############################################
-# 5A. Heatmap WITHOUT clustering
-############################################
-
- Plotting heatmap 
-
+# Plot heatmap
 plotHeatmap \
-  -m ceb_idr_TSS.mat.gz \
+  -m deeptools_viz/matrices/ceb_idr_TSS.mat.gz \
   --colorMap RdBu_r \
   --refPointLabel TSS \
   --dpi 600 \
-  -out cebpa_peakPromoters_heatmap_noKmeans.pdf
+  -out deeptools_viz/plots/cebpa_peakPromoters_heatmap.pdf
+```
 
-echo
+### Heatmap Visualization
 
-
-
- ```
-
-<img alt="Screenshot 2025-12-10 at 12 14 14 PM" src="./images/bw3.png" />
+<img alt="CEBPA heatmap at bound promoters" src="./images/bw3.png" />
 
 ```
 
