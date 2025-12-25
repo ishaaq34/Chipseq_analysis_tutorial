@@ -6,6 +6,35 @@ We want to visualize the "Average" pattern of our protein across all genes. To d
 
 1. **Portrait Mode (Reference-Point):**
     * **Focus:** One specific point (e.g., the Transcription Start Site, **TSS**).
+
+## Directory Structure After Visualization Setup
+
+```text
+chipseq_tutorial/
+├── bigwigs/                    ← Normalized BigWig files (from Tutorial 14)
+├── bw_mean/                    ← **NEW: Averaged BigWig files**
+│   ├── H3K9ac_mean.bw
+│   ├── H3K27me3_mean.bw
+│   └── Input_mean.bw
+├── bw_log2/                    ← **NEW: Log2(IP/Input) normalized files**
+│   ├── H3K9ac_log2IPoverInput.bw
+│   └── H3K27me3_log2IPoverInput.bw
+├── deeptools_viz/              ← **NEW: deepTools visualization outputs**
+│   ├── matrices/               # Computed matrices
+│   │   ├── H3K9ac_TSS.mat.gz
+│   │   ├── H3K9ac_genes.mat.gz
+│   │   └── cebpa_multimark_TSS.mat.gz
+│   └── plots/                  # Generated plots
+│       ├── H3K9ac_TSS_profile.pdf
+│       ├── H3K9ac_genes_profile.pdf
+│       └── cebpa_multimark_heatmap.pdf
+├── tss.bed                     ← **NEW: TSS annotation (1bp positions)**
+├── genes.bed                   ← **NEW: Gene body annotation**
+└── cebpa_peak_promoters.bed    ← **NEW: CEBPA-bound promoters**
+```
+
+---
+
     * **Action:** We stand at the TSS and look 3kb upstream and 10kb downstream.
     * **Use Case:** Great for seeing promoter activity (H3K9ac, Transcription Factors).
 
@@ -384,5 +413,35 @@ plotHeatmap \
 ## Summary
 
 CEBPA-bound promoters are enriched for active chromatin (H3K9ac) and depleted for repressive chromatin (H3K27me3).
+
+---
+
+---
+
+## Directory Structure After Visualization
+
+```text
+chipseq_tutorial/
+├── bigwigs/                    ← Normalized BigWig files from Tutorial 14
+├── bw_mean/                    ← **NEW: Averaged BigWig files**
+│   ├── H3K9ac_mean.bw
+│   ├── H3K27me3_mean.bw
+│   └── Input_mean.bw
+├── bw_log2/                    ← **NEW: Log2(IP/Input) normalized files**
+│   ├── H3K9ac_log2IPoverInput.bw
+│   └── H3K27me3_log2IPoverInput.bw
+├── deeptools_viz/              ← **NEW: deepTools visualization outputs**
+│   ├── matrices/               # Computed matrices
+│   │   ├── H3K9ac_TSS.mat.gz
+│   │   ├── H3K9ac_genes.mat.gz
+│   │   └── cebpa_multimark_TSS.mat.gz
+│   └── plots/                  # Generated plots
+│       ├── H3K9ac_TSS_profile.pdf
+│       ├── H3K9ac_genes_profile.pdf
+│       └── cebpa_multimark_heatmap.pdf
+├── tss.bed                     ← **NEW: TSS annotation (1bp positions)**
+├── genes.bed                   ← **NEW: Gene body annotation**
+└── cebpa_peak_promoters.bed    ← **NEW: CEBPA-bound promoters**
+```
 
 ---

@@ -6,6 +6,8 @@
 
 ### Why BigWig?
 
+---
+
 A **BAM** file gives you the location of every single "car" (read) on the road. It's massive and slow to load.
 
 A **BigWig** file is like the **Google Maps Traffic View**. It doesn't show you the individual cars; it just shows you a green, yellow, or red line indicating "Volume".
@@ -198,3 +200,23 @@ If we don't fix this, Sample A will look huge just because it has more money (re
 
 > [!NOTE]
 > **Up Next:** Now that we have our signals (BigWigs) and our QC (Fingerprints) done, we are ready to call peaks! (Wait, technically we usually call peaks *before* or *parallel* to visualization, but viewing tracks helps confirm peak calls).
+
+---
+
+## Directory Structure After BigWig Generation
+
+```text
+chipseq_tutorial/
+├── bam_files_final/            ← Source BAM files
+├── macs3_results/              ← MACS3 peak files
+├── idr/                        ← IDR outputs
+└── bigwigs/                    ← **NEW: Normalized BigWig tracks**
+    ├── H3K9ac_ENCFF534IPX.bw
+    ├── H3K9ac_ENCFF193NPE.bw
+    ├── H3K27me3_ENCFF164ALR.bw
+    ├── H3K27me3_ENCFF532DQH.bw
+    ├── Input_ENCFF110SOB.bw
+    └── Input_ENCFF919XCV.bw
+```
+
+---
