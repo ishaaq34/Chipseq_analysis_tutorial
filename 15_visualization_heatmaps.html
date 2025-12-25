@@ -35,7 +35,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-5a8019b4.js";
+            window.path_to_searchindex_js = "searchindex-9a8abcf6.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-9c36ea23.js"></script>
@@ -411,40 +411,53 @@ plotHeatmap \
 </code></pre>
 <h3 id="heatmap-visualization"><a class="header" href="#heatmap-visualization">Heatmap Visualization</a></h3>
 <img alt="CEBPA heatmap at bound promoters" src="./images/bw3.png" />
-<pre><code>
-
-(chip) rajaishaqnabikhan@Mac 1.bigwig_smoothlength % 
+<hr>
+<h3 id="step-3-chromatin-state-analysis-at-cebpa-bound-promoters"><a class="header" href="#step-3-chromatin-state-analysis-at-cebpa-bound-promoters">Step 3: Chromatin State Analysis at CEBPA-Bound Promoters</a></h3>
+<p><strong>Objective:</strong> Use the CEBPA-peak promoter bed file (<code>cebpa_peak_promoters.bed</code>) to identify enrichment of H3K9ac (active mark) and H3K27me3 (repressive mark) at CEBPA binding sites.</p>
+<pre><code class="language-bash"># Compute matrix using CEBPA-peak promoters as regions
+# This shows H3K9ac and H3K27me3 enrichment at sites where CEBPA binds
 computeMatrix reference-point \
-  --referencePoint TSS \
-  -b 2000 -a 2000 \
-  -R cebpa_peak_promoters.bed \
-  -S bw_log2/ceb_log2IPoverInput.bw \
-     bw_log2/H3K9ac_log2IPoverInput.bw \
-     bw_log2/H3K27me3_log2IPoverInput.bw \
-  --binSize 25 \
-  -p 8 \
-  -o cebpa_promoters_TSS.mat.gz
-
-(chip) rajaishaqnabikhan@Mac 1.bigwig_smoothlength %                     
-plotProfile \                  
-  -m cebpa_promoters_TSS.mat.gz \
-  --perGroup \                      
-  --plotTitle "CEBPA-bound promoters (±2 kb TSS)" \
-  --dpi 600 \
--out cebpa_promoters_profile.pdf
+  --referencePoint TSS \
+  -b 2000 -a 2000 \
+  -R cebpa_peak_promoters.bed \
+  -S bw_log2/ceb_log2IPoverInput.bw \
+     bw_log2/H3K9ac_log2IPoverInput.bw \
+     bw_log2/H3K27me3_log2IPoverInput.bw \
+  --binSize 25 \
+  -p 8 \
+  -o deeptools_viz/matrices/cebpa_multimark_TSS.mat.gz
 
+# Profile plot: shows average enrichment across all CEBPA-bound promoters
+plotProfile \
+  -m deeptools_viz/matrices/cebpa_multimark_TSS.mat.gz \
+  --perGroup \
+  --plotTitle "CEBPA-bound promoters: Chromatin state" \
+  --dpi 600 \
+  -out deeptools_viz/plots/cebpa_multimark_profile.pdf
 
+# Heatmap: shows enrichment at individual CEBPA-bound promoters
+plotHeatmap \
+  -m deeptools_viz/matrices/cebpa_multimark_TSS.mat.gz \
+  --colorMap RdBu_r \
+  --dpi 600 \
+  -out deeptools_viz/plots/cebpa_multimark_heatmap.pdf
 </code></pre>
-<img alt="Screenshot 2025-12-10 at 12 14 14 PM" src="./images/bw4.png" />
-(chip) rajaishaqnabikhan@Mac 1.bigwig_smoothlength % plotHeatmap \
-  -m cebpa_promoters_TSS.mat.gz \
-  --colorMap RdBu_r \
-  --dpi 600 \
-  -out cebpa_promoters_heatmap.pdf
-(chip) rajaishaqnabikhan@Mac 1.bigwig_smoothlength %
-<img alt="Screenshot 2025-12-10 at 12 14 14 PM" src="./images/bw5.png" />```
+<p><strong>What this reveals:</strong></p>
+<ul>
+<li>H3K9ac enrichment at CEBPA peaks indicates active chromatin</li>
+<li>H3K27me3 depletion at CEBPA peaks confirms absence of repressive marks</li>
+<li>CEBPA binds preferentially to active (H3K9ac+, H3K27me3-) promoters</li>
+</ul>
+<hr>
+<h3 id="profile-plot"><a class="header" href="#profile-plot">Profile Plot</a></h3>
+<img alt="Multi-mark profile at CEBPA-bound promoters" src="./images/bw4.png" />
+<hr>
+<h3 id="heatmap"><a class="header" href="#heatmap">Heatmap</a></h3>
+<img alt="Multi-mark heatmap at CEBPA-bound promoters" src="./images/bw5.png" />
+<hr>
+<h2 id="summary"><a class="header" href="#summary">Summary</a></h2>
 <p>CEBPA-bound promoters are enriched for active chromatin (H3K9ac) and depleted for repressive chromatin (H3K27me3).</p>
-
+<hr>
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
