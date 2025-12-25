@@ -322,7 +322,7 @@ multiBamSummary bins -b $IP_FILES --labels $IP_LABELS ...
 <h2 id="level-3-reading-the-charts"><a class="header" href="#level-3-reading-the-charts">Level 3: Reading the Charts</a></h2>
 <h3 id="31-interpreting-the-fingerprint-the-census"><a class="header" href="#31-interpreting-the-fingerprint-the-census"><a href="#21-fingerprint-plot">3.1 Interpreting the Fingerprint (The Census)</a></a></h3>
 <p>This plot shows the cumulative read distribution across the genome. Good ChIP libraries show a clear separation between ChIP and input samples, with ChIP curves rising earlier due to enriched regions. Flat, overlapping curves usually indicate poor enrichment or over-background signal.</p>
-<hr><img width="755" height="574" alt="Screenshot 2025-12-10 at 12 02 40 PM" src="./images/fingerprint_plot.png" />
+<hr><img alt="Screenshot 2025-12-10 at 12 02 40 PM" src="./images/fingerprint_plot.png" />
 <hr>
 <div class="table-wrapper">
 <table>
@@ -346,11 +346,11 @@ multiBamSummary bins -b $IP_FILES --labels $IP_LABELS ...
 <p><strong>ChIPs :</strong> In contrast, every IP sample collapses more sharply; the curves drop faster after coverage 1 because most genomic positions in a ChIP experiment receive almost no reads. Only a small portion of the genome — the actual binding or modification sites — reaches deeper coverage, and that fraction is tiny enough that the tail beyond coverage 2 nearly vanishes.</p>
 </li>
 </ul>
-<hr><img width="861" height="578" alt="Screenshot 2025-12-10 at 12 03 51 PM" src="./images/coverage_histogram_full.png" />
+<hr><img alt="Screenshot 2025-12-10 at 12 03 51 PM" src="./images/coverage_histogram_full.png" />
 <hr>
 <p><strong>Plot B: The Tail</strong>
 Zooming in reveals the difference. Input covers more of the genome at 1x depth, while ChIP focuses on peaks. The Input curves decline more slowly because a larger fraction of their genome maintains at least some measurable coverage. The IP curves fall off earlier and more steeply, which reflects the enrichment pattern: most positions have essentially no reads, and only a very small subset of bases in true peak regions sustain higher coverage.</p>
-<hr><img width="731" height="501" alt="Screenshot 2025-12-10 at 12 04 14 PM" src="./images/coverage_histogram_zoomed.png" />
+<hr><img alt="Screenshot 2025-12-10 at 12 04 14 PM" src="./images/coverage_histogram_zoomed.png" />
 <hr>
 <h3 id="33-interpreting-correlation-the-family-tree"><a class="header" href="#33-interpreting-correlation-the-family-tree"><a href="#24-correlation--pca">3.3 Interpreting Correlation (The Family Tree)</a></a></h3>
 <p>Using the binned count matrix, we compute pairwise correlations between samples. A Spearman correlation heatmap shows whether biological replicates cluster together and whether inputs are distinct from ChIP samples. Poor clustering or scattered correlations usually indicate sample swaps, failed IPs, or inconsistent library prep.</p>
@@ -359,7 +359,7 @@ Zooming in reveals the difference. Input covers more of the genome at 1x depth, 
 <li><strong>Clustering:</strong> H3K27me3 samples cluster together and show moderately high mutual correlations (around 0.6), which is exactly what you expect for a broad repressive mark. The H3K9ac samples also correlate strongly with each other (0.76–1.0), forming a clean sub-cluster that is distinct from H3K27me3.</li>
 <li><strong>Separation:</strong> Active marks (H3K9ac) should look different from Repressive marks (H3K27me3).</li>
 </ul>
-<hr><img width="667" height="575" alt="Screenshot 2025-12-10 at 12 05 28 PM" src="./images/correlation_heatmap.png" />
+<hr><img alt="Screenshot 2025-12-10 at 12 05 28 PM" src="./images/correlation_heatmap.png" />
 <hr>
 <h3 id="34-interpreting-pca"><a class="header" href="#34-interpreting-pca"><a href="#24-correlation--pca">3.4 Interpreting PCA</a></a></h3>
 <p>Finally, we perform PCA on the same binned count matrix. PCA reduces the data to a few dimensions that capture most of the variance. In a good ChIP-seq dataset, biological replicates cluster together in PCA space, and distinct conditions or marks separate along major components. PCA is a convenient visual check for batch effects, sample swaps, and outlier libraries.</p>
@@ -368,7 +368,7 @@ Zooming in reveals the difference. Input covers more of the genome at 1x depth, 
 <li><strong>PC1 (X-axis):</strong> The PCA shows clear separation of samples by assay type. PC1 captures most of the variance and cleanly splits the H3K27me3 group from the H3K9ac group, which is expected because these marks have very different genomic distributions.</li>
 <li><strong>Clustering:</strong> The two “ceb” samples cluster tightly together, indicating consistent coverage patterns within that group. The H3K27me3 replicates are also tightly paired, which matches their broad and uniform enrichment profile. The H3K9ac replicates sit on the opposite side of PC1, with one replicate shifted slightly on PC2, hinting at a mild difference in coverage distribution but nothing severe. If one replicate is far away, it might be an outlier/bad sample.</li>
 </ul>
-<hr><img width="983" height="488" alt="Screenshot 2025-12-10 at 12 05 56 PM" src="./images/pca_plot.png" />
+<hr><img alt="Screenshot 2025-12-10 at 12 05 56 PM" src="./images/pca_plot.png" />
 <hr>
 <h2 id="directory-structure-after-deeptools-qc"><a class="header" href="#directory-structure-after-deeptools-qc">Directory Structure After deepTools QC</a></h2>
 <pre><code class="language-text">chipseq_tutorial/

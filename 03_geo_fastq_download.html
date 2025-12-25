@@ -195,7 +195,7 @@
 <h2 id="level-2-fetching-the-data"><a class="header" href="#level-2-fetching-the-data">Level 2: Fetching the data</a></h2>
 <p>Complete information for all sequencing runs associated with this repository is available through the <a href="https://www.ncbi.nlm.nih.gov/Traces/study/?acc=PRJNA475794&amp;o=acc_s%3Aa">NCBI SRA Run Selector (PRJNA475794)</a>. The Run Selector provides an interactive interface to inspect sequencing metadata, including library layout, platform, read length, and experimental design.</p>
 <p>From this interface, you can download the full metadata table as well as a plain accession list containing the SRR identifiers. The accession list can be saved as <code>srr_list.txt</code> and used directly for automated data retrieval. Unwanted runs can be removed from this file before download, allowing precise control over which datasets are processed.</p>
-<img width="639" height="403" alt="ncbi" src="./images/ncbi.png" />
+<img alt="ncbi" src="./images/ncbi.png" />
 <p>To download data, we use a tool called <a href="https://github.com/rpetit3/fastq-dl">fastq-dl</a>. It acts like a smart librarian—you just give it the ID number, and it deals with the complicated databases for you.</p>
 <h3 id="21-download-a-single-sample"><a class="header" href="#21-download-a-single-sample">2.1 Download a Single Sample</a></h3>
 <p>If you have a Run ID (starts with <strong>SRR</strong> or <strong>ERR</strong>), use this command:</p>

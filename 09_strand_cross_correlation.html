@@ -189,7 +189,7 @@ However, the sequencer only reads the <strong>Ends</strong> of these fragments (
 <li>We slide the Forward reads towards the Reverse reads. When they overlap perfectly, the “volume” is loudest (Max Correlation).</li>
 <li>The distance we slid them telling us the <strong>True Fragment Length</strong>.</li>
 </ul>
-<hr><img width="639" height="403" alt="Screenshot 2025-12-10 at 11 39 06 AM" src="./images/cross_correlation_concept.png" />
+<hr><img alt="Screenshot 2025-12-10 at 11 39 06 AM" src="./images/cross_correlation_concept.png" />
 <p><em>(Source:<a href="https://www.nature.com/articles/nmeth.1246">Genome-wide analysis of transcription factor binding sites based on ChIP-Seq data</a></em></p>
 <hr>
 <h2 id="2-phantompeakqualtools"><a class="header" href="#2-phantompeakqualtools">2: PhantomPeakQualTools</a></h2>
@@ -242,7 +242,7 @@ Rscript /opt/anaconda3/envs/chip/bin/run_spp.R \
 1.339926                         #10 RSC – Relative Strand Cross-correlation
 1                               #11 SPP quality tag (1 = good)
 </code></pre>
-<hr><img width="758" height="504" alt="Screenshot 2025-12-15 at 9 23 05 PM" src="./images/fragment_length_estimate.png" />
+<hr><img alt="Screenshot 2025-12-15 at 9 23 05 PM" src="./images/fragment_length_estimate.png" />
 <hr>
 <h3 id="32-the-metrics-nsc--rsc"><a class="header" href="#32-the-metrics-nsc--rsc">3.2 The Metrics (NSC &amp; RSC)</a></h3>
 <p>We compare the Height of the Real Peak (Signal) to the Phantom Peak (Noise).</p>
@@ -259,7 +259,7 @@ Rscript /opt/anaconda3/envs/chip/bin/run_spp.R \
 </table>
 </div>
 <h3 id="33-interpreting-the-data-example-analysis"><a class="header" href="#33-interpreting-the-data-example-analysis">3.3 Interpreting the Data (Example Analysis)</a></h3>
-<hr><img width="943" height="470" alt="image3" src="./images/cross_correlation_plot.png" />
+<hr><img alt="image3" src="./images/cross_correlation_plot.png" />
 <hr>
 <ul>
 <li>As shown in the plot, expectedly, the two input samples show the typical profile of unenriched DNA, with very low signal-to-noise. Their NSC values sit almost exactly at background (1.003 and 1.005), and their RSC values are only 0.62 and 0.64, which is far below what any real ChIP signal produces (NSC  &gt; 1.05 &amp; RSC &gt; 0.8)</li>
