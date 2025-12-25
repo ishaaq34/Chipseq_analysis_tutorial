@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>BigWig Generation - ChIP-seq Analysis Tutorial </title>
+        <title>Contributors - ChIP-seq Analysis Tutorial </title>
 
 
         <!-- Custom HTML head -->
@@ -171,189 +171,43 @@
 
                 <div id="mdbook-content" class="content">
                     <main>
-                        <h1 id="bam-to-bigwig-visualizing-the-signal"><a class="header" href="#bam-to-bigwig-visualizing-the-signal">Bam to BigWig (Visualizing the Signal)</a></h1>
-<p><code>bamCoverage</code> <code>bigWig</code> <code>normalization</code> <code>RPGC</code> <code>effective-genome-size</code> <code>visualization</code></p>
-<h2 id="1-basic-concept-the-traffic-map"><a class="header" href="#1-basic-concept-the-traffic-map">1. Basic Concept (The Traffic Map)</a></h2>
-<h3 id="why-bigwig"><a class="header" href="#why-bigwig">Why BigWig?</a></h3>
-<hr>
-<p>A <strong>BAM</strong> file gives you the location of every single “car” (read) on the road. It’s massive and slow to load.</p>
-<p>A <strong>BigWig</strong> file is like the <strong>Google Maps Traffic View</strong>. It doesn’t show you the individual cars; it just shows you a green, yellow, or red line indicating “Volume”.</p>
-<ul>
-<li><strong>Small &amp; Fast:</strong> Compact file size.</li>
-<li><strong>Visual:</strong> Perfect for viewing on a Genome Browser (IGV/UCSC).</li>
-</ul>
-<hr>
-<h2 id="2-requirements-effective-genome-size"><a class="header" href="#2-requirements-effective-genome-size">2. Requirements (Effective Genome Size)</a></h2>
-<p>The “Effective” size is the part of the genome that is mappable.</p>
-<ul>
-<li><strong>Unique Regions:</strong> Easy to map.</li>
-<li><strong>Repetitive Regions:</strong> Hard to map, but reads can technically align there (Ambiguous).</li>
-</ul>
-<p><strong>Formula 1: Total Raw Length</strong>
-$$
-\text{Total Genome Length} = \underbrace{\text{Effective Genome}}<em>{\text{All Mappable}} + \underbrace{\text{N-bases}}</em>{\text{Gaps/Unsequenced}}
-$$</p>
-<p><strong>Formula 2: Breaking Down “Effective Genome”</strong>
-$$
-\text{Effective Genome} = \underbrace{\text{Unique Genome}}<em>{\text{Easy}} + \underbrace{\text{Repetitive DNA}}</em>{\text{Ambiguous}}
-$$</p>
-<h3 id="how-we-calculated-it"><a class="header" href="#how-we-calculated-it">How we calculated it</a></h3>
-<p>There are <strong>two main ways</strong> to estimate this:</p>
-<h4 id="method-1-fasize-calculates-general-effective-genome"><a class="header" href="#method-1-fasize-calculates-general-effective-genome">Method 1: faSize (Calculates General Effective Genome)</a></h4>
-<p>The <strong>faSize</strong> tool counts all non-N bases. This assumes that if a read aligns to a repeat, it still counts as “mapped”.</p>
-<p><strong>Step 1.1: Extract chr11 and chr12</strong></p>
-<pre><code class="language-bash">samtools faidx genome.fasta chr11 chr12 &gt; chr11_chr12.fasta
-</code></pre>
-<p><strong>Step 1.2: Get statistics</strong></p>
-<pre><code class="language-bash">faSize chr11_chr12.fasta
-</code></pre>
-<p><strong>Output:</strong></p>
-<pre><code>268361931 bases (690373 N's 267671558 real 267671558 upper 0 lower) in 2 sequences inside 1 file
-</code></pre>
-<p><strong>Step 1.3: Calculate total effective size (non-N)</strong></p>
-<pre><code class="language-bash">awk '{nonN = $2 - $5; sum += nonN} END {print sum}' chr11_chr11_chr12.faSize.txt
-# Result: 268361931
-</code></pre>
-<p><strong>Result:</strong> <code>268,361,931 bp</code> (Unique + Repetitive)</p>
-<h4 id="method-2-khmer-calculates-unique-effective-genome"><a class="header" href="#method-2-khmer-calculates-unique-effective-genome">Method 2: khmer (Calculates Unique Effective Genome)</a></h4>
-<p>The <strong>khmer</strong> tool counts only unique k-mers. It strictly ignores repetitive zones.</p>
-<p><strong>Command:</strong></p>
-<pre><code class="language-bash">unique-kmers.py -k 21 chr11_chr12.fasta
-</code></pre>
-<p><strong>Output:</strong></p>
-<pre><code>(chip) rajaishaqnabikhan@Mac human % unique-kmers.py -k 21 chr11_chr12.fasta
-
-|| This is the script unique-kmers.py in khmer.
-|| You are running khmer version 3.0.0a3
-|| You are also using screed version 1.1.3
-||
-|| If you use this script in a publication, please cite EACH of the following:
-||
-||   * MR Crusoe et al., 2015. https://doi.org/10.12688/f1000research.6924.1
-||   * A. Döring et al. https://doi.org:80/10.1186/1471-2105-9-11
-||   * Irber and Brown. https://doi.org/10.1101/056846
-||
-|| Please see http://khmer.readthedocs.io/en/latest/citations.html for details.
-
-Estimated number of unique 21-mers in chr11_chr12.fasta: 220798375
-Total estimated number of unique 21-mers: 220798375
-</code></pre>
-<h3 id="the-result"><a class="header" href="#the-result">The Result</a></h3>
-<ul>
-<li><strong>Raw length (Method 1: faSize):</strong> <code>268,361,931 bp</code> (Unique + Repetitive)</li>
-<li><strong>Unique length (Method 2: khmer):</strong> <code>220,798,375 bp</code> (Unique Only)</li>
-<li><strong>The Difference:</strong> <code>47,563,556 bp</code> of repetitive/unmappable DNA (Ambiguous).</li>
-</ul>
-<h3 id="the-decision"><a class="header" href="#the-decision">The Decision</a></h3>
-<p>Which number do we use?</p>
-<ul>
-<li>Therefore, we must use the <strong>khmer</strong> result (<code>Unique Only</code>), because our data does not contain reads mapped to repetitive regions.</li>
-</ul>
-<blockquote class="blockquote-tag blockquote-tag-tip">
-<p class="blockquote-tag-title"><svg viewbox="0 0 16 16" width="18" height="18"><path d="M8 1.5c-2.363 0-4 1.69-4 3.75 0 .984.424 1.625.984 2.304l.214.253c.223.264.47.556.673.848.284.411.537.896.621 1.49a.75.75 0 0 1-1.484.211c-.04-.282-.163-.547-.37-.847a8.456 8.456 0 0 0-.542-.68c-.084-.1-.173-.205-.268-.32C3.201 7.75 2.5 6.766 2.5 5.25 2.5 2.31 4.863 0 8 0s5.5 2.31 5.5 5.25c0 1.516-.701 2.5-1.328 3.259-.095.115-.184.22-.268.319-.207.245-.383.453-.541.681-.208.3-.33.565-.37.847a.751.751 0 0 1-1.485-.212c.084-.593.337-1.078.621-1.489.203-.292.45-.584.673-.848.075-.088.147-.173.213-.253.561-.679.985-1.32.985-2.304 0-2.06-1.637-3.75-4-3.75ZM5.75 12h4.5a.75.75 0 0 1 0 1.5h-4.5a.75.75 0 0 1 0-1.5ZM6 15.25a.75.75 0 0 1 .75-.75h2.5a.75.75 0 0 1 0 1.5h-2.5a.75.75 0 0 1-.75-.75Z"></path></svg>Tip</p>
-<p><strong>Use this number:</strong> <code>220798375</code></p>
-</blockquote>
-<hr>
-<h2 id="3-execution-the-converter"><a class="header" href="#3-execution-the-converter">3. Execution (The Converter)</a></h2>
-<p>We use <code>bamCoverage</code> to convert BAM files into BigWig tracks. We will normalize using <strong>RPGC</strong> (Reads Per Genome Coverage) so all tracks are comparable (1x coverage scale).</p>
-<h3 id="step-31-create-output-directory"><a class="header" href="#step-31-create-output-directory">Step 3.1: Create Output Directory</a></h3>
-<p>Keep your workspace clean.</p>
-<pre><code class="language-bash">mkdir -p bigwigs
-</code></pre>
-<h3 id="step-32-run-bamcoverage-loop"><a class="header" href="#step-32-run-bamcoverage-loop">Step 3.2: Run bamCoverage Loop</a></h3>
-<p>We process all BAM files using our <code>sample_id.txt</code> list.</p>
-<pre><code class="language-bash"># Loop through each sample ID in the text file
-cat sample_id.txt | while read id; do
-  
-  echo "Generating BigWig for: $id"
-  
-  bamCoverage \
-    -b encode_bam/${id}.bam \                    
-    -o bigwigs/${id}.bw \                        
-    --binSize 10 \                               
-    --normalizeUsing RPGC \                      
-    --effectiveGenomeSize 2701495761 \            
-    --smoothLength 30 \                          
-    --numberOfProcessors 4 
-
-done
-</code></pre>
-<p><strong>What this does:</strong></p>
+                        <h1 id="contributors"><a class="header" href="#contributors">Contributors</a></h1>
+<p>This ChIP-seq Analysis Tutorial series was developed and is maintained by:</p>
+<p><strong>Raja Ishaq Nabi Khan</strong>
+Epigenetics Researcher
+Research Focus: RNA Modifications &amp; Epigenetics</p>
+<p><a href="https://github.com/ishaaq34"><img src="https://img.shields.io/badge/GitHub-ishaaq34-181717?style=flat&amp;logo=github" alt="GitHub"></a></p>
+<h2 id="acknowledgments"><a class="header" href="#acknowledgments">Acknowledgments</a></h2>
+<p>This tutorial is informed by experimental standards and analytical guidelines established by the ENCODE Consortium and makes extensive use of established open-source tools, including MACS3, HOMER, deepTools, and IDR. Publicly available ChIP-seq datasets (including SRP115709) were used for demonstration, benchmarking, and validation.</p>
+<h2 id="contributing"><a class="header" href="#contributing">Contributing</a></h2>
+<p>Contributions are welcome. To contribute:</p>
 <ol>
-<li><strong>Reads</strong> the BAM file.</li>
-<li><strong>Chops</strong> the genome into 10bp bins (buckets).</li>
-<li><strong>Counts</strong> reads in each bin.</li>
-<li><strong>Normalizes</strong> the count so 1.0 = 1x genome coverage.</li>
-<li><strong>Smooths</strong> the signal (averaging neighbors) to make the peaks look cleaner.</li>
-<li><strong>Saves</strong> the result as a <code>.bw</code> file.</li>
+<li>Fork the repository</li>
+<li>Create a feature branch</li>
+<li>Submit a pull request with a clear description of the changes</li>
 </ol>
-<hr>
-<h2 id="4-fine-tuning-under-the-hood"><a class="header" href="#4-fine-tuning-under-the-hood">4. Fine Tuning (Under the Hood)</a></h2>
-<h3 id="41-bin-size-resolution"><a class="header" href="#41-bin-size-resolution">4.1 Bin Size (Resolution)</a></h3>
-<ul>
-<li><strong>Concept:</strong> Think of this as the <strong>Resolution</strong> of your image.</li>
-<li><strong>Small Bin (10bp):</strong> “HD” resolution. You see every tiny peak, but the file is larger and slower to compute.</li>
-<li><strong>Large Bin (100bp):</strong> “SD” resolution. Good for zooming out and looking at broad trends. Faster to process.</li>
-<li><strong>Decision:</strong> For transcription factors (sharp peaks), 10bp is great. For broad histone marks (H3K27me3), 50-100bp is often sufficient. We use <strong>10bp</strong> here for high detail.</li>
-</ul>
-<h3 id="42-smoothing-blurring-the-photo"><a class="header" href="#42-smoothing-blurring-the-photo">4.2 Smoothing (Blurring the Photo)</a></h3>
-<ul>
-<li><strong>Concept:</strong> Smoothing averages the signal of nearby bins to reduce “jumpy” noise.</li>
-<li><strong>Why?</strong> Raw sequencing data can be pixelated. Smoothing applies a slight blur to make the biological signal (the hill) stand out against the background noise (the grass).</li>
-<li><strong>Our Setting:</strong> <code>--smoothLength 30</code>. This averages the signal over a 30bp window.</li>
-</ul>
-<h3 id="43-normalization-the-currency-exchange"><a class="header" href="#43-normalization-the-currency-exchange">4.3 Normalization (The Currency Exchange)</a></h3>
-<p>Samples have different sequencing depths.</p>
-<ul>
-<li><strong>Sample A:</strong> 40 million reads (Rich)</li>
-<li><strong>Sample B:</strong> 20 million reads (Poor)</li>
-</ul>
-<p>If we don’t fix this, Sample A will look huge just because it has more money (reads). <strong>Normalization</strong> puts everyone on the same currency.</p>
-<ul>
-<li><strong>RPGC (Reads Per Genome Coverage):</strong> <em>Preferred for ChIP-seq.</em>
-<ul>
-<li><strong>Logic:</strong> “What would this signal look like if we had exactly <strong>1x coverage</strong> of the genome?”</li>
-<li><strong>Why:</strong> It creates a standardized “Currency” (1x coverage) that makes biological sense. A value of “5.0” in the track means “5 times more reads than random background”.</li>
-</ul>
-</li>
-</ul>
-<hr>
-<h2 id="summary"><a class="header" href="#summary">Summary</a></h2>
-<ol>
-<li><strong>Input:</strong> BAM files (<code>encode_bam/</code>).</li>
-<li><strong>Action:</strong> <code>bamCoverage</code> with <strong>RPGC</strong> normalization.</li>
-<li><strong>Output:</strong> BigWig files (<code>bigwigs/</code>) ready for IGV visualization.</li>
-</ol>
-<blockquote class="blockquote-tag blockquote-tag-note">
-<p class="blockquote-tag-title"><svg viewbox="0 0 16 16" width="18" height="18"><path d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8Zm8-6.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13ZM6.5 7.75A.75.75 0 0 1 7.25 7h1a.75.75 0 0 1 .75.75v2.75h.25a.75.75 0 0 1 0 1.5h-2a.75.75 0 0 1 0-1.5h.25v-2h-.25a.75.75 0 0 1-.75-.75ZM8 6a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z"></path></svg>Note</p>
-<p><strong>Up Next:</strong> Now that we have our signals (BigWigs) and our QC (Fingerprints) done, we are ready to call peaks! (Wait, technically we usually call peaks <em>before</em> or <em>parallel</em> to visualization, but viewing tracks helps confirm peak calls).</p>
+<p>Bug fixes, corrections, and documentation improvements are particularly encouraged.</p>
+<h2 id="ai-usage-disclosure"><a class="header" href="#ai-usage-disclosure">AI Usage Disclosure</a></h2>
+<p>AI tools were used in a limited, assistive capacity for script troubleshooting, installation guidance, and documentation consistency.</p>
+<h2 id="citation"><a class="header" href="#citation">Citation</a></h2>
+<p>If you use this tutorial in research or teaching, please cite the archived version:</p>
+<blockquote>
+<p>Khan, R. I. N. (2025). ChIP-seq Analysis Tutorial: A Practical Guide to Chromatin Immunoprecipitation Sequencing Data Analysis (Version 1.0) [Software]. Zenodo. <a href="https://doi.org/10.5281/zenodo.XXXXXXX">https://doi.org/10.5281/zenodo.XXXXXXX</a></p>
 </blockquote>
+<h2 id="license"><a class="header" href="#license">License</a></h2>
+<p>This project is distributed under the MIT License. See the LICENSE file for details.</p>
 <hr>
-<h2 id="directory-structure-after-bigwig-generation"><a class="header" href="#directory-structure-after-bigwig-generation">Directory Structure After BigWig Generation</a></h2>
-<pre><code class="language-text">chipseq_tutorial/
-├── bam_files_final/            ← Source BAM files
-├── macs3_results/              ← MACS3 peak files
-├── idr/                        ← IDR outputs
-└── bigwigs/                    ← **NEW: Normalized BigWig tracks**
-    ├── H3K9ac_ENCFF534IPX.bw
-    ├── H3K9ac_ENCFF193NPE.bw
-    ├── H3K27me3_ENCFF164ALR.bw
-    ├── H3K27me3_ENCFF532DQH.bw
-    ├── Input_ENCFF110SOB.bw
-    └── Input_ENCFF919XCV.bw
-</code></pre>
-<hr>
+<p><em>Last updated: December 2025</em>
+<em>Version: 1.0</em></p>
+
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="13_idr_consensus_motifs_rk_corrected.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="tutorial_book_creation.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
                             </a>
 
-                            <a rel="next prefetch" href="15_visualization_heatmaps.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
-                                <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
-                            </a>
 
                         <div style="clear: both"></div>
                     </nav>
@@ -361,13 +215,10 @@ done
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="13_idr_consensus_motifs_rk_corrected.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="tutorial_book_creation.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
                     </a>
 
-                    <a rel="next prefetch" href="15_visualization_heatmaps.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
-                        <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
-                    </a>
             </nav>
 
         </div>
