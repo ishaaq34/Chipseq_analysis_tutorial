@@ -198,16 +198,31 @@ bigwigAverage -b bigwigs/Input_ENCFF110SOB.bw bigwigs/Input_ENCFF919XCV.bw \
 
 After averaging, we normalize IP signals to Input controls using log2 ratio to reveal true enrichment:
 
-```
+```bash
+# Create output directory
+mkdir -p bw_log2
+
+# Normalize H3K9ac to Input (log2 ratio)
 bigwigCompare -b1 bw_mean/H3K9ac_mean.bw -b2 bw_mean/Input_mean.bw \
-  --operation log2 --pseudocount 1 -p $THREADS \
+  --operation log2 --pseudocount 1 -p 6 \
   -o bw_log2/H3K9ac_log2IPoverInput.bw
 
+# Normalize H3K27me3 to Input (log2 ratio)
 bigwigCompare -b1 bw_mean/H3K27me3_mean.bw -b2 bw_mean/Input_mean.bw \
-  --operation log2 --pseudocount 1 -p $THREADS \
+  --operation log2 --pseudocount 1 -p 6 \
   -o bw_log2/H3K27me3_log2IPoverInput.bw
-
 ```
+
+**What is pseudocount?**
+
+The `--pseudocount 1` parameter adds 1 to all signal values before calculating the log2 ratio. This prevents two critical mathematical problems:
+
+1. **Division by zero**: When Input signal is 0, we'd calculate log2(IP/0) which is undefined
+2. **Log of zero**: When IP signal is 0, we'd calculate log2(0/Input) which is also undefined
+
+By adding 1 to both values, we calculate `log2((IP+1)/(Input+1))` instead. This gives meaningful results even in regions with no signal while minimally affecting regions with strong signal (where adding 1 to large numbers like 100 has negligible impact).
+
+---
 
 # Compute matrix and plots TSS and Scalar plot (for H3k9ac)
 
