@@ -1,22 +1,18 @@
-# Visualization (The Camera Angles)
-
-`computeMatrix` `plotProfile` `plotHeatmap` `TSS-enrichment` `gene-body-profile` `visualization`
+# Visualization with deepTools (Creating Signal Heatmaps)
 
 ## 1. Basic Concept (Camera Modes)
 
 We want to visualize the "Average" pattern of our protein across all genes. To do this, we need to choose our **Camera Mode**:
 
-### 1. Portrait Mode (Reference-Point)
+1. **Portrait Mode (Reference-Point):**
+    * **Focus:** One specific point (e.g., the Transcription Start Site, **TSS**).
+    * **Action:** We stand at the TSS and look 3kb upstream and 10kb downstream.
+    * **Use Case:** Great for seeing promoter activity (H3K9ac, Transcription Factors).
 
-* **Focus:** One specific point (e.g., the Transcription Start Site, **TSS**).
-* **Action:** We stand at the TSS and look 4kb upstream and 4kb downstream.
-* **Use Case:** Great for seeing promoter activity (**H3K9ac**, Transcription Factors).
-
-### 2. Panorama Mode (Scale-Regions)
-
-* **Focus:** The entire gene body.
-* **Action:** Since genes are different lengths (short vs long), we stretch or compress them all to fit the same "frame" (e.g., 5000bp).
-* **Use Case:** Great for seeing broad marks that cover the whole gene (**H3K27me3**, H3K36me3).
+2. **Panorama Mode (Scale-Regions):**
+    * **Focus:** The entire gene body.
+    * **Action:** Since genes are different lengths (short vs long), we stretch or compress them all to fit the same "frame" (e.g., 5000bp).
+    * **Use Case:** Great for seeing broad marks that cover the whole gene (H3K27me3, H3K36me3).
 
 **The Process:**
 
@@ -26,154 +22,304 @@ We want to visualize the "Average" pattern of our protein across all genes. To d
 
 ---
 
-## 2. Requirements (The Files)
+## 2. The Blueprint & The Photo - Basic requirement
 
-We need:
+### Step 1: Download Reference Annotation
 
-1. **BigWig Files:** Generated in Tutorial 12 (in `bigwigs/`).
-2. **BED Files:** From Reference Annotation (Tutorial 01).
-    * `tss.bed` (Start sites only)
-    * `genes.bed` (Full gene bodies)
+We need the GENCODE human genome annotation to define TSS and gene body regions.
 
-> [!NOTE]
-> **Output Directory:** All results will go into `bw_plot/` to keep things organized.
+**Download the GENCODE v49 GTF file:**
+
+```bash
+# Download GENCODE basic annotation (primary assembly)
+wget https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_49/gencode.v49.primary_assembly.basic.annotation.gtf.gz
+
+# Decompress
+gunzip gencode.v49.primary_assembly.basic.annotation.gtf.gz
+```
+
+This GTF file contains comprehensive gene annotations including transcript start sites (TSS), gene bodies, and other genomic features.
+
+### Step 2: Extract TSS Regions (Portrait Mode)
+
+Run this `awk` script to get a 1bp position for every Transcript Start Site from the GTF:
+
+```bash
+awk 'BEGIN{OFS="\t"} $3=="transcript" {                 
+  if($7=="+")                                         
+    print $1, $4-1, $4, $12, ".", $7;                
+  else                                               
+    print $1, $5-1, $5, $12, ".", $7                 
+}' gencode.v49.annotation.gtf |  
+tr -d '";' |                                        
+sort -k1,1V -k2,2n > tss.bed                        
+```
+
+This command extracts the **transcription start site (TSS)** for each transcript from the GTF annotation file. The script identifies whether each transcript is on the forward (+) or reverse (-) strand: for forward-strand transcripts, the TSS is the start coordinate (column 4), while for reverse-strand transcripts, it's the end coordinate (column 5).
+. The output `tss.bed` is a BED file containing chromosome, TSS position (as a 1bp interval), transcript name, and strand information for every annotated transcript.
+
+### Step 3: Extract Gene Bodies (Panorama Mode)
+
+Run this to get the full gene intervals from the same GTF file:
+
+```bash
+awk 'BEGIN{OFS="\t"} $3=="gene" {                     
+  print $1, $4-1, $5, $10, ".", $7                    
+}' gencode.v47.annotation.gtf | 
+tr -d '";' |                                          
+sort -k1,1V -k2,2n > genes.bed
+```
+
+### Build the Matrix (The Blueprint)
+
+This command calculates the coverage scores for plotting.
+
+**Mode A: Reference-Point (TSS)**
+
+```bash
+computeMatrix reference-point \
+  --referencePoint TSS \
+  -R "$REGIONS" \
+  -S \
+    "$BW/H3K9ac_ENCFF534IPX.RPGC.bw" \
+    "$BW/H3K9ac_ENCFF193NPE.RPGC.bw" \
+  -b 3000 -a 3000 \
+  --binSize 250 \
+  --numberOfProcessors 4 \
+  -o bw_plot/H3K9ac_TSS.mat.gz
+```
+
+**Mode B: Scale-Regions (Gene Body)**
+
+```bash
+
+```bash
+computeMatrix scale-regions \
+  -R "$REGIONS" \
+  -S \
+    "$BW/H3K9ac_ENCFF534IPX.RPGC.bw" \
+    "$BW/H3K9ac_ENCFF193NPE.RPGC.bw" \
+  --regionBodyLength 5000 \
+  -b 3000 -a 3000 \
+  --binSize 250 \
+  --numberOfProcessors 4 \
+  -o bw_plot/H3K9ac_combined.mat.gz
+```
+
+### Step 3: Plotting (The Photo)
+
+Now we turn the `matrix_TSS.gz` and `matrix_Body.gz` into plots.
+
+```
+plotProfile \
+  -m ceb_TSS.mat.gz \
+  --perGroup \
+  -out ceb_TSS_profile.pdf
+```
+
+Likewise, you can generate plots for other IPs and Inputs.
 
 ---
 
-## 3. Execution (The Blueprint)
+## Reading the Pictures
 
-We will calculate the matrices using two simple commands.
+---
 
-### Step 3.1: Portrait Mode (TSS Matrix)
+<img alt="image" src="./images/bw1.png"/>
 
-This command calculates the signal ±4kb around the TSS.
+---
 
-```bash
-mkdir -p bw_plot
+Each panel shows average signal around transcription start sites (±3 kb), and the differences between tracks are clear.
 
-# Calculate signals around TSS
+The input tracks show low, smooth signal with no sharp peak at the TSS. This is what background looks like and confirms there is no real promoter-specific enrichment in the inputs.
+
+The H3K27me3 tracks show broader enrichment across the promoter region. The signal rises gradually toward the TSS and spreads over several kilobases, which fits a repressive chromatin mark that acts over domains rather than sharply at promoters.
+
+The H3K9ac tracks are very different. They show strong, narrow peaks centered exactly at the TSS, with signal far higher than all other tracks. This reflects active promoter-associated acetylation and clear separation from background.
+
+---
+<img alt="Screenshot 2025-12-10 at 12 14 14 PM" src="./images/bw2.png" />
+
+---
+
+The genome-wide metagene profiles show clear differences between input, CEBP, and histone marks across transcription start sites (TSS) and transcription end sites (TES).
+
+The input tracks show low-amplitude signal with mild structure around both TSS and TES, consistent with background chromatin features and technical biases rather than true enrichment. There is no sharp localization to either boundary.
+
+In contrast, H3K27me3 shows broad enrichment centered near the TSS that extends across the gene body and decays toward the TES. The signal is moderate in amplitude and spread over several kilobases, consistent with its role as a repressive chromatin mark acting over domains rather than forming sharp peaks.
+
+H3K9ac displays strong, sharp enrichment precisely at the TSS, with signal levels far exceeding input and transcription factor profiles. The signal decreases steadily across the gene body and approaches baseline near the TES, consistent with promoter-focused acetylation associated with active transcription.
+
+---
+These are individual replicates of the different IPs. Now let's see how they look cumulatively.
+
+### Average BigWigs
+
+```
+bigwigAverage -b H3K9ac_ENCFF193NPE.RPGC.bw H3K9ac_ENCFF534IPX.RPGC.bw \
+  -o bw_mean/H3K9ac_mean.bw -p 6
+
+
+bigwigAverage -b H3K27me3_ENCFF164ALR.RPGC.bw H3K27me3_ENCFF532DQH.RPGC.bw \
+  -o bw_mean/H3K27me3_mean.bw -p $THREADS
+
+
+
+
+```
+
+## After normalisation to Inpouts , how these plots look like
+
+```
+bigwigCompare -b1 bw_mean/H3K9ac_mean.bw -b2 bw_mean/Input_mean.bw \
+  --operation log2 --pseudocount 1 -p $THREADS \
+  -o bw_log2/H3K9ac_log2IPoverInput.bw
+
+bigwigCompare -b1 bw_mean/H3K27me3_mean.bw -b2 bw_mean/Input_mean.bw \
+  --operation log2 --pseudocount 1 -p $THREADS \
+  -o bw_log2/H3K27me3_log2IPoverInput.bw
+
+```
+
+# Compute matrix and plots TSS and Scalar plot (for H3k9ac)
+
+```
 computeMatrix reference-point \
     --referencePoint TSS \
-    -b 4000 -a 4000 \
-    -R tss.bed \
-    -S bigwigs/*.bw \
-    --skipZeros \
-    -o bw_plot/matrix_all_bw_TSS.gz \
-    --binSize 1000 \
-    --numberOfProcessors 4
+    -b 3000 -a 3000 \
+    --binSize 250 \
+    -R $TSS_BED \
+    -S bw_log2/${MARK}_log2IPoverInput.bw \
+    --skipZeros --missingDataAsZero \
+    -p $THREADS \
+    -o matrix/${MARK}_TSS_log2.gz
+
+
+plotProfile \
+    -m matrix/${MARK}_TSS_log2.gz \
+    --refPointLabel TSS \
+    --yAxisLabel "log2(IP/Input)" \
+    --plotTitle "${MARK} log2(IP/Input)" \
+    -out plots/${MARK}_TSS_log2_profile.pdf
+
 ```
 
-### Step 3.2: Panorama Mode (Gene Body Matrix)
-
-This command stretches all genes to 5kb to compare them side-by-side.
-
-```bash
-# Calculate signals across entire gene bodies
+```
 computeMatrix scale-regions \
-    -R genes.bed \
-    -S bigwigs/*.bw \
+    -b 3000 -a 3000 \
     --regionBodyLength 5000 \
-    -b 1000 -a 1000 \
-    --binSize 1000 \
-    --skipZeros \
-    -o bw_plot/matrix_all_bw_scalar.gz \
-    --numberOfProcessors 4
+    --binSize 250 \
+    -R $GENES_BED \
+    -S bw_mean/${MARK}_mean.bw \
+    --skipZeros --missingDataAsZero \
+    -p $THREADS \
+    -o matrix/${MARK}_genes_norm.gz
+
+plotProfile \
+    -m matrix/${MARK}_genes_norm.gz \
+    --yAxisLabel "RPGC-normalized signal" \
+    --plotTitle "${MARK} gene-body (normalized)" \
+    -out plots/${MARK}_genes_norm_profile.pdf
+done
 ```
 
----
+## CEBPA Peak-Focused Analysis
 
-## 4. Plotting (The Photo)
+Now, to focus on peaks identified by MACS3 and validated by IDR, we'll identify promoters overlapping CEBPA consensus peaks.
 
-Now that we have the "Blueprints" (matrices), we can develop the actual images.
-
-### 4.1 Plot Profiles (Line Graphs)
-
-This shows the *Average* signal across all genes.
+### Identifying Promoters Overlapping CEBPA Peaks
 
 ```bash
-# 1. TSS Profile (Portrait)
-plotProfile \
-  -m bw_plot/matrix_all_bw_TSS.gz \
-  -out bw_plot/profile_TSS.pdf \
-  --perGroup \
-  --plotTitle "TSS Enrichment Profile" \
-  --dpi 600
+# Count total CEBPA IDR-passed peaks
+wc -l ceb_idr_passed.bed
+# Output: 9468 ceb_idr_passed.bed
 
-# 2. Gene Body Profile (Panorama)
-plotProfile \
-  -m bw_plot/matrix_all_bw_scalar.gz \
-  -out bw_plot/profile_Body.pdf \
-  --perGroup \
-  --plotTitle "Gene Body Enrichment Profile" \
-  --dpi 600
-```
+bedtools intersect \
+  -a TSS.bed \
+  -b ceb_idr_passed.bed \
+  -u > cebpa_peak_promoters.bed
 
-### 4.2 Plot Heatmaps (Rich Detail)
 
-This shows the signal for *Every Single Gene* stacked on top of each other.
+(chip) rajaishaqnabikhan@Mac 1.bigwig_smoothlength %  wc -l cebpa_peak_promoters.bed
+    5792 cebpa_peak_promoters.bed
+############################################
+# 4. computeMatrix: TSS-centered
+############################################
 
-```bash
-# Heatmap for TSS
+ Computing TSS-centered signal matrix 
+
+computeMatrix reference-point \
+  --referencePoint TSS \
+  -b 2000 -a 2000 \
+  -R cebpa_peak_promoters.bed \
+  -S bw_log2/ceb_log2IPoverInput.bw \
+  --binSize 25 \
+  --skipZeros \
+  -p 8\
+  -o ceb_idr_TSS.mat.gz
+
+
+
+
+############################################
+# 5A. Heatmap WITHOUT clustering
+############################################
+
+ Plotting heatmap 
+
 plotHeatmap \
-  -m bw_plot/matrix_all_bw_TSS.gz \
-  -out bw_plot/heatmap_TSS.pdf \
-  --colorMap jet \
-  --missingDataColor "#FFF6EB" \
-  --refPointLabel "TSS" \
-  --dpi 600
+  -m ceb_idr_TSS.mat.gz \
+  --colorMap RdBu_r \
+  --refPointLabel TSS \
+  --dpi 600 \
+  -out cebpa_peakPromoters_heatmap_noKmeans.pdf
 
-# Heatmap for Gene Body
-plotHeatmap \
-  -m bw_plot/matrix_all_bw_scalar.gz \
-  -out bw_plot/heatmap_genebody.pdf \
-  --colorMap jet \
-  --missingDataColor "#FFF6EB" \
-  --refPointLabel "Gene Start" \
-  --dpi 600
+echo
+
+
+
+ ```
+
+<img alt="Screenshot 2025-12-10 at 12 14 14 PM" src="./images/bw3.png" />
+
 ```
 
-### 4.3 Advanced: K-means Clustering
 
-This groups genes into clusters based on their signal patterns (useful for finding distinct gene classes).
+(chip) rajaishaqnabikhan@Mac 1.bigwig_smoothlength % 
+computeMatrix reference-point \
+  --referencePoint TSS \
+  -b 2000 -a 2000 \
+  -R cebpa_peak_promoters.bed \
+  -S bw_log2/ceb_log2IPoverInput.bw \
+     bw_log2/H3K9ac_log2IPoverInput.bw \
+     bw_log2/H3K27me3_log2IPoverInput.bw \
+  --binSize 25 \
+  -p 8 \
+  -o cebpa_promoters_TSS.mat.gz
+
+(chip) rajaishaqnabikhan@Mac 1.bigwig_smoothlength %                     
+plotProfile \                  
+  -m cebpa_promoters_TSS.mat.gz \
+  --perGroup \                      
+  --plotTitle "CEBPA-bound promoters (±2 kb TSS)" \
+  --dpi 600 \
+-out cebpa_promoters_profile.pdf
 
-```bash
-plotProfile \
-  -m bw_plot/matrix_all_bw_scalar.gz \
-  --perGroup \
-  --kmeans 2 \
-  --plotType heatmap \
-  -out bw_plot/profile_kmeans_heatmap.pdf
+(chip) rajaishaqnabikhan@Mac 1.bigwig_smoothlength % plotHeatmap \
+  -m cebpa_promoters_TSS.mat.gz \
+  --colorMap RdBu_r \
+  --dpi 600 \
+  -out cebpa_promoters_heatmap.pdf
+(chip) rajaishaqnabikhan@Mac 1.bigwig_smoothlength % 
 ```
 
----
+<img alt="Screenshot 2025-12-10 at 12 14 14 PM" src="./images/bw4.png" />
+(chip) rajaishaqnabikhan@Mac 1.bigwig_smoothlength % plotHeatmap \
+  -m cebpa_promoters_TSS.mat.gz \
+  --colorMap RdBu_r \
+  --dpi 600 \
+  -out cebpa_promoters_heatmap.pdf
+(chip) rajaishaqnabikhan@Mac 1.bigwig_smoothlength %
+<img alt="Screenshot 2025-12-10 at 12 14 14 PM" src="./images/bw5.png" />```
 
-## 5. Reading the Results
-
-### 5.1 The TSS Profile (Portrait)
-
-This tells us about **Promoter Activity**.
-
-<img width="900" height="271" alt="Screenshot 2025-12-15 at 7 10 31 PM" src="./images/heatmap_viz_1.png" />
-
-* **Input (Background):** Flat line (~1.2-1.5). No enrichment. This is good quality control.
-* **H3K9ac (Active Mark):** **Huge spike** right at the TSS (reaching ~12-25!). This confirms H3K9ac is strongly associated with active promoters.
-* **H3K27me3 (Repressive Mark):** Broad, lower hill (~2.5-3.0). It doesn't spike at the TSS but sits broadly around it.
-* **CEBPA (Factor):** Small but distinct bump at the TSS (~1.5). Transcription factors bind specific spots, so the average signal is lower than histone marks but still distinct from input.
-
-### 5.2 The Gene Body Profile (Panorama)
-
-This tells us about **Domain Structure**.
-
-<img width="1022" height="323" alt="Screenshot 2025-12-10 at 12 14 14 PM" src="./images/heatmap_viz_2.png" />
-
-* **H3K9ac:** Spike at the start (TSS), then rapid drop. It's a "Starting Gun" mark.
-* **H3K27me3:** Stays elevated across the **entire gene body**, slowly decaying. It's a "Blanket" mark that covers the whole region to silence it.
-
-| Mark | Portrait (TSS) | Panorama (Gene Body) |
-| :--- | :--- | :--- |
-| **Input** | Flat. | Flat. |
-| **H3K9ac** | **Sharp Spike** | Spike then Drop. |
-| **H3K27me3** | Broad Hill | **Broad Blanket** (Entire Gene) |
-
-> [!NOTE]
-> **Up Next:** We have visualized the signals and confirmed they look biologically correct. Now, finally, we will use **MACS2** to mathematically identify the exact genomic coordinates of these peaks.
+CEBPA-bound promoters are enriched for active chromatin (H3K9ac) and depleted for repressive chromatin (H3K27me3).

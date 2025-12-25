@@ -11,7 +11,6 @@ A **BAM** file gives you the location of every single "car" (read) on the road. 
 A **BigWig** file is like the **Google Maps Traffic View**. It doesn't show you the individual cars; it just shows you a green, yellow, or red line indicating "Volume".
 
 * **Small & Fast:** Compact file size.
-* **Small & Fast:** Compact file size.
 * **Visual:** Perfect for viewing on a Genome Browser (IGV/UCSC).
 
 ---
