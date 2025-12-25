@@ -35,7 +35,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-70ba0bb4.js";
+            window.path_to_searchindex_js = "searchindex-b8810d74.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-9c36ea23.js"></script>
@@ -231,40 +231,43 @@ sort -k1,1V -k2,2n &gt; tss.bed
 tr -d '";' |                                          
 sort -k1,1V -k2,2n &gt; genes.bed
 </code></pre>
-<h3 id="build-the-matrix-the-blueprint"><a class="header" href="#build-the-matrix-the-blueprint">Build the Matrix (The Blueprint)</a></h3>
+<h3 id="step-4-create-output-directories"><a class="header" href="#step-4-create-output-directories">Step 4: Create Output Directories</a></h3>
+<pre><code class="language-bash"># Create directories for matrices and plots
+mkdir -p deeptools_viz/matrices
+mkdir -p deeptools_viz/plots
+</code></pre>
+<h3 id="step-5-build-the-matrix-the-blueprint"><a class="header" href="#step-5-build-the-matrix-the-blueprint">Step 5: Build the Matrix (The Blueprint)</a></h3>
 <p>This command calculates the coverage scores for plotting.</p>
 <p><strong>Mode A: Reference-Point (TSS)</strong></p>
 <pre><code class="language-bash">computeMatrix reference-point \
   --referencePoint TSS \
-  -R "$REGIONS" \
+  -R tss.bed \
   -S \
-    "$BW/H3K9ac_ENCFF534IPX.RPGC.bw" \
-    "$BW/H3K9ac_ENCFF193NPE.RPGC.bw" \
+    bigwigs/H3K9ac_ENCFF534IPX.bw \
+    bigwigs/H3K9ac_ENCFF193NPE.bw \
   -b 3000 -a 3000 \
   --binSize 250 \
   --numberOfProcessors 4 \
-  -o bw_plot/H3K9ac_TSS.mat.gz
+  -o deeptools_viz/matrices/H3K9ac_TSS.mat.gz
 </code></pre>
 <p><strong>Mode B: Scale-Regions (Gene Body)</strong></p>
-<pre><code class="language-bash">
-```bash
-computeMatrix scale-regions \
-  -R "$REGIONS" \
+<pre><code class="language-bash">computeMatrix scale-regions \
+  -R genes.bed \
   -S \
-    "$BW/H3K9ac_ENCFF534IPX.RPGC.bw" \
-    "$BW/H3K9ac_ENCFF193NPE.RPGC.bw" \
+    bigwigs/H3K9ac_ENCFF534IPX.bw \
+    bigwigs/H3K9ac_ENCFF193NPE.bw \
   --regionBodyLength 5000 \
   -b 3000 -a 3000 \
   --binSize 250 \
   --numberOfProcessors 4 \
-  -o bw_plot/H3K9ac_combined.mat.gz
+  -o deeptools_viz/matrices/H3K9ac_genes.mat.gz
 </code></pre>
-<h3 id="step-3-plotting-the-photo"><a class="header" href="#step-3-plotting-the-photo">Step 3: Plotting (The Photo)</a></h3>
-<p>Now we turn the <code>matrix_TSS.gz</code> and <code>matrix_Body.gz</code> into plots.</p>
-<pre><code>plotProfile \
-  -m ceb_TSS.mat.gz \
+<h3 id="step-6-plotting-the-photo"><a class="header" href="#step-6-plotting-the-photo">Step 6: Plotting (The Photo)</a></h3>
+<p>Now we turn the matrices into plots.</p>
+<pre><code class="language-bash">plotProfile \
+  -m deeptools_viz/matrices/H3K9ac_TSS.mat.gz \
   --perGroup \
-  -out ceb_TSS_profile.pdf
+  -out deeptools_viz/plots/H3K9ac_TSS_profile.pdf
 </code></pre>
 <p>Likewise, you can generate plots for other IPs and Inputs.</p>
 <hr>
