@@ -65,7 +65,7 @@ Run this to get the full gene intervals from the same GTF file:
 ```bash
 awk 'BEGIN{OFS="\t"} $3=="gene" {                     
   print $1, $4-1, $5, $10, ".", $7                    
-}' gencode.v47.annotation.gtf | 
+}' gencode.v49.annotation.gtf | 
 tr -d '";' |                                          
 sort -k1,1V -k2,2n > genes.bed
 ```
@@ -123,11 +123,17 @@ plotProfile \
   -out deeptools_viz/plots/H3K9ac_TSS_profile.pdf
 ```
 
-Likewise, you can generate plots for other IPs and Inputs.
+**Generating plots for all samples:**
+
+Repeat the above `computeMatrix` and `plotProfile` commands for all your samples (Input, H3K27me3, CEBPA) to create comprehensive visualization of ChIP-seq signal patterns. Each mark will show distinct enrichment profiles: active marks like H3K9ac peak sharply at promoters, repressive marks like H3K27me3 spread broadly across gene bodies, while Input controls show flat background signal.
 
 ---
 
 ## Reading the Pictures
+
+### TSS-Centered Profiles: Individual Replicates
+
+The following plots show average ChIP-seq signal around transcription start sites (TSS ±3 kb) for individual replicates of Input, H3K27me3, and H3K9ac:
 
 ---
 
