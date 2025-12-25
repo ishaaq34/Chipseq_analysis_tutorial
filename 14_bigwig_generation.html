@@ -35,7 +35,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-293fc682.js";
+            window.path_to_searchindex_js = "searchindex-5c29c5ba.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-9c36ea23.js"></script>
@@ -175,6 +175,7 @@
 <p><code>bamCoverage</code> <code>bigWig</code> <code>normalization</code> <code>RPGC</code> <code>effective-genome-size</code> <code>visualization</code></p>
 <h2 id="1-basic-concept-the-traffic-map"><a class="header" href="#1-basic-concept-the-traffic-map">1. Basic Concept (The Traffic Map)</a></h2>
 <h3 id="why-bigwig"><a class="header" href="#why-bigwig">Why BigWig?</a></h3>
+<hr>
 <p>A <strong>BAM</strong> file gives you the location of every single “car” (read) on the road. It’s massive and slow to load.</p>
 <p>A <strong>BigWig</strong> file is like the <strong>Google Maps Traffic View</strong>. It doesn’t show you the individual cars; it just shows you a green, yellow, or red line indicating “Volume”.</p>
 <ul>
@@ -327,7 +328,21 @@ done
 <p class="blockquote-tag-title"><svg viewbox="0 0 16 16" width="18" height="18"><path d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8Zm8-6.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13ZM6.5 7.75A.75.75 0 0 1 7.25 7h1a.75.75 0 0 1 .75.75v2.75h.25a.75.75 0 0 1 0 1.5h-2a.75.75 0 0 1 0-1.5h.25v-2h-.25a.75.75 0 0 1-.75-.75ZM8 6a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z"></path></svg>Note</p>
 <p><strong>Up Next:</strong> Now that we have our signals (BigWigs) and our QC (Fingerprints) done, we are ready to call peaks! (Wait, technically we usually call peaks <em>before</em> or <em>parallel</em> to visualization, but viewing tracks helps confirm peak calls).</p>
 </blockquote>
-
+<hr>
+<h2 id="directory-structure-after-bigwig-generation"><a class="header" href="#directory-structure-after-bigwig-generation">Directory Structure After BigWig Generation</a></h2>
+<pre><code class="language-text">chipseq_tutorial/
+├── bam_files_final/            ← Source BAM files
+├── macs3_results/              ← MACS3 peak files
+├── idr/                        ← IDR outputs
+└── bigwigs/                    ← **NEW: Normalized BigWig tracks**
+    ├── H3K9ac_ENCFF534IPX.bw
+    ├── H3K9ac_ENCFF193NPE.bw
+    ├── H3K27me3_ENCFF164ALR.bw
+    ├── H3K27me3_ENCFF532DQH.bw
+    ├── Input_ENCFF110SOB.bw
+    └── Input_ENCFF919XCV.bw
+</code></pre>
+<hr>
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
