@@ -70,7 +70,15 @@ tr -d '";' |
 sort -k1,1V -k2,2n > genes.bed
 ```
 
-### Build the Matrix (The Blueprint)
+### Step 4: Create Output Directories
+
+```bash
+# Create directories for matrices and plots
+mkdir -p deeptools_viz/matrices
+mkdir -p deeptools_viz/plots
+```
+
+### Step 5: Build the Matrix (The Blueprint)
 
 This command calculates the coverage scores for plotting.
 
@@ -79,42 +87,40 @@ This command calculates the coverage scores for plotting.
 ```bash
 computeMatrix reference-point \
   --referencePoint TSS \
-  -R "$REGIONS" \
+  -R tss.bed \
   -S \
-    "$BW/H3K9ac_ENCFF534IPX.RPGC.bw" \
-    "$BW/H3K9ac_ENCFF193NPE.RPGC.bw" \
+    bigwigs/H3K9ac_ENCFF534IPX.bw \
+    bigwigs/H3K9ac_ENCFF193NPE.bw \
   -b 3000 -a 3000 \
   --binSize 250 \
   --numberOfProcessors 4 \
-  -o bw_plot/H3K9ac_TSS.mat.gz
+  -o deeptools_viz/matrices/H3K9ac_TSS.mat.gz
 ```
 
 **Mode B: Scale-Regions (Gene Body)**
 
 ```bash
-
-```bash
 computeMatrix scale-regions \
-  -R "$REGIONS" \
+  -R genes.bed \
   -S \
-    "$BW/H3K9ac_ENCFF534IPX.RPGC.bw" \
-    "$BW/H3K9ac_ENCFF193NPE.RPGC.bw" \
+    bigwigs/H3K9ac_ENCFF534IPX.bw \
+    bigwigs/H3K9ac_ENCFF193NPE.bw \
   --regionBodyLength 5000 \
   -b 3000 -a 3000 \
   --binSize 250 \
   --numberOfProcessors 4 \
-  -o bw_plot/H3K9ac_combined.mat.gz
+  -o deeptools_viz/matrices/H3K9ac_genes.mat.gz
 ```
 
-### Step 3: Plotting (The Photo)
+### Step 6: Plotting (The Photo)
 
-Now we turn the `matrix_TSS.gz` and `matrix_Body.gz` into plots.
+Now we turn the matrices into plots.
 
-```
+```bash
 plotProfile \
-  -m ceb_TSS.mat.gz \
+  -m deeptools_viz/matrices/H3K9ac_TSS.mat.gz \
   --perGroup \
-  -out ceb_TSS_profile.pdf
+  -out deeptools_viz/plots/H3K9ac_TSS_profile.pdf
 ```
 
 Likewise, you can generate plots for other IPs and Inputs.
