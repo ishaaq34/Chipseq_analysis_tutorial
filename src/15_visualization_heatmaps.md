@@ -175,20 +175,28 @@ These are individual replicates of the different IPs. Now let's see how they loo
 
 ### Average BigWigs
 
-```
-bigwigAverage -b H3K9ac_ENCFF193NPE.RPGC.bw H3K9ac_ENCFF534IPX.RPGC.bw \
+To reduce noise and create consensus signal tracks, we average the replicate BigWig files for each mark:
+
+```bash
+# Create output directory
+mkdir -p bw_mean
+
+# Average H3K9ac replicates
+bigwig Average -b bigwigs/H3K9ac_ENCFF193NPE.bw bigwigs/H3K9ac_ENCFF534IPX.bw \
   -o bw_mean/H3K9ac_mean.bw -p 6
 
+# Average H3K27me3 replicates
+bigwigAverage -b bigwigs/H3K27me3_ENCFF164ALR.bw bigwigs/H3K27me3_ENCFF532DQH.bw \
+  -o bw_mean/H3K27me3_mean.bw -p 6
 
-bigwigAverage -b H3K27me3_ENCFF164ALR.RPGC.bw H3K27me3_ENCFF532DQH.RPGC.bw \
-  -o bw_mean/H3K27me3_mean.bw -p $THREADS
-
-
-
-
+# Average Input replicates
+bigwigAverage -b bigwigs/Input_ENCFF110SOB.bw bigwigs/Input_ENCFF919XCV.bw \
+  -o bw_mean/Input_mean.bw -p 6
 ```
 
-## After normalisation to Inpouts , how these plots look like
+## Normalization to Input Controls
+
+After averaging, we normalize IP signals to Input controls using log2 ratio to reveal true enrichment:
 
 ```
 bigwigCompare -b1 bw_mean/H3K9ac_mean.bw -b2 bw_mean/Input_mean.bw \
