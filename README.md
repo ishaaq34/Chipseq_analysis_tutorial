@@ -3,7 +3,6 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![mdBook](https://img.shields.io/badge/mdBook-Documentation-blue)](https://ishaaq34.github.io/Chipseq_analysis_tutorial/)
 
-<<<<<<< HEAD
 **[ Read the Tutorial Book Online](https://ishaaq34.github.io/Chipseq_analysis_tutorial/)**
 
 
