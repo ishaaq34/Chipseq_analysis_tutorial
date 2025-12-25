@@ -125,7 +125,7 @@ plotProfile \
 
 **Generating plots for all samples:**
 
-Repeat the above `computeMatrix` and `plotProfile` commands for all your samples (Input, H3K27me3, CEBPA) to create comprehensive visualization of ChIP-seq signal patterns. Each mark will show distinct enrichment profiles: active marks like H3K9ac peak sharply at promoters, repressive marks like H3K27me3 spread broadly across gene bodies, while Input controls show flat background signal.
+Repeat the above `computeMatrix` and `plotProfile` commands for all your samples (Input, H3K27me3, CEBPA) to create comprehensive visualization of ChIP-seq signal patterns.
 
 ---
 
