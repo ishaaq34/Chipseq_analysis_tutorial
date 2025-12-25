@@ -18,3 +18,7 @@
 - [Visualization Heatmaps](./15_visualization_heatmaps.md)
 - [Annotation with ChIPseeker](./16_chipseeker_annotation.md)
 - [Appendix: How We Built This Book](./tutorial_book_creation.md)
+
+---
+
+- [Contributors](./CONTRIBUTORS.md)
