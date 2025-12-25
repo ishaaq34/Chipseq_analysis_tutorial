@@ -35,7 +35,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-a9e80855.js";
+            window.path_to_searchindex_js = "searchindex-5269c116.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-9c36ea23.js"></script>
@@ -312,15 +312,27 @@ bigwigAverage -b bigwigs/Input_ENCFF110SOB.bw bigwigs/Input_ENCFF919XCV.bw \
 </code></pre>
 <h2 id="normalization-to-input-controls"><a class="header" href="#normalization-to-input-controls">Normalization to Input Controls</a></h2>
 <p>After averaging, we normalize IP signals to Input controls using log2 ratio to reveal true enrichment:</p>
-<pre><code>bigwigCompare -b1 bw_mean/H3K9ac_mean.bw -b2 bw_mean/Input_mean.bw \
-  --operation log2 --pseudocount 1 -p $THREADS \
+<pre><code class="language-bash"># Create output directory
+mkdir -p bw_log2
+
+# Normalize H3K9ac to Input (log2 ratio)
+bigwigCompare -b1 bw_mean/H3K9ac_mean.bw -b2 bw_mean/Input_mean.bw \
+  --operation log2 --pseudocount 1 -p 6 \
   -o bw_log2/H3K9ac_log2IPoverInput.bw
 
+# Normalize H3K27me3 to Input (log2 ratio)
 bigwigCompare -b1 bw_mean/H3K27me3_mean.bw -b2 bw_mean/Input_mean.bw \
-  --operation log2 --pseudocount 1 -p $THREADS \
+  --operation log2 --pseudocount 1 -p 6 \
   -o bw_log2/H3K27me3_log2IPoverInput.bw
-
 </code></pre>
+<p><strong>What is pseudocount?</strong></p>
+<p>The <code>--pseudocount 1</code> parameter adds 1 to all signal values before calculating the log2 ratio. This prevents two critical mathematical problems:</p>
+<ol>
+<li><strong>Division by zero</strong>: When Input signal is 0, we’d calculate log2(IP/0) which is undefined</li>
+<li><strong>Log of zero</strong>: When IP signal is 0, we’d calculate log2(0/Input) which is also undefined</li>
+</ol>
+<p>By adding 1 to both values, we calculate <code>log2((IP+1)/(Input+1))</code> instead. This gives meaningful results even in regions with no signal while minimally affecting regions with strong signal (where adding 1 to large numbers like 100 has negligible impact).</p>
+<hr>
 <h1 id="compute-matrix-and-plots-tss-and-scalar-plot-for-h3k9ac"><a class="header" href="#compute-matrix-and-plots-tss-and-scalar-plot-for-h3k9ac">Compute matrix and plots TSS and Scalar plot (for H3k9ac)</a></h1>
 <pre><code>computeMatrix reference-point \
     --referencePoint TSS \
