@@ -168,6 +168,9 @@ In contrast, H3K27me3 shows broad enrichment centered near the TSS that extends 
 H3K9ac displays strong, sharp enrichment precisely at the TSS, with signal levels far exceeding input and transcription factor profiles. The signal decreases steadily across the gene body and approaches baseline near the TES, consistent with promoter-focused acetylation associated with active transcription.
 
 ---
+
+## Average Signal Analysis
+
 These are individual replicates of the different IPs. Now let's see how they look cumulatively.
 
 ### Average BigWigs
