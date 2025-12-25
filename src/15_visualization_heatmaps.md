@@ -346,12 +346,7 @@ plotProfile \                  
   --dpi 600 \
 -out cebpa_promoters_profile.pdf
 
-(chip) rajaishaqnabikhan@Mac 1.bigwig_smoothlength % plotHeatmap \
-  -m cebpa_promoters_TSS.mat.gz \
-  --colorMap RdBu_r \
-  --dpi 600 \
-  -out cebpa_promoters_heatmap.pdf
-(chip) rajaishaqnabikhan@Mac 1.bigwig_smoothlength % 
+
 ```
 
 <img alt="Screenshot 2025-12-10 at 12 14 14 PM" src="./images/bw4.png" />
