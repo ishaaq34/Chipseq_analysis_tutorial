@@ -35,7 +35,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-9ecff273.js";
+            window.path_to_searchindex_js = "searchindex-623a0840.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-9c36ea23.js"></script>
@@ -464,29 +464,13 @@ plotProfile \
 # Heatmap: shows enrichment at individual CEBPA-bound promoters
 plotHeatmap \
   -m deeptools_viz/matrices/cebpa_multimark_TSS.mat.gz \
-  --colorMap RdBu_r \
-  --dpi 600 \
-  -out deeptools_viz/plots/cebpa_multimark_heatmap.pdf
-</code></pre>
-<p><strong>What this reveals:</strong></p>
-<ul>
-<li>H3K9ac enrichment at CEBPA peaks indicates active chromatin</li>
-<li>H3K27me3 depletion at CEBPA peaks confirms absence of repressive marks</li>
-<li>CEBPA binds preferentially to active (H3K9ac+, H3K27me3-) promoters</li>
-</ul>
-<hr>
-<h3 id="profile-plot"><a class="header" href="#profile-plot">Profile Plot</a></h3>
-<img alt="Multi-mark profile at CEBPA-bound promoters" src="./images/bw4.png" />
-<hr>
-<h3 id="heatmap"><a class="header" href="#heatmap">Heatmap</a></h3>
-<img alt="Multi-mark heatmap at CEBPA-bound promoters" src="./images/bw5.png" />
-<hr>
-<h2 id="summary"><a class="header" href="#summary">Summary</a></h2>
-<p>CEBPA-bound promoters are enriched for active chromatin (H3K9ac) and depleted for repressive chromatin (H3K27me3).</p>
-<hr>
-<hr>
-<h2 id="directory-structure-after-visualization"><a class="header" href="#directory-structure-after-visualization">Directory Structure After Visualization</a></h2>
-<pre><code class="language-text">chipseq_tutorial/
+
+---
+
+## Directory Structure After Visualization
+
+```text
+chipseq_tutorial/
 ├── bigwigs/                    ← Normalized BigWig files from Tutorial 14
 ├── bw_mean/                    ← **NEW: Averaged BigWig files**
 │   ├── H3K9ac_mean.bw
@@ -509,6 +493,35 @@ plotHeatmap \
 └── cebpa_peak_promoters.bed    ← **NEW: CEBPA-bound promoters**
 </code></pre>
 <hr>
+<p>–colorMap RdBu_r <br>–dpi 600 <br>-out deeptools_viz/plots/cebpa_multimark_heatmap.pdf</p>
+<pre><code>
+**What this reveals:**
+- H3K9ac enrichment at CEBPA peaks indicates active chromatin
+- H3K27me3 depletion at CEBPA peaks confirms absence of repressive marks
+- CEBPA binds preferentially to active (H3K9ac+, H3K27me3-) promoters
+
+---
+
+### Profile Plot
+
+&lt;img alt="Multi-mark profile at CEBPA-bound promoters" src="./images/bw4.png" /&gt;
+
+---
+
+### Heatmap
+
+&lt;img alt="Multi-mark heatmap at CEBPA-bound promoters" src="./images/bw5.png" /&gt;
+
+---
+
+## Summary
+
+CEBPA-bound promoters are enriched for active chromatin (H3K9ac) and depleted for repressive chromatin (H3K27me3).
+
+---
+
+</code></pre>
+
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
