@@ -35,7 +35,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-394a672a.js";
+            window.path_to_searchindex_js = "searchindex-a9e80855.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-9c36ea23.js"></script>
@@ -294,18 +294,24 @@ mkdir -p deeptools_viz/plots
 <h2 id="average-signal-analysis"><a class="header" href="#average-signal-analysis">Average Signal Analysis</a></h2>
 <p>These are individual replicates of the different IPs. Now let’s see how they look cumulatively.</p>
 <h3 id="average-bigwigs"><a class="header" href="#average-bigwigs">Average BigWigs</a></h3>
-<pre><code>bigwigAverage -b H3K9ac_ENCFF193NPE.RPGC.bw H3K9ac_ENCFF534IPX.RPGC.bw \
+<p>To reduce noise and create consensus signal tracks, we average the replicate BigWig files for each mark:</p>
+<pre><code class="language-bash"># Create output directory
+mkdir -p bw_mean
+
+# Average H3K9ac replicates
+bigwig Average -b bigwigs/H3K9ac_ENCFF193NPE.bw bigwigs/H3K9ac_ENCFF534IPX.bw \
   -o bw_mean/H3K9ac_mean.bw -p 6
 
+# Average H3K27me3 replicates
+bigwigAverage -b bigwigs/H3K27me3_ENCFF164ALR.bw bigwigs/H3K27me3_ENCFF532DQH.bw \
+  -o bw_mean/H3K27me3_mean.bw -p 6
 
-bigwigAverage -b H3K27me3_ENCFF164ALR.RPGC.bw H3K27me3_ENCFF532DQH.RPGC.bw \
-  -o bw_mean/H3K27me3_mean.bw -p $THREADS
-
-
-
-
+# Average Input replicates
+bigwigAverage -b bigwigs/Input_ENCFF110SOB.bw bigwigs/Input_ENCFF919XCV.bw \
+  -o bw_mean/Input_mean.bw -p 6
 </code></pre>
-<h2 id="after-normalisation-to-inpouts--how-these-plots-look-like"><a class="header" href="#after-normalisation-to-inpouts--how-these-plots-look-like">After normalisation to Inpouts , how these plots look like</a></h2>
+<h2 id="normalization-to-input-controls"><a class="header" href="#normalization-to-input-controls">Normalization to Input Controls</a></h2>
+<p>After averaging, we normalize IP signals to Input controls using log2 ratio to reveal true enrichment:</p>
 <pre><code>bigwigCompare -b1 bw_mean/H3K9ac_mean.bw -b2 bw_mean/Input_mean.bw \
   --operation log2 --pseudocount 1 -p $THREADS \
   -o bw_log2/H3K9ac_log2IPoverInput.bw
