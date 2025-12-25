@@ -160,3 +160,24 @@ You've learned how to:
 > **Up Next:** Assess reproducibility between replicates using IDR (Irreproducible Discovery Rate) and identify consensus peaks for downstream motif analysis.
 
 ---
+
+---
+
+## Directory Structure After FRiP Calculation
+
+```text
+chipseq_tutorial/
+├── bam_files_final/            ← Filtered BAM files
+├── macs3_results/              ← Peak files
+│   ├── H3K9ac_ENCFF534IPX_peaks.narrowPeak
+│   ├── H3K9ac_ENCFF193NPE_peaks.narrowPeak
+│   ├── H3K27me3_ENCFF164ALR_peaks.broadPeak
+│   └── H3K27me3_ENCFF532DQH_peaks.broadPeak
+└── frip_results/               ← **NEW: FRiP metrics**
+    ├── H3K9ac_ENCFF534IPX_frip.txt
+    ├── H3K9ac_ENCFF193NPE_frip.txt
+    ├── H3K27me3_ENCFF164ALR_frip.txt
+    └── H3K27me3_ENCFF532DQH_frip.txt
+```
+
+---

@@ -297,3 +297,23 @@ You have successfully called peaks using MACS3 for:
 > **Up Next:** Calculate FRiP (Fraction of Reads in Peaks) quality metrics to validate peak enrichment, then assess reproducibility with IDR and perform motif discovery.
 
 ---
+
+---
+
+## Directory Structure After Peak Calling
+
+```text
+chipseq_tutorial/
+├── bam_files_final/            ← Filtered BAM files
+└── macs3_results/              ← **NEW: MACS3 peak calling outputs**
+    ├── H3K9ac_ENCFF534IPX_peaks.narrowPeak
+    ├── H3K9ac_ENCFF534IPX_peaks.xls
+    ├── H3K9ac_ENCFF534IPX_summits.bed
+    ├── H3K9ac_ENCFF534IPX_model.r
+    ├── H3K9ac_ENCFF193NPE_peaks.narrowPeak
+    ├── H3K9ac_ENCFF193NPE_peaks.xls
+    ├── H3K9ac_ENCFF193NPE_summits.bed
+    └── H3K9ac_ENCFF193NPE_model.r
+```
+
+---
